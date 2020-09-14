@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "881150586408",
+    "firebase_url": "https://monkoodog-app.firebaseio.com",
+    "project_id": "monkoodog-app",
+    "storage_bucket": "monkoodog-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881150586408:android:83dd6b7df67445c2e68f1d",
+        "android_client_info": {
+          "package_name": "com.monkoodog.monkoodog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881150586408-1sdcsn2f0sf9hgaj6p7i9bh3rdd5vg5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.monkoodog.monkoodog",
+            "certificate_hash": "7bdc49f2f9dde95d0f224308ccc75f572d04359b"
+          }
+        },
+        {
+          "client_id": "881150586408-1vao2s397s7hfv1ocp730qas03u2f4qv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbnvfq_iViGKH25xf5Qh7b3AmuZKstfgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881150586408-1vao2s397s7hfv1ocp730qas03u2f4qv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
