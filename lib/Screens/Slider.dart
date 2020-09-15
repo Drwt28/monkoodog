@@ -17,6 +17,7 @@ class _SliderPageState extends State<SliderPage> {
           buildSinglePage('Welcome to Monkoodog','Best app for your dog','assets/images/scree1.png',Utiles.primaryBgColor),
           buildSinglePage('Set your Location','Set your location so we can tell you the nearest animal shop to but pet','assets/images/screen2.png',Utiles.primaryButton),
           buildSinglePage('Pet Vaccines Dates','Get your dog health \ninsights, next due date for\nvaccines and lot more.','assets/images/screen3.png',Utiles.primaryBgColor),
+          LoginScreen()
         ],
       ),
     );

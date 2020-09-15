@@ -16,7 +16,7 @@ class PetDetailScreen extends StatefulWidget {
   final DocumentSnapshot snapshot;
 
 
-  PetDetailScreen(this.pets, this.view, this.snapshot);
+  PetDetailScreen({this.pets, this.view, this.snapshot});
 
   @override
   _PetDetailScreenState createState() => _PetDetailScreenState();

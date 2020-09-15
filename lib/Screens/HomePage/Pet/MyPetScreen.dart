@@ -53,7 +53,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
     return InkWell(
 
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder:(context)=>PetDetailScreen(pet,true,snapshot)));
+        Navigator.push(context, MaterialPageRoute(builder:(context)=>PetDetailScreen(pets: pet,snapshot: snapshot,view: true,)));
       },
       child: Container(
         height: 140,

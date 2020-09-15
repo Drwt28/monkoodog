@@ -37,6 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   checcklogin()async{
+    //emulator checking
+   await FirebaseAuth.instance.signInAnonymously();
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     if(user!=null)
       {
@@ -54,7 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return (isLooged) ?HomePage():Form(
       key: formKey,
       child: Scaffold(
@@ -118,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () async {
                             if (formKey.currentState.validate()) verifyPhone();
                             setState(() {
-                              loading = false;
+                              loading = true;
                             });
                           },
                           loading: loading),

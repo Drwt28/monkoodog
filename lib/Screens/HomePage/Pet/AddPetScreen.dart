@@ -13,6 +13,7 @@ import 'package:monkoodog/CustomWidgets.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
 import 'package:monkoodog/Modals/breed.dart';
+import 'package:monkoodog/utils/age.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   buildBottomButton() {
     var user = Provider.of<FirebaseUser>(context);
-    var Location = Provider
+    var location = Provider
         .of<DataProvider>(context)
         .userLocation;
     return ClipRRect(
@@ -63,6 +64,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
                       }
                   else{
                     step = 2;
+                    setState(() {
+
+                    });
                   }
 
                 }
@@ -80,17 +84,20 @@ class _AddPetScreenState extends State<AddPetScreen> {
             var pet = NewPet(
               position: geo
                   .point(
-                  latitude: Location.latitude, longitude: Location.longitude)
+                  latitude: location.latitude, longitude: location.longitude)
                   .data,
               diseases: _diseasesResult,
-              dob: "${age.day}/${age.month}/${age.year}",
+              dob: age.toString().substring(0,10),
               gender: gender,
-              longitude: Location.longitude,
+              longitude: location.longitude,
               created: DateTime.now().toString(),
               id: user.uid,
-              latitude: Location.latitude,
+              latitude: location.latitude,
               name: petNameController.text,
-              age: Utiles.calculateAge(age),
+              age: Age.weeks(
+                  fromDate: age,
+                  toDate: DateTime.now(),
+                  includeToDate: false).toString(),
               userId: user.uid,
               loves: feedBackController.text,
               primaryBreed: selectedPrimaryBreed,
@@ -177,9 +184,10 @@ class _AddPetScreenState extends State<AddPetScreen> {
             : Form(
           key: formkey,
               child: ListView(
+                physics: BouncingScrollPhysics(),
           children: [
               Container(
-                height: 130,
+                height: 160,
                 padding: EdgeInsets.all(8),
                 child: Row(
                   children: [
@@ -228,7 +236,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
+                                        horizontal: 0, vertical: 10),
                                     child: (profileImage != null)
                                         ? Image.memory(profileImage)
                                         : Image.asset(
@@ -289,7 +297,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
                           buildWithHeading(
                               "Gender",
                               ToggleButtons(
-                                  borderRadius: BorderRadius.circular(8),
+                                  constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width*.35,height: 45)
+                                 , borderRadius: BorderRadius.circular(8),
                                   fillColor: Colors.green,
                                   borderColor: Colors.white,
                                   selectedColor: Colors.white,
@@ -326,6 +335,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                           buildWithHeading(
                               "Breed",
                               ToggleButtons(
+                                constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width*.35,height: 45),
                                   borderRadius: BorderRadius.circular(8),
                                   fillColor: Colors.green,
                                   borderColor: Colors.white,
@@ -344,13 +354,15 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                           horizontal: 20),
                                       child: Text("Pure"),
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(10)),
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Text("Mix"),
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Text("Mix"),
+                                      ),
                                     ),
                                   ],
                                   isSelected: breedSelected)),
@@ -365,7 +377,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 20),
+                                      vertical: 18, horizontal: 24),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.black12),
@@ -385,7 +397,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 20),
+                                      vertical: 18, horizontal: 24),
                                   decoration: BoxDecoration(
                                       borderRadius:
                                       BorderRadius.circular(10),
@@ -398,39 +410,6 @@ class _AddPetScreenState extends State<AddPetScreen> {
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Visibility(
-                              visible: false,
-                              maintainSize: true,
-                              maintainAnimation: true,
-                              maintainInteractivity: false,
-                              maintainState: true,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    child: (profileImage != null)
-                                        ? Image.memory(profileImage)
-                                        : Image.asset(
-                                      "assets/images/dog.png",
-                                      color: Colors.white,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          Text(
-                            "",
-                            style: TextStyle(color: Colors.black54),
-                          )
-                        ],
-                      ),
-                    )
                   ],
                 ),
               )
@@ -559,9 +538,12 @@ class _AddPetScreenState extends State<AddPetScreen> {
           "$title *",
         ),
         SizedBox(
-          height: 2,
+          height: 10,
         ),
-        Widget
+        Align(
+          alignment: Alignment.center,
+          child: Widget,
+        )
       ],
     );
   }

@@ -44,6 +44,7 @@ dependencies:
   location: ^3.0.0
   geoflutterfire:
   firebase_storage:
+  carousel_slider:
   url_launcher:
   multiselectable_dropdown: ^0.0.4
   lazy_load_scrollview: ^1.1.0

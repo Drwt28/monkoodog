@@ -8,6 +8,8 @@ import 'package:monkoodog/Screens/HomePage/Newspage/NewsPage.dart';
 import 'package:monkoodog/Screens/HomePage/Pet/AddPetScreen.dart';
 import 'package:monkoodog/Screens/HomePage/Pet/MyPetScreen.dart';
 import 'package:monkoodog/Screens/Login.dart';
+import 'package:monkoodog/Screens/Map/Finder.dart';
+import 'package:monkoodog/Screens/Map/PetFinder.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +33,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: InkWell(
+        onTap: (){
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>Finder()));
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white
+          ),
+          child: Image.asset('assets/images/paw.png',height: 50,),
+        ),
+      ),
       key: scaffoldKey,
       drawer: buildHomeDrawer(),
       appBar: AppBar(
@@ -52,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         decoration: BoxDecoration(
         ),
-        height: 90,
+        height: MediaQuery.of(context).size.height*.1,
         child: Row(
           children: [
             SingleItem(0,icon: CupertinoIcons.home),
