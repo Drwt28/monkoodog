@@ -2,11 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Monkoo/monkoodog/lib/Screens/Map/AreaSearch.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
 import 'package:monkoodog/Screens/HomePage/Pet/PetDetailScreen.dart';
+import 'package:monkoodog/Screens/Map/AreaSearch.dart';
 import 'package:monkoodog/utils/utiles.dart';
 
 import 'dart:math' show cos, sqrt, asin;
