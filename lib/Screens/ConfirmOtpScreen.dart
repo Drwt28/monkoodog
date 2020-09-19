@@ -48,13 +48,13 @@ class _confirmOtpState extends State<confirmOtp> {
           Text("Enter the Code Sent", style: Theme
               .of(context)
               .textTheme
-              .headline4
+              .headline5
               .copyWith(color: Colors.black, fontWeight: FontWeight.w700),),
           SizedBox(height: 10,),
           Text("Enter the 6-digit code", style: Theme
               .of(context)
               .textTheme
-              .headline5
+              .headline6
               .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),),
           SizedBox(height: 30,),
           Padding(
@@ -69,10 +69,11 @@ class _confirmOtpState extends State<confirmOtp> {
               },
             autofocus: true,
               maxLength: 6,
-              pinBoxHeight: 60,
+              pinBoxHeight: 45,
               pinBoxRadius: 10,
-              pinBoxWidth: 50,
-              wrapAlignment: WrapAlignment.center,
+              pinBoxWidth: 45,
+
+              wrapAlignment: WrapAlignment.spaceAround,
               defaultBorderColor: Utiles.primaryButton,
               pinBoxColor: Colors.white,
 
@@ -83,43 +84,41 @@ class _confirmOtpState extends State<confirmOtp> {
           Text("Didn't get the code ? Tap here to", style: Theme
               .of(context)
               .textTheme
-              .headline6
+              .subtitle1
               .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),)
           ,
           SizedBox(height: 8,),
           Text("Resend Code", style: Theme
               .of(context)
               .textTheme
-              .headline6
+              .subtitle2
               .copyWith(color: Colors.black),)
 
           ,
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildButton(text: "Continue",
-                context: context,
-                color: Utiles.primaryBgColor,
-                onPressed: () async {
+          SizedBox(height: 20,),
+          buildButton(text: "Continue",
+              context: context,
+              color: Utiles.primaryBgColor,
+              onPressed: () async {
 
-              loading=true;
-              setState(() {
+            loading=true;
+            setState(() {
 
-              });
-              signIn();
-                  // Navigator.push(context, CupertinoPageRoute(
-                  //     builder: (context)=>HomePage()
-                  // ));
-                  // setState(() {
-                  //   loading = true;
-                  // });
-                  //
-                  // await Future.delayed(Duration(seconds: 3));
-                  // setState(() {
-                  //   loading =F false;
-                  // });
-                },
-                loading: loading),
-          ),
+            });
+            signIn();
+                // Navigator.push(context, CupertinoPageRoute(
+                //     builder: (context)=>HomePage()
+                // ));
+                // setState(() {
+                //   loading = true;
+                // });
+                //
+                // await Future.delayed(Duration(seconds: 3));
+                // setState(() {
+                //   loading =F false;
+                // });
+              },
+              loading: loading),
           SizedBox(height: 15,),
     ]
     )

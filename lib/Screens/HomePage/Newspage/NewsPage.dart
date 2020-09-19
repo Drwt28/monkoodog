@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:monkoodog/DataProvider/DataProvider.dart';
+import 'package:monkoodog/Search.dart';
+import 'package:monkoodog/Widgets/NewsItem.dart';
 import 'package:monkoodog/utils/utiles.dart';
+import 'package:provider/provider.dart';
 
 class NewsScreen extends StatefulWidget {
   @override
@@ -24,7 +28,9 @@ class _NewsScreenState extends State<NewsScreen> {
               width: MediaQuery.of(context).size.width*.9,
 
               child: ListTile(
-                onTap: (){},
+                onTap: (){
+                  showSearch(context: context, delegate: Search(type: isNews?"news":"events",suggestions: isNews?news:events));
+                },
                 leading: Icon(Icons.search),
                 title: Text("Search"),
               ),
@@ -38,10 +44,44 @@ class _NewsScreenState extends State<NewsScreen> {
           SizedBox(height: 10,),
           buildToggleButton()
           , SizedBox(height: 10,),
+          (isNews)?buildNewsPage():buildEvents()
+
+
+
         ],
       ),
     );
   }
+
+  List news,events;
+  buildNewsPage()
+  {
+    news = Provider.of<DataProvider>(context).news;
+
+
+    return (news==null)?Center(child: CircularProgressIndicator(),):ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: news.length,
+      itemBuilder: (context, index) => NewsItem(index, news,"news"),
+    );
+
+  }
+  buildEvents()
+  {
+    events = Provider.of<DataProvider>(context).events;
+
+    return (events==null)?Center(child: CircularProgressIndicator(),):ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: events.length,
+      itemBuilder: (context, index) => NewsItem(index, events,"events"),
+    );
+
+  }
+
+
+  bool isNews = true;
   buildToggleButton()
   {
     return Center(
@@ -51,6 +91,7 @@ class _NewsScreenState extends State<NewsScreen> {
             {
               selected[i] = !selected[i];
             }
+            isNews = selected[0];
             setState(() {
 
             });

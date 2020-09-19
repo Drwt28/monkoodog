@@ -12,6 +12,7 @@ import 'package:monkoodog/Screens/Map/Finder.dart';
 import 'package:monkoodog/Screens/Map/PetFinder.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,8 +28,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<DataProvider>(context,listen: false).getdata();
+
   }
+
+  var title = ["Home","My Pet","Blogs"];
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +51,7 @@ class _HomePageState extends State<HomePage> {
       key: scaffoldKey,
       drawer: buildHomeDrawer(),
       appBar: AppBar(
+        title: Text(title[selectedIndex]),
         leading: IconButton(onPressed: (){
           scaffoldKey.currentState.openDrawer();
         }
@@ -172,11 +176,12 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
-                // onTap: () {
-                //   Navigator.pop(context);
-                //   Navigator.push(context, MaterialPageRoute(builder: (context)=>Finder()));
-                // },
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Finder()));
+                },
               ),
+
               ListTile(
                 leading: Icon(Icons.bug_report,
                   color: Utiles.primaryBgColor,),
@@ -185,16 +190,16 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 16,
                         color: Colors.black,
                         fontWeight: FontWeight.bold)),
-                // onTap: () async {
-                //   Navigator.pop(context);
-                //   var uri =
-                //       'mailto:woof@monkoodog.com?subject=Reporting%20Issue&body=';
-                //   if (await canLaunch(uri)) {
-                //     launch(uri);
-                //   } else {
-                //     print("Cant  Do   IT");
-                //   }
-                // },
+                onTap: () async {
+                  Navigator.pop(context);
+                  var uri =
+                      'mailto:woof@monkoodog.com?subject=Reporting%20Issue&body=';
+                  if (await canLaunch(uri)) {
+                    launch(uri);
+                  } else {
+                    print("Cant  Do   IT");
+                  }
+                },
               ),
               ListTile(
                 leading: Icon(Icons.person,

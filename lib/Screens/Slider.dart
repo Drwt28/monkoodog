@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:monkoodog/Screens/HomePage/HomePage.dart';
 import 'package:monkoodog/Screens/Login.dart';
 import 'package:monkoodog/utils/utiles.dart';
 
@@ -9,9 +11,31 @@ class SliderPage extends StatefulWidget {
 }
 
 class _SliderPageState extends State<SliderPage> {
+  var isLooged = false;
+
+
+  checcklogin()async{
+    //emulator checking
+    // await FirebaseAuth.instance.signInAnonymously();
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if(user!=null)
+    {
+      setState(() {
+        isLooged = true;
+      });
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    checcklogin();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return (isLooged)?HomePage():Scaffold(
       body: LiquidSwipe(
         pages : [
           buildSinglePage('Welcome to Monkoodog','Best app for your dog','assets/images/scree1.png',Utiles.primaryBgColor),
@@ -39,26 +63,26 @@ class _SliderPageState extends State<SliderPage> {
                 title,
                 style: Theme.of(context)
                     .textTheme
-                    .headline3
+                    .headline4
                     .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 70,
+                height: 30,
               ),
               Text(
                 subtitle,
                 style: Theme.of(context)
                     .textTheme
-                    .headline4
+                    .headline5
                     .copyWith(color: Colors.white, fontWeight: FontWeight.normal),
               ),
               SizedBox(height: 40,),
               Align(
                   alignment: Alignment.centerRight,child: FlatButton(onPressed: (){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-              }, child: Text("Skip",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),))),
+              }, child: Text("Skip",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white),))),
               SizedBox(
-                height: 60,
+                height: 10,
               ),
               Expanded(child: Align(
                   alignment: Alignment.bottomCenter,

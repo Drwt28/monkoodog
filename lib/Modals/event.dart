@@ -5,25 +5,25 @@ class Event {
   String title;
   String content;
   String url;
+  String mediaLink;
 
   Event({this.id, this.title, this.url});
 
   Event.fromJson(Map<String, dynamic> json) {
-       id = json['Id'];
-    title = json['Title'];
-    url = json['Thumbnail'].toString().isEmpty
-        ? "https://www.tiffanyjonesre.com/assets/images/image-not-available.jpg"
-        : json['Thumbnail'];
-    content = json['ContentDetails'];
+    id = json['id'];
+    mediaLink = "https://www.monkoodog.com/wp-json/wp/v2/media/${json["featured_media"]}";
+    title = json['title']['rendered'];
+    content = json['content']['rendered'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Id'] = this.id;
-    data['Title'] = this.title;
-    data['Thumbnail'] = this.url;
-    data['ContentDetails'] = this.content;
+    data['id'] = this.id;
+    data['title']['rendered'] = this.title;
+    data['guid']['rendered'] = this.url;
+    data['content']['rendered'] = this.content;
     return data;
+
   }
 }
 

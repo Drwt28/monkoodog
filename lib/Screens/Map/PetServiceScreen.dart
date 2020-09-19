@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:monkoodog/Modals/PetServiceModel.dart';
 import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
+import 'package:provider/provider.dart';
 
 import 'AreaSearch.dart';
 import 'ServiceDetailPage.dart';
@@ -27,46 +29,6 @@ class _PetServicePageState extends State<PetServicePage> {
   List<MultipleSelectItem> breeds = [];
 
 
-  Future<List> getPets() async {
-    var data = await Firestore.instance.collection('services').getDocuments();
-
-    List<PetService> pets = List();
-    getUserLocation();
-
-    for(var doc in data.documents)
-      {
-        var pet = PetService.fromMap(doc.data);
-        try{
-          pet.distance = calculateDistance(pet.latitude, pet.longitude).ceil().toString();
-          pets.add(pet);
-        }catch(e)
-        {
-          pet.distance=100000099.0.toString();
-        }
-
-
-
-
-
-      }
-
-
-
-
-    pets.sort((a,b)=>(double.parse(a.distance)).compareTo(double.parse(b.distance)));
-
-    petList = pets.sublist(0,100);
-    totalPets = pets;
-    setState(() {});
-    return pets;
-  }
-
-  @override
-  void initState() {
-
-    getUserLocation();
-  }
-
   Utiles _utiles = Utiles();
 
   List<PetService> totalPets = List<PetService>();
@@ -77,7 +39,7 @@ class _PetServicePageState extends State<PetServicePage> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    final pets = await getPets();
+
     getMarkers();
   }
 
@@ -103,6 +65,9 @@ class _PetServicePageState extends State<PetServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    petList = Provider.of<DataProvider>(context).mapPetService;
+    var location = Provider.of<DataProvider>(context).userLocation;
+    getMarkers();
     return SafeArea(
       child: Scaffold(
         key: scaffold,
@@ -116,7 +81,7 @@ class _PetServicePageState extends State<PetServicePage> {
                 zoomGesturesEnabled: true,
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
-                  target:  LatLng(lat1, lon1),
+                  target:  LatLng(location.latitude, location.longitude),
                   zoom: 10,
                 ),
                 markers: _markers.values.toSet(),
@@ -350,31 +315,6 @@ class _PetServicePageState extends State<PetServicePage> {
                   .copyWith(color: Colors.black87),
             ),
           ),
-          // buildExpansionTile("Primary Breed", [
-          //   Card(
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: MultipleDropDown(
-          //         placeholder: 'Select Primary Breed',
-          //         disabled: false,
-          //         values: _primarybreedresult,
-          //         elements: breeds,
-          //       ),
-          //     ),
-          //   )
-          // ]),
-          // buildExpansionTile("Secondary Breed", [
-          //   Card(
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: MultipleDropDown(
-          //         placeholder: 'Select Secondary Breed',
-          //         disabled: false,
-          //         values: _secondarybreedresult,
-          //         elements: breeds,
-          //       ),
-          //     ),
-          //   )
           // ]),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -395,7 +335,7 @@ class _PetServicePageState extends State<PetServicePage> {
                   onChanged: (val) {
                     setState(() {
                       distance = val;
-                      filterByRange(val);
+
                     });
                   },
                   value: distance,
@@ -444,18 +384,13 @@ class _PetServicePageState extends State<PetServicePage> {
           ,Padding(
             padding: const EdgeInsets.all(8.0),
             child: CupertinoButton(
-              onPressed: () {
-                //
+              onPressed: () async{
 
-                //
-                // if(_primarybreedresult.isNotEmpty||_secondarybreedresult.isNotEmpty)
-                //   petList = totalPets.where((element) => ((_primarybreedresult.toString()??'g').
-                //
-                //   toLowerCase().contains((element.primaryBreed??'hgajgjg').toLowerCase())||
-                //       (_secondarybreedresult.toString()??'hj').toLowerCase().contains((element.secondaryBreed??'lidaliaud').toLowerCase()))).toList();
-                //
-                //
+                petList=null;
+                setState(() {
 
+                });
+                await Provider.of<DataProvider>(context,listen: false).getMapPetService(distance);
                 getMarkers();
                 Navigator.pop(context);
 
@@ -534,31 +469,8 @@ class _PetServicePageState extends State<PetServicePage> {
 
   var lat1, lon1;
 
-  getUserLocation() async {
-    var loc = await Location.instance.getLocation();
-    setState(() {
-      lat1 = loc.latitude;
-      lon1 = loc.longitude;
-    });
-  }
 
-  filterByRange(double range) {
-    petList = totalPets
-        .where((element) =>
-    double.parse(element.distance)  <= distance)
-        .toList();
-    getMarkers();
-    setState(() {});
-  }
 
-  double calculateDistance(lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lat2??0.0 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
-  }
 
 }
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }

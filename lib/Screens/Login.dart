@@ -33,30 +33,17 @@ class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
 
 
-  var isLooged = false;
 
-
-  checcklogin()async{
-    //emulator checking
-   await FirebaseAuth.instance.signInAnonymously();
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    if(user!=null)
-      {
-        setState(() {
-          isLooged = true;
-        });
-      }
-  }
 
 
   @override
   void initState() {
-    checcklogin();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return (isLooged) ?HomePage():Form(
+    return Form(
       key: formKey,
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -74,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Text(
                       "Let's Get Started",
-                      style: Theme.of(context).textTheme.headline4.copyWith(
+                      style: Theme.of(context).textTheme.headline5.copyWith(
                           color: Colors.black, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
@@ -82,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Text(
                       "Enter Your mobile number",
-                      style: Theme.of(context).textTheme.headline5.copyWith(
+                      style: Theme.of(context).textTheme.headline6.copyWith(
                           color: Colors.black54, fontWeight: FontWeight.normal),
                     ),
                     SizedBox(

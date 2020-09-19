@@ -95,47 +95,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
             weeks: int.parse(age
                 .toString()
                 .substring(0, age.toString().indexOf(' '))),
-            vac: selected[selectedTab],
+            vac: selectedTab==0?false:true,
           )
 
-          ,Container(
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-
-                  children: [
-                    Text("Name",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
-                    SizedBox(height: 8,)
-                    ,Text("Age",style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
-                    SizedBox(height: 2,),
-                    Text("Breed",style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                   ],
-                ),
-
-                Column(
-
-                  children: [
-                    Text("21/12/12",style: Theme.of(context).textTheme.headline6.copyWith(color: Utiles.primaryBgColor),),
-                    SizedBox(height: 8,)
-                    ,Text("Medication",style: Theme.of(context).textTheme.headline5.copyWith(color: Utiles.primaryButton,fontSize: 15),),
-
-                  ],
-                )
-
-              ],
-            ),
-            height: 110,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Utiles.primaryBgColor,width: 1)
-            ),
-          )
-        ],
       ),
 
     );
@@ -143,6 +106,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
 
   Widget buildTopLayout()
   {
+    print(MediaQuery.of(context).size.height);
     return Container(
       height: 240,
       padding: EdgeInsets.all(10),
@@ -157,11 +121,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 110,),
-                  buildHeadText("Allergies"," alue"),
+                  buildHeadText("Allergies",widget.pets.allergies.length>0?widget.pets.allergies.toString().replaceAll("]", "").replaceAll("[", ""):"No Allergies"),
                   SizedBox(height: 4,),
-                  buildHeadText("Diseases"," alue"),
+                  buildHeadText("Diseases",widget.pets.diseases.length>0?widget.pets.diseases.toString().replaceAll("]", "").replaceAll("[", ""):"No Diseases"),
                   SizedBox(height: 4,),
-                  buildHeadText("Loves"," alue"),
+                  buildHeadText("Loves",widget.pets.loves),
                 ],
               ),
               height: 200,
@@ -174,14 +138,18 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
           ),
           Positioned(
             top: 0,
-            left: 50,
-            right: 50,
+            left: 10,
+            right: 10,
             child: Row(
               children: [
                 Container(
                   height: 120,
                   width: 120,
                   decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(widget.pets.media)
+                    ),
                     color: Colors.white,
                     shape: BoxShape.circle,
                     border: Border.all(color: Utiles.primaryButton,width: 1)
@@ -194,11 +162,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Name",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
+                    Text(widget.pets.name,style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
                     SizedBox(height: 8,)
-                    ,Text("Age",style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+                    ,Text(Utiles.calculateAge(DateTime.parse(widget.pets.dob)),style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                     SizedBox(height: 2,),
-                    Text("Breed",style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+                    Text(widget.pets.breed,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                   ],
                 )
               ],
@@ -220,7 +188,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
             child: Text("$title :",style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black,fontSize: 15),textAlign: TextAlign.start,)),
         Flexible(
             flex: 1,
-            child: Text("$value :",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black,fontSize: 15),textAlign: TextAlign.start)),
+            child: Text("$value ",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black,fontSize: 15),textAlign: TextAlign.start)),
       ],
     );
   }
@@ -237,7 +205,6 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 selectedTab =i;
             }
             setState(() {
-
             });
           },
           constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width*.45,height: 40),

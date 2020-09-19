@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:monkoodog/Modals/news.dart';
+import 'package:monkoodog/Screens/HomePage/Newspage/NewsDetail.dart';
 import 'package:monkoodog/utils/UiHelper.dart';
 import 'package:html/parser.dart';
 
 class NewsItem extends StatelessWidget {
   final int index;
-  final List<News> news;
-  const NewsItem(this.index, this.news, {Key key}) : super(key: key);
+  final List news;
+  final type;
+  const NewsItem(this.index, this.news,this.type, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,8 +16,7 @@ class NewsItem extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, 'newscomplete',
-                  arguments: news[index]);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsCompleteDetail(news: news[index],)));
             },
             child: Container(
               decoration: BoxDecoration(

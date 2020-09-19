@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monkoodog/utils/utiles.dart';
 
@@ -12,7 +13,7 @@ Widget buildButton({text, onPressed, loading, color, context}) {
             child: Container(
               decoration: BoxDecoration(
                   color: color, borderRadius: BorderRadius.circular(8)),
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: InkWell(
                 onTap: onPressed,
                 child: Center(
@@ -79,284 +80,152 @@ class ListAllVaccination extends StatelessWidget {
               weeks <=
                   int.parse(vaccination[index].age.substring(
                       0, vaccination[index].age.indexOf(' ')))
-              ? Card(
-            elevation: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              ? Container(
+
+            child: Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Name: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Age From Birth: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Type: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Medication Type: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Due on: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            vaccination[index].nameVaccination,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(""),
-                          Text(
-                            vaccination[index].age,
-                            style: vaccination[index]
-                                .age
-                                .contains('every')
-                                ? TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-//                                              fontStyle: FontStyle.italic,
-//                                              decoration: TextDecoration.underline
-                            )
-                                : TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Text(""),
-                          Text(
-                            vaccination[index].type,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(""),
-                          Text(
-                            vaccination[index].medicationType,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(""),
-                          Text(
-                              vaccination[index]
-                                  .age
-                                  .contains('every')
-                                  ? month > DateTime.now().month
-                                  ? "${DateTime.now().year}/$month/$date"
-                                  : "${DateTime.now().year + 1}/$month/$date"
-                                  : weeks <=
-                                  int.parse(vaccination[
-                                  index]
-                                      .age
-                                      .substring(
-                                      0,
-                                      vaccination[
-                                      index]
-                                          .age
-                                          .indexOf(
-                                          ' ')))
-                                  ? "$year/${month + (int.parse(vaccination[index].age.substring(0, vaccination[index].age.indexOf(' '))) / 4).round()}/$date"
-                                  : " ",
-                              style: month == DateTime.now().month
-                                  ? TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold)
-                                  : TextStyle(
-                                fontSize: 18,
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ],
-                      ),
+                      Text(vaccination[index].nameVaccination,style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
+                      SizedBox(height: 8,)
+                      ,Text(vaccination[index].age,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+                      SizedBox(height: 2,),
+                      Text(vaccination[index].type,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-//                            RaisedButton(
-//                              onPressed: () {},
-//                              child: Text("Given", style: TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.bold)),
-//                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
-//                            )
+
+                  Column(
+
+                    children: [
+                      Text(
+                          vaccination[index]
+                              .age
+                              .contains('every')
+                              ? month > DateTime.now().month
+                              ? "${DateTime.now().year}/$month/$date"
+                              : "${DateTime.now().year + 1}/$month/$date"
+                              : weeks <=
+                              int.parse(vaccination[
+                              index]
+                                  .age
+                                  .substring(
+                                  0,
+                                  vaccination[
+                                  index]
+                                      .age
+                                      .indexOf(
+                                      ' ')))
+                              ? "$year/${month + (int.parse(vaccination[index].age.substring(0, vaccination[index].age.indexOf(' '))) / 4).round()}/$date"
+                              : " ",
+                          style: month == DateTime.now().month
+                              ? TextStyle(
+                              fontSize: 18,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold)
+                              : TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      SizedBox(height: 8,)
+                      ,Text(vaccination[index].medicationType,style: Theme.of(context).textTheme.headline5.copyWith(color: Utiles.primaryButton,fontSize: 15),),
+
+                    ],
+                  )
+
                 ],
               ),
             ),
-          )
-              : Container()
+            height: 110,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Utiles.primaryBgColor,width: 1)
+            ),
+          )   : Container()
               : Container()
               : vaccination[index].medicationType.contains('medication')
               ? vaccination[index].age.contains('every') ||
               weeks <=
                   int.parse(vaccination[index].age.substring(
                       0, vaccination[index].age.indexOf(' ')))
-              ? Card(
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              ? Container(
+
+            child: Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Name: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Age From Birth: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Type: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Medication Type: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(""),
-                          Text(
-                            "Due on: ",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            vaccination[index].nameVaccination,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(""),
-                          Text(
-                            vaccination[index].age,
-                            style: vaccination[index]
-                                .age
-                                .contains('every')
-                                ? TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-//                                              fontStyle: FontStyle.italic,
-//                                              decoration: TextDecoration.underline
-                            )
-                                : TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          Text(""),
-                          Text(
-                            vaccination[index].type,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(""),
-                          Text(
-                            vaccination[index].medicationType,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(""),
-                          Text(
-                              vaccination[index]
-                                  .age
-                                  .contains('every')
-                                  ? month > DateTime.now().month
-                                  ? "${DateTime.now().year}/$month/$date"
-                                  : "${DateTime.now().year + 1}/$month/$date"
-                                  : weeks <=
-                                  int.parse(vaccination[
-                                  index]
-                                      .age
-                                      .substring(
-                                      0,
-                                      vaccination[
-                                      index]
-                                          .age
-                                          .indexOf(
-                                          ' ')))
-                                  ? "$year/${month + (int.parse(vaccination[index].age.substring(0, vaccination[index].age.indexOf(' '))) / 4).round()}/$date"
-                                  : " ",
-                              style: month == DateTime.now().month
-                                  ? TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold)
-                                  : TextStyle(
-                                fontSize: 18,
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ],
-                      ),
+                      Text(vaccination[index].nameVaccination,style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
+                      SizedBox(height: 8,)
+                      ,Text(vaccination[index].age,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+                      SizedBox(height: 2,),
+                      Text(vaccination[index].type,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-//                            RaisedButton(
-//                              onPressed: () {},
-//                              child: Text("Given", style: TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.bold)),
-//                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
-//                            )
+
+                  Column(
+
+                    children: [
+                      Text(
+                          vaccination[index]
+                              .age
+                              .contains('every')
+                              ? month > DateTime.now().month
+                              ? "${DateTime.now().year}/$month/$date"
+                              : "${DateTime.now().year + 1}/$month/$date"
+                              : weeks <=
+                              int.parse(vaccination[
+                              index]
+                                  .age
+                                  .substring(
+                                  0,
+                                  vaccination[
+                                  index]
+                                      .age
+                                      .indexOf(
+                                      ' ')))
+                              ? "$year/${month + (int.parse(vaccination[index].age.substring(0, vaccination[index].age.indexOf(' '))) / 4).round()}/$date"
+                              : " ",
+                          style: month == DateTime.now().month
+                              ? TextStyle(
+                              fontSize: 18,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold)
+                              : TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      SizedBox(height: 8,)
+                      ,Text(vaccination[index].medicationType,style: Theme.of(context).textTheme.headline5.copyWith(color: Utiles.primaryButton,fontSize: 15),),
+
+                    ],
+                  )
+
                 ],
               ),
             ),
-          )
-              : Container()
+            height: 110,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Utiles.primaryBgColor,width: 1)
+            ),
+          )              : Container()
               : Container(),
           separatorBuilder: (BuildContext context, int index) => Divider(
             color: Colors.transparent,
@@ -364,6 +233,76 @@ class ListAllVaccination extends StatelessWidget {
           ),
           itemCount: vaccination.length),
     );
+  }
+
+  buildSingleLayout(context)
+  {
+    // return Container(
+    //
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Column(
+    //
+    //         children: [
+    //           Text(vaccination[index].nameVaccination,style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
+    //           SizedBox(height: 8,)
+    //           ,Text(vaccination[index].age,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+    //           SizedBox(height: 2,),
+    //           Text(vaccination[index].type,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+    //         ],
+    //       ),
+    //
+    //       Column(
+    //
+    //         children: [
+    //           Text(
+    //               vaccination[index]
+    //                   .age
+    //                   .contains('every')
+    //                   ? month > DateTime.now().month
+    //                   ? "${DateTime.now().year}/$month/$date"
+    //                   : "${DateTime.now().year + 1}/$month/$date"
+    //                   : weeks <=
+    //                   int.parse(vaccination[
+    //                   index]
+    //                       .age
+    //                       .substring(
+    //                       0,
+    //                       vaccination[
+    //                       index]
+    //                           .age
+    //                           .indexOf(
+    //                           ' ')))
+    //                   ? "$year/${month + (int.parse(vaccination[index].age.substring(0, vaccination[index].age.indexOf(' '))) / 4).round()}/$date"
+    //                   : " ",
+    //               style: month == DateTime.now().month
+    //                   ? TextStyle(
+    //                   fontSize: 18,
+    //                   color: Colors.red,
+    //                   fontWeight: FontWeight.bold)
+    //                   : TextStyle(
+    //                 fontSize: 18,
+    //                 color: Colors.blue,
+    //                 fontWeight: FontWeight.bold,
+    //               )),
+    //           SizedBox(height: 8,)
+    //           ,Text(vaccination[index].medicationType,style: Theme.of(context).textTheme.headline5.copyWith(color: Utiles.primaryButton,fontSize: 15),),
+    //
+    //         ],
+    //       )
+    //
+    //     ],
+    //   ),
+    //   height: 110,
+    //   margin: EdgeInsets.all(10),
+    //   padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
+    //   decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       borderRadius: BorderRadius.circular(8),
+    //       border: Border.all(color: Utiles.primaryBgColor,width: 1)
+    //   ),
+    // );
   }
 }
 

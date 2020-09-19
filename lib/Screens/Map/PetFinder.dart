@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
 import 'package:monkoodog/Screens/HomePage/Pet/PetDetailScreen.dart';
 import 'package:monkoodog/Screens/Map/AreaSearch.dart';
@@ -13,6 +14,7 @@ import 'package:monkoodog/utils/utiles.dart';
 import 'dart:math' show cos, sqrt, asin;
 
 import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
+import 'package:provider/provider.dart';
 // import 'package:restcountries/restcountries.dart';
 
 void main() {
@@ -52,24 +54,7 @@ class _MyAppState extends State<MyApp> {
    });
   }
 
-  Future<List> getPets() async {
-    var data = await Firestore.instance.collection('pets').getDocuments();
 
-    getUserLocation();
-    List<NewPet> pets = List.generate(data.documents.length,
-        (index){
-          var pet = NewPet.fromJson(data.documents[index].data);
-          pet.distance = calculateDistance(pet.latitude, pet.longitude).ceil().toString();
-          return pet;
-    });
-
-    pets.sort((a,b)=>(double.parse(a.distance)).compareTo(double.parse(b.distance)));
-   petList = pets;
-    totalPets = petList;
-
-    setState(() {});
-    return pets;
-  }
 
   @override
   void initState() {
@@ -89,8 +74,8 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    final pets = await getPets();
-   getMarkers();
+
+  getMarkers();
   }
 
   getMarkers(){
@@ -120,6 +105,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    petList = Provider.of<DataProvider>(context).mapPets;
+    var location = Provider.of<DataProvider>(context).userLocation;
     return SafeArea(
       child: Scaffold(
         key: scaffold,
@@ -135,7 +122,7 @@ class _MyAppState extends State<MyApp> {
                   zoomGesturesEnabled: true,
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
-                    target: const LatLng(26, 75),
+                    target:  LatLng(location.latitude, location.longitude),
                     zoom: 2,
                   ),
                   markers: _markers.values.toSet(),
@@ -151,7 +138,7 @@ class _MyAppState extends State<MyApp> {
                 child: Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
-                      "${petList.length} pets",
+                      "",
                       style: Theme.of(context)
                           .textTheme
                           .headline6
@@ -167,7 +154,7 @@ class _MyAppState extends State<MyApp> {
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: (petList.length == 0)
+                  child: (petList==null)?Center(child: CircularProgressIndicator()):(petList.length == 0)
                       ? buildRangeWidget()
                       : CarouselSlider(
                           items: List.generate(
@@ -443,20 +430,13 @@ class _MyAppState extends State<MyApp> {
             child: CupertinoButton(
               onPressed: () {
                 //
-
-
+                Provider.of<DataProvider>(context,listen: false).getMapPets(distance);
                 if(_primarybreedresult.isNotEmpty||_secondarybreedresult.isNotEmpty)
                petList = totalPets.where((element) => ((_primarybreedresult.toString()??'g').
-
                toLowerCase().contains((element.primaryBreed??'hgajgjg').toLowerCase())||
                    (_secondarybreedresult.toString()??'hj').toLowerCase().contains((element.secondaryBreed??'lidaliaud').toLowerCase()))).toList();
-
-
-
                 getMarkers();
                 Navigator.pop(context);
-
-
                 },
               color: Utiles.primaryBgColor,
               child: Text(
@@ -469,42 +449,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  bool containsAny(List breed,result)
-  {
 
-  }
-
-
-  // getCountryData()async{
-  //     var api = RestCountries.setup("90f50cb51356ea8e324563ed224a64eb");
-  //     List<Country> countries;
-  //     List<Region> regions;
-  //     List<City> cities;
-  //     // get all countries
-  //     countries = await api.getCountries();
-  //     for(var c in countries)
-  //       {
-  //         country.add(MultipleSelectItem.build(value: c.code, display: c.name, content: c.name));
-  //       }
-  //     // or you could do this as long as you have called setup for initialization
-  //
-  //     // search country functionality
-  //     // you could also put city and/or region to narrow down the search of the country
-  //     // get all regions of a country. You need to pass the countryCode as it is required from the API
-  //     regions = await api.getRegions(countryCode: "id");
-  //
-  //     // search region
-  //     regions =
-  //     await api.searchRegion(countryCode: "id", city: "", keyword: "Jawa");
-  //
-  //     // you could get all cities by just filling the countryCode and region name.
-  //     // if you want to narrow it down to search of some city, put the keyword as parameter
-  //     cities = await api.getCities(
-  //         countryCode: "id", region: "Jawa Timur", keyword: "mal");
-  //
-  // }
-
-  //area search
 
   Widget buildRangeWidget() {
     return Card(

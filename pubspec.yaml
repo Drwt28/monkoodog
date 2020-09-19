@@ -41,6 +41,7 @@ dependencies:
   firebase_core: ^0.4.4
   google_sign_in: ^4.5.1
   google_maps_flutter: ^0.5.32
+
   location: ^3.0.0
   geoflutterfire:
   firebase_storage:
