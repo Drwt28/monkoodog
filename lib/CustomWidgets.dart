@@ -100,7 +100,7 @@ class ListAllVaccination extends StatelessWidget {
                   ),
 
                   Column(
-
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                           vaccination[index]
@@ -142,7 +142,7 @@ class ListAllVaccination extends StatelessWidget {
               ),
             ),
             height: 110,
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(4),
             padding: EdgeInsets.symmetric(horizontal: 20,vertical: 4),
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -176,7 +176,7 @@ class ListAllVaccination extends StatelessWidget {
                   ),
 
                   Column(
-
+                      mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                           vaccination[index]

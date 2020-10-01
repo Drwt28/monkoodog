@@ -502,7 +502,7 @@ class _AreaSearchState extends State<AreaSearch> {
     GeoFirePoint center = geo.point(latitude: 41.960632, longitude: 87.641603);
     var stream = geo
         .collection(collectionRef: petServiceCollection)
-        .within(center: center, radius: range, field: 'position');
+        .within(center: center, radius: range, field: 'position').take(50);
 
     petList.clear();
     stream.listen((List<DocumentSnapshot> documentList) {
@@ -540,7 +540,7 @@ class _AreaSearchState extends State<AreaSearch> {
     GeoFirePoint center = geo.point(latitude: 41.960632, longitude: 87.641603);
     var stream = geo
         .collection(collectionRef: petsCollection)
-        .within(center: center, radius: range, field: 'position');
+        .within(center: center, radius: range, field: 'position').take(50);
 
     petList.clear();
     stream.listen((List<DocumentSnapshot> documentList) {

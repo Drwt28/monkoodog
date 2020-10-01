@@ -15,11 +15,12 @@ class _NewsScreenState extends State<NewsScreen> {
 
 
   List<bool> selected = [true,false];
-
+  var scaffold = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
 
+    return Scaffold(
+      key: scaffold,
       body: ListView(
         children: [
           SizedBox(height: 10,)
@@ -29,8 +30,15 @@ class _NewsScreenState extends State<NewsScreen> {
 
               child: ListTile(
                 onTap: (){
+                  if(isNews?news!=null:events!=null)
                   showSearch(context: context, delegate: Search(type: isNews?"news":"events",suggestions: isNews?news:events));
-                },
+                  else
+                    scaffold.currentState.showSnackBar(SnackBar(
+                     backgroundColor: Utiles.primaryBgColor,
+                      behavior: SnackBarBehavior.floating,
+                      content: Text("Data is loading......."),margin: EdgeInsets.symmetric(vertical: 100,horizontal: 20),));
+
+                  },
                 leading: Icon(Icons.search),
                 title: Text("Search"),
               ),

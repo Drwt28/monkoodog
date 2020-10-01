@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 25, right: 25,top: 10),
           child: (loading)
               ? Center(
                   child: CircularProgressIndicator(),
@@ -80,60 +80,51 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: Theme.of(context).textTheme.subtitle1.copyWith(
                           color: Colors.black26, fontWeight: FontWeight.normal),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        decoration:
-                            InputDecoration(hintText: "Enter Mobile Number"),
-                        validator: (val) => (val.isEmpty || val.length != 10)
-                            ? "Enter Valid Mobile No"
-                            : null,
-                        onChanged: (val) {
-                          mobileNo = val;
-                          phoneNo = val;
-                        },
-                      ),
+                    TextFormField(
+                      decoration:
+                          InputDecoration(hintText: "Enter Mobile Number"),
+                      validator: (val) => (val.isEmpty || val.length != 10)
+                          ? "Enter Valid Mobile No"
+                          : null,
+                      onChanged: (val) {
+                        mobileNo = val;
+                        phoneNo = val;
+                      },
                     ),
                     SizedBox(
                       height: 60,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: buildButton(
-                          context: context,
-                          text: "Verify Mobile Number",
-                          color: Utiles.primaryBgColor,
-                          onPressed: () async {
-                            if (formKey.currentState.validate()) verifyPhone();
-                            setState(() {
-                              loading = true;
-                            });
-                          },
-                          loading: loading),
-                    ),
+                    buildButton(
+                        context: context,
+                        text: "Verify Mobile Number",
+                        color: Utiles.primaryBgColor,
+                        onPressed: () async {
+                          if (formKey.currentState.validate()) verifyPhone();
+                          setState(() {
+                            loading = true;
+                          });
+                        },
+                        loading: loading),
                     SizedBox(
                       height: 15,
                     ),
                     Center(
                         child: Text(
                       "Or",
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline6,
                       textAlign: TextAlign.center,
                     )),
                     SizedBox(
                       height: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: buildButton(
-                          context: context,
-                          text: "Sign in with Google",
-                          color: Utiles.primaryButton,
-                          onPressed: () {
-                            _handleSignIn();
-                          },
-                          loading: loading),
-                    ),
+                    buildButton(
+                        context: context,
+                        text: "Sign in with Google",
+                        color: Utiles.primaryButton,
+                        onPressed: () {
+                          _handleSignIn();
+                        },
+                        loading: loading),
                     SizedBox(
                       height: 20,
                     ),
@@ -193,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _auth
                 .signInWithCredential(phoneAuthCredential)
                 .then((authResult) async {
-              MyUser user = await getUser(authResult);
+              User user = await getUser(authResult);
             });
           },
           verificationFailed: (exception) {
@@ -208,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<MyUser> getUser(AuthResult authResult) async {
+  Future<User> getUser(AuthResult authResult) async {
     String uid = authResult.user.uid;
 
     var doc =
@@ -216,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (doc.exists) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomePage()));
-      return MyUser.fromJson(doc.data);
+      return User.fromJson(doc.data);
     } else {
       await createUser(await _auth.currentUser());
 
@@ -224,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<MyUser> getGoogleUser(FirebaseUser user) async {
+  Future<User> getGoogleUser(FirebaseUser user) async {
     String uid = user.uid;
 
     var doc =
@@ -232,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (doc.exists) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomePage()));
-      return MyUser.fromJson(doc.data);
+      return User.fromJson(doc.data);
     } else {
       await createUser(user);
 
@@ -240,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  checkUser(MyUser user) {
+  checkUser(User user) {
     if (user == null) {
       print("null");
     } else {}
@@ -250,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       loading = true;
       setState(() {});
-      MyUser user = new MyUser(
+      User user = new User(
           userEmail: fUser.email, userPhone: fUser.phoneNumber, uid: fUser.uid);
 
       var doc = await Firestore.instance

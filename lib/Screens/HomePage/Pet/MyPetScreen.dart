@@ -72,7 +72,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: FadeInImage(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.fitWidth,
                       image: NetworkImage(pet.media),
                       placeholder : AssetImage("assets/images/dog.png",))),
             ),
@@ -121,7 +121,9 @@ class _MyPetScreenState extends State<MyPetScreen> {
         SizedBox(height: 10,),
         Text("it Looks You Don't have Any Pets",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black54),),
         SizedBox(height: 10,),
-        FloatingActionButton(onPressed: (){},elevation: 0,backgroundColor: Utiles.primaryButton,
+        FloatingActionButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddPetScreen()));
+        },elevation: 0,backgroundColor: Utiles.primaryButton,
         child: Icon(Icons.add,color: Colors.white,size: 20,),
         )
 

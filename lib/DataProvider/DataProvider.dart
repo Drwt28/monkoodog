@@ -32,7 +32,7 @@ class DataProvider with ChangeNotifier {
     var ref = Firestore.instance.collection("pets");
 
     Stream<List<DocumentSnapshot>> stream = geoflutterfire.collection(collectionRef: ref)
-        .within(center: center, radius: dis, field: 'position');
+        .within(center: center, radius: dis, field: 'position',strictMode: true);
 
     stream.listen((List<DocumentSnapshot> documentList) {
       // doSomething()
@@ -53,10 +53,10 @@ class DataProvider with ChangeNotifier {
  async {
     await getUserLocation();
     var center = geoflutterfire.point(latitude: userLocation.latitude, longitude: userLocation.longitude);
-    var ref = Firestore.instance.collection("services").limit(100);
+    var ref = Firestore.instance.collection("services");
 
     Stream<List<DocumentSnapshot>> stream = geoflutterfire.collection(collectionRef: ref)
-        .within(center: center, radius: dis, field: 'position');
+        .within(center: center, radius: dis, field: 'position',strictMode: true).take(100);
 
     if(mapPetService!=null)
       mapPetService.clear();

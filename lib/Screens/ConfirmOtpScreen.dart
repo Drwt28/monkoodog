@@ -136,7 +136,7 @@ class _confirmOtpState extends State<confirmOtp> {
       );
       final result = (await _auth.signInWithCredential(credential));
 
-      MyUser user = await getUser(result);
+      User user = await getUser(result);
 
     } catch (e) {
 
@@ -154,7 +154,7 @@ class _confirmOtpState extends State<confirmOtp> {
 
   }
 
-  Future<MyUser> getUser( authResult)
+  Future<User> getUser( authResult)
   async{
     String uid = authResult.user.uid;
 
@@ -162,7 +162,7 @@ class _confirmOtpState extends State<confirmOtp> {
     if(doc.exists)
     {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
-      return MyUser.fromJson(doc.data);
+      return User.fromJson(doc.data);
 
     }else{
 
@@ -217,7 +217,7 @@ class _confirmOtpState extends State<confirmOtp> {
       setState(() {
 
       });
-      MyUser user = new MyUser(userEmail: fUser.email,userPhone: fUser.phoneNumber,uid: fUser.uid);
+      User user = new User(userEmail: fUser.email,userPhone: fUser.phoneNumber,uid: fUser.uid);
 
       var doc =  await Firestore.instance.collection("users").document(user.uid).get();
 
@@ -275,7 +275,7 @@ class _confirmOtpState extends State<confirmOtp> {
             _auth
                 .signInWithCredential(phoneAuthCredential)
                 .then((authResult)async {
-              MyUser user = await getUser(authResult);
+              User user = await getUser(authResult);
 
               loading = false;
               print(user);
@@ -300,7 +300,7 @@ class _confirmOtpState extends State<confirmOtp> {
     }
   }
 
-  checkUser(MyUser user){
+  checkUser(User user){
     if(user==null)
     {
       print("null");

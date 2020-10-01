@@ -49,6 +49,7 @@ dependencies:
   url_launcher:
   multiselectable_dropdown: ^0.0.4
   lazy_load_scrollview: ^1.1.0
+  share:
 
 dev_dependencies:
   flutter_test:

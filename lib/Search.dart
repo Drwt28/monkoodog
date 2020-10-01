@@ -7,7 +7,7 @@ import 'package:monkoodog/utils/utiles.dart';
 
 class Search extends SearchDelegate{
 
-  List<News> suggestions;
+  List suggestions;
   String type;
   Search({this.type,this.suggestions});
   Api api = Api();
@@ -67,5 +67,7 @@ class Search extends SearchDelegate{
   }
 
 
+  @override
+  String get searchFieldLabel => "search in $type";
 
 }

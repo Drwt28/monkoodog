@@ -140,6 +140,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   @override
   void initState() {
+    if(Provider.of<DataProvider>(context).userLocation==null)
     Provider.of<DataProvider>(context, listen: false).getdata();
   }
 
@@ -184,6 +185,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
             : Form(
           key: formkey,
               child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                 physics: BouncingScrollPhysics(),
           children: [
               Container(

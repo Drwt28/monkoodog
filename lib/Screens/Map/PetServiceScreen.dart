@@ -341,7 +341,7 @@ class _PetServicePageState extends State<PetServicePage> {
                   value: distance,
                   activeColor: Colors.blue,
                   min: 10,
-                  max: 2000,
+                  max: 300,
                 ),
               ),
               Padding(

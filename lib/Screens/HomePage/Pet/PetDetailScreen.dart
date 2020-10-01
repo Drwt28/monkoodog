@@ -5,6 +5,7 @@ import 'package:monkoodog/CustomWidgets.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
 import 'package:monkoodog/Modals/vaccination.dart';
+import 'package:monkoodog/Screens/HomePage/Pet/EditPetScreen.dart';
 import 'package:monkoodog/utils/age.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +75,9 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          FlatButton(onPressed: (){}, child: Text("Edit"))
+          (widget.view)?FlatButton(onPressed: (){
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>EditPetPage(petdate: widget.snapshot,reference: widget.snapshot.reference,)));
+          }, child: Text("Edit")):SizedBox()
         ],
       ),
       body: ListView(
@@ -147,7 +150,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                   width: 120,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       image: NetworkImage(widget.pets.media)
                     ),
                     color: Colors.white,

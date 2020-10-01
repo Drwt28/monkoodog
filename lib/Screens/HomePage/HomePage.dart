@@ -10,8 +10,10 @@ import 'package:monkoodog/Screens/HomePage/Pet/MyPetScreen.dart';
 import 'package:monkoodog/Screens/Login.dart';
 import 'package:monkoodog/Screens/Map/Finder.dart';
 import 'package:monkoodog/Screens/Map/PetFinder.dart';
+import 'package:monkoodog/Screens/User/ProfileUpdateScreen.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,45 +22,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
 
   @override
   void initState() {
     super.initState();
-
   }
 
-  var title = ["Home","My Pet","Blogs"];
+  var title = ["Home", "My Pet", "Blogs"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: InkWell(
-        onTap: (){
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>Finder()));
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Finder()));
         },
         child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white
+          decoration:
+              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          child: Image.asset(
+            'assets/images/paw.png',
+            height: 50,
           ),
-          child: Image.asset('assets/images/paw.png',height: 50,),
         ),
       ),
       key: scaffoldKey,
       drawer: buildHomeDrawer(),
       appBar: AppBar(
         title: Text(title[selectedIndex]),
-        leading: IconButton(onPressed: (){
-          scaffoldKey.currentState.openDrawer();
-        }
-        ,icon: Icon(Icons.menu),),
+        leading: IconButton(
+          onPressed: () {
+            scaffoldKey.currentState.openDrawer();
+          },
+          icon: Icon(Icons.menu),
+        ),
         backgroundColor: Utiles.primaryBgColor,
       ),
-      body: selectedIndex==0?NewsScreen():selectedIndex==1?MyPetScreen():BlogsScreen(),
+      body: selectedIndex == 0
+          ? NewsScreen()
+          : selectedIndex == 1 ? MyPetScreen() : BlogsScreen(),
       bottomNavigationBar: bottomNavBar(),
     );
   }
@@ -66,25 +70,23 @@ class _HomePageState extends State<HomePage> {
   Widget bottomNavBar() {
     return ClipRRect(
       clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       child: Container(
-        decoration: BoxDecoration(
-        ),
-        height: MediaQuery.of(context).size.height*.1,
+        decoration: BoxDecoration(),
+        height: MediaQuery.of(context).size.height * .1,
         child: Row(
           children: [
-            SingleItem(0,icon: CupertinoIcons.home),
-            SingleItem(1,icon: CupertinoIcons.paw_solid),
-            SingleItem(2,icon: CupertinoIcons.news_solid),
+            SingleItem(0, icon: CupertinoIcons.home),
+            SingleItem(1, icon: CupertinoIcons.paw_solid),
+            SingleItem(2, icon: CupertinoIcons.news_solid),
           ],
         ),
       ),
     );
   }
 
-
-  buildHomeDrawer()
-  {
+  buildHomeDrawer() {
     return Container(
       child: Drawer(
           elevation: 0,
@@ -93,13 +95,13 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               GestureDetector(
-                // onTap: () {
-                //   Navigator.pop(context);
-                //
-                //   Navigator.push(context, MaterialPageRoute(
-                //       builder: (context)=>ProfileUpdateScreen()
-                //   ));
-                // },
+                onTap: () {
+                  Navigator.pop(context);
+
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context)=>ProfileUpdateScreen()
+                  ));
+                },
                 child: DrawerHeader(
                   child: Center(
                     child: Row(
@@ -136,8 +138,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home,
-                  color: Utiles.primaryBgColor,),
+                leading: Icon(
+                  Icons.home,
+                  color: Utiles.primaryBgColor,
+                ),
                 title: Text(
                   'Home',
                   style: TextStyle(
@@ -150,7 +154,8 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.send,
+                leading: Icon(
+                  Icons.send,
                   color: Utiles.primaryBgColor,
                 ),
                 title: Text(
@@ -160,15 +165,17 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
-                // onTap: () {
-                //   Navigator.pop(context);
-                //   Share.share(
-                //       'Check out our app Moonkodog https://play.google.com/store/apps/details?id=com.moonkodog.app');
-                // },
+                onTap: () {
+                  Navigator.pop(context);
+                  Share.share(
+                      'Check out our app Moonkodog https://play.google.com/store/apps/details?id=com.moonkodog.app');
+                },
               ),
               ListTile(
-                leading: Icon(Icons.pets,
-                  color: Utiles.primaryBgColor,),
+                leading: Icon(
+                  Icons.pets,
+                  color: Utiles.primaryBgColor,
+                ),
                 title: Text(
                   'PetFinder',
                   style: TextStyle(
@@ -178,13 +185,16 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Finder()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Finder()));
                 },
               ),
 
               ListTile(
-                leading: Icon(Icons.bug_report,
-                  color: Utiles.primaryBgColor,),
+                leading: Icon(
+                  Icons.bug_report,
+                  color: Utiles.primaryBgColor,
+                ),
                 title: Text("Report Issue",
                     style: TextStyle(
                         fontSize: 16,
@@ -202,8 +212,10 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.person,
-                  color: Utiles.primaryBgColor,),
+                leading: Icon(
+                  Icons.person,
+                  color: Utiles.primaryBgColor,
+                ),
                 title: Text(
                   'Logout',
                   style: TextStyle(
@@ -221,17 +233,20 @@ class _HomePageState extends State<HomePage> {
                       backgroundColor: Colors.white,
                       title: Text("Logout"),
                       content:
-                      Text("Are you sure you wanna logout of MonkooDog?"),
+                          Text("Are you sure you wanna logout of MonkooDog?"),
                       actions: <Widget>[
                         FlatButton(
                           onPressed: () async {
-                            try{
+                            try {
                               await GoogleSignIn().signOut();
-                            }catch(e){
+                            } catch (e) {
                               print(e.toString());
                             }
                             FirebaseAuth.instance.signOut();
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
 
 //
                           },
@@ -267,39 +282,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  int selectedIndex=0;
-  Widget SingleItem(index,{icon})
-  {
-    return !(selectedIndex==index)?
-    Flexible(
-        flex: 1,
-        child:InkWell(
-      onTap: (){
-        selectedIndex=index;
-        setState(() {
+  int selectedIndex = 1;
 
-        });
-      },
-      child: Container(
-        color: Utiles.primaryBgColor,
-        child: Center(
-          child: Icon(icon,size: 30,),
-        ),
-      ),
-    ) ):Flexible(
-        flex: 1,
-        child: CustomPaint(
-      painter: circleShape(),
-      child: ClipPath(
-        clipper: selectedClipper(),
-        child: Container(
-          color: Utiles.primaryBgColor,
-          child: Center(
-            child: Icon(icon,color: Colors.white,size: 35,),
-          ),
-        ),
-      ),
-    ));
+  Widget SingleItem(index, {icon}) {
+    return !(selectedIndex == index)
+        ? Flexible(
+            flex: 1,
+            child: InkWell(
+              onTap: () {
+                selectedIndex = index;
+                setState(() {});
+              },
+              child: Container(
+                color: Utiles.primaryBgColor,
+                child: Center(
+                  child: Icon(
+                    icon,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ))
+        : Flexible(
+            flex: 1,
+            child: CustomPaint(
+              painter: circleShape(),
+              child: ClipPath(
+                clipper: selectedClipper(),
+                child: Container(
+                  color: Utiles.primaryBgColor,
+                  child: Center(
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                  ),
+                ),
+              ),
+            ));
   }
 }
 
@@ -310,7 +331,7 @@ class selectedClipper extends CustomClipper<Path> {
     Path path = Path();
     var part = (size.width / 3);
     path.lineTo(part, 0);
-    path.lineTo(size.width/2, 20);
+    path.lineTo(size.width / 2, 20);
     path.lineTo(2 * part, 0);
     path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
@@ -327,19 +348,16 @@ class selectedClipper extends CustomClipper<Path> {
   }
 }
 
-class circleShape extends CustomPainter{
+class circleShape extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-
     Paint paint = Paint();
     paint.color = Utiles.primaryBgColor;
-    canvas.drawCircle(Offset(size.width/2,6), 6, paint);
+    canvas.drawCircle(Offset(size.width / 2, 6), 6, paint);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-
     return true;
   }
-
 }
