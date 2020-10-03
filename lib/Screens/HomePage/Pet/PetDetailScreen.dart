@@ -43,7 +43,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
   bool vac = true;
 
 
-  List<bool> selected = [false,true];
+  List<bool> selected = [true,false];
 
   void getDob() {
     int _year = int.parse(widget.pets.dob.substring(0, 4));
@@ -76,7 +76,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       appBar: AppBar(
         actions: [
           (widget.view)?FlatButton(onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context)=>EditPetPage()));
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>EditPetPage(documentSnapshot: widget.snapshot,)));
           }, child: Row(children: [
             Icon(Icons.edit,size: 20,color: Colors.white,),
             SizedBox(width: 5,),

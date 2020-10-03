@@ -47,6 +47,10 @@ class _EditPetPageState extends State<EditPetPage> {
       selectedAllergies = "";
   var step = 1;
 
+
+
+
+
   buildBottomButton() {
     var user = Provider.of<FirebaseUser>(context);
     var location = Provider
@@ -117,7 +121,7 @@ class _EditPetPageState extends State<EditPetPage> {
             );
 
 
-            await Firestore.instance.collection("pets").add(NewPet.getData(pet));
+            await widget.documentSnapshot.reference.updateData(NewPet.getData(pet));
             Navigator.pop(context);
             showSuccesDialog();
             setState(() {});
@@ -145,13 +149,67 @@ class _EditPetPageState extends State<EditPetPage> {
     );
   }
 
+  NewPet pet;
   @override
   void initState() {
     super.initState();
-    // if(Provider.of<DataProvider>(context).userLocation==null)
-    //   Provider.of<DataProvider>(context, listen: false).getdata();
+
+    pet = NewPet.fromJson(widget.documentSnapshot.data);
+
+    feedBackController.text = pet.loves;
+    _diseasesResult = pet.diseases;
+    _allergiesResult = pet.allergies;
+    petNameController.text = pet.name;
+    profileImageUrl = pet.media;
+    imageExists=  true;
+    int gen = pet.gender.contains("Male")?0:1;
+    genderSelected[gen] = true;
+    age = DateTime.parse(pet.dob);
+    breedSelected[pet.breedType] = true;
+    selectedPrimaryBreed = pet.primaryBreed;
+    selectedSecondaryBreed = pet.secondaryBreed;
+
+    Future.delayed(Duration(milliseconds: 300)).then((value){setState(() {
+
+    });});
+
+
   }
 
+
+  deletePet(){
+    showDialog(
+      context: (context),
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)),
+        backgroundColor: Colors.white,
+        title: Text("Delete"),
+        content:
+        Text("Are you sure you to delete "),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () async {
+              widget.documentSnapshot.reference.delete();
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: Text("Yes"),
+            color: Colors.red,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5)),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("No"),
+          )
+        ],
+      ),
+    );
+  }
   List breeds;
   DateTime age;
   FocusNode focusNode = FocusNode();
@@ -170,11 +228,11 @@ class _EditPetPageState extends State<EditPetPage> {
             FlatButton(onPressed: (){
               Navigator.pop(context);
               return true;
-            }, child: Text("Add Pet")),
+            }, child: Text("No")),
             FlatButton(onPressed: (){
               Navigator.pop(context);
               Navigator.pop(context);
-            }, child: Text("Quit")),
+            }, child: Text("Yes")),
           ],
         ));
 
@@ -185,7 +243,17 @@ class _EditPetPageState extends State<EditPetPage> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Add Pet"),
+
+          actions: [
+            FlatButton(onPressed: (){
+              deletePet();
+            }, child: Row(children: [
+              Icon(Icons.delete,size: 20,color: Colors.white,),
+              SizedBox(width: 5,),
+              Text("Delete",style: TextStyle(fontSize: 20,color: Colors.white),)
+            ],))
+          ],
+          title: Text("Edit Pet"),
         ),
         bottomNavigationBar: buildBottomButton(),
         body: step == 2
@@ -207,7 +275,7 @@ class _EditPetPageState extends State<EditPetPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Fill dog's info",
+                            "Edit dog's info",
                             style: Theme
                                 .of(context)
                                 .textTheme
@@ -247,8 +315,8 @@ class _EditPetPageState extends State<EditPetPage> {
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 10),
-                                    child: (profileImage != null)
-                                        ? Image.memory(profileImage)
+                                    child: (imageExists)
+                                        ? Image.network(profileImageUrl)
                                         : Image.asset(
                                       "assets/images/dog.png",
                                       fit: BoxFit.cover,
@@ -762,7 +830,7 @@ class _EditPetPageState extends State<EditPetPage> {
           ),
 
           Text(
-            "Pet is adding please wait....",
+            "Updating pet info....",
             style: Theme
                 .of(context)
                 .textTheme

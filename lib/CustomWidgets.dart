@@ -13,7 +13,7 @@ Widget buildButton({text, onPressed, loading, color, context}) {
             child: Container(
               decoration: BoxDecoration(
                   color: color, borderRadius: BorderRadius.circular(8)),
-              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               child: InkWell(
                 onTap: onPressed,
                 child: Center(
