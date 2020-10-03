@@ -22,7 +22,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection("pets").where("id",isEqualTo: user.uid ).snapshots(),
       builder: (context, snapshot) {
-        return Padding(
+        return (snapshot.hasData)?(snapshot.data.documents.length==0)?NoPetwidget():Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
@@ -35,14 +35,14 @@ class _MyPetScreenState extends State<MyPetScreen> {
                   },),
                 ],
               ),
-            (snapshot.hasData)?(snapshot.data.documents.length==0)?NoPetwidget():Expanded(
+            Expanded(
               child: ListView(
                 children: List.generate(snapshot.data.documents.length, (index) => buildSinglePetWidget(NewPet.fromJson(snapshot.data.documents[index].data),snapshot.data.documents[index]))
               ),
-            ):Center(child: CircularProgressIndicator(),)
+            )
             ],
           ),
-        );
+        ):Center(child: CircularProgressIndicator(),);
       }
     );
   }
@@ -110,24 +110,25 @@ class _MyPetScreenState extends State<MyPetScreen> {
 
   NoPetwidget()
   {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('assets/images/dog.png',height: 100,width: 100,),
+          SizedBox(height: 10,),
+          Text("No Pets Added",style: Theme.of(context).textTheme.headline5.copyWith(color: Utiles.primaryButton),),
+          SizedBox(height: 10,),
+          Text("it Looks You Don't have Any Pets",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black54),),
+          SizedBox(height: 10,),
+          FloatingActionButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddPetScreen()));
+          },elevation: 0,backgroundColor: Utiles.primaryButton,
+          child: Icon(Icons.add,color: Colors.white,size: 20,),
+          )
 
-        Image.asset('assets/images/dog.png',height: 100,width: 100,),
-        SizedBox(height: 10,),
-        Text("No Pets Added",style: Theme.of(context).textTheme.headline5.copyWith(color: Utiles.primaryButton),),
-        SizedBox(height: 10,),
-        Text("it Looks You Don't have Any Pets",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black54),),
-        SizedBox(height: 10,),
-        FloatingActionButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddPetScreen()));
-        },elevation: 0,backgroundColor: Utiles.primaryButton,
-        child: Icon(Icons.add,color: Colors.white,size: 20,),
-        )
-
-      ],
+        ],
+      ),
     );
   }
 }

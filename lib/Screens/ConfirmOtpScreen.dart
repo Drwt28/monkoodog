@@ -7,8 +7,8 @@ import 'package:monkoodog/Modals/User.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:monkoodog/Screens/HomePage/HomePage.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 import '../CustomWidgets.dart';
 
@@ -38,9 +38,10 @@ class _confirmOtpState extends State<confirmOtp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: false,
       body: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 25, right: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -60,39 +61,40 @@ class _confirmOtpState extends State<confirmOtp> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: PinCodeTextField(
-              onTextChanged: (val){
+              keyboardType: TextInputType.number,
+              animationCurve: Curves.decelerate,
+              onChanged: (val){
                 smsOTP = val;
               },
-              onDone: (val){
+              appContext: context,
+              length: 6,
+              onCompleted: (val){
                 smsOTP = val;
                 signIn();
               },
-            autofocus: true,
-              maxLength: 6,
-              pinBoxHeight: 45,
-              pinBoxRadius: 10,
-              pinBoxWidth: 45,
-
-              wrapAlignment: WrapAlignment.spaceAround,
-              defaultBorderColor: Utiles.primaryButton,
-              pinBoxColor: Colors.white,
 
             ),
           ),
           SizedBox(height: 20,),
 
-          Text("Didn't get the code ? Tap here to", style: Theme
-              .of(context)
-              .textTheme
-              .subtitle1
-              .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),)
+          Align(
+            alignment: Alignment.center,
+            child: Text("Didn't get the code ? Tap here to", style: Theme
+                .of(context)
+                .textTheme
+                .subtitle1
+                .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),),
+          )
           ,
           SizedBox(height: 8,),
-          Text("Resend Code", style: Theme
-              .of(context)
-              .textTheme
-              .subtitle2
-              .copyWith(color: Colors.black),)
+          Align(
+            alignment: Alignment.center,
+            child: Text("Resend Code", style: Theme
+                .of(context)
+                .textTheme
+                .subtitle2
+                .copyWith(color: Colors.black),),
+          )
 
           ,
           SizedBox(height: 20,),

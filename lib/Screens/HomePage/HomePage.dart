@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Screens/HomePage/BlogsPage/BlogsScreen.dart';
@@ -40,23 +41,24 @@ class _HomePageState extends State<HomePage> {
               context, MaterialPageRoute(builder: (context) => Finder()));
         },
         child: Container(
+          padding: EdgeInsets.all(3),
           decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-          child: Image.asset(
-            'assets/images/paw.png',
-            height: 50,
-          ),
+              BoxDecoration(shape: BoxShape.circle, color: Colors.pink[100]),
+          child: Icon(CupertinoIcons.paw_solid,color: Utiles.primaryButton,size: 53,),
         ),
       ),
       key: scaffoldKey,
       drawer: buildHomeDrawer(),
       appBar: AppBar(
+        centerTitle: true,
         title: Text(title[selectedIndex]),
         leading: IconButton(
           onPressed: () {
             scaffoldKey.currentState.openDrawer();
           },
-          icon: Icon(Icons.menu),
+          icon: ClipPath(
+              clipper: iconShape(),
+              child: Icon(Icons.menu,size: 37,)),
         ),
         backgroundColor: Utiles.primaryBgColor,
       ),
@@ -69,7 +71,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget bottomNavBar() {
     return ClipRRect(
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       child: Container(
@@ -330,13 +332,21 @@ class selectedClipper extends CustomClipper<Path> {
     // TODO: implement getClip
     Path path = Path();
     var part = (size.width / 3);
+
+
+    //
     path.lineTo(part, 0);
+    //
+    //
     path.lineTo(size.width / 2, 20);
     path.lineTo(2 * part, 0);
     path.lineTo(size.width, 0);
+
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.lineTo(0, 0);
+
+    path.arcTo(Rect.fromCircle(center: Offset(size.width/2,0),radius: size.width/6),3.14,0,false);
 
     return path;
   }
@@ -352,12 +362,37 @@ class circleShape extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
+   paint.color = Colors.white;
+    canvas.drawCircle(Offset(size.width / 2, 0), size.width/3, paint);
     paint.color = Utiles.primaryBgColor;
     canvas.drawCircle(Offset(size.width / 2, 6), 6, paint);
+
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
+}
+
+class iconShape extends CustomClipper<Path>{
+
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return true;
+  }
+
+  @override
+  Path getClip(Size size) {
+
+    Path path = new Path();
+
+    path.lineTo(size.width, 0);
+    path.lineTo(0, size.height);
+    path.lineTo(0, 0);
+    return path;
+
+  }
+
 }

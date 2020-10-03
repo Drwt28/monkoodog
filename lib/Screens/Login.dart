@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   var loading = false;
   final _controller = TextEditingController();
-  String countryCode = "91";
+  String countryCode = "+91";
 
   var formKey = GlobalKey<FormState>();
 
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25,top: 10),
+          padding: const EdgeInsets.only(left: 30, right: 30,),
           child: (loading)
               ? Center(
                   child: CircularProgressIndicator(),
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 35,
                     ),
                     Text(
                       "Let's Get Started",
@@ -80,16 +81,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: Theme.of(context).textTheme.subtitle1.copyWith(
                           color: Colors.black26, fontWeight: FontWeight.normal),
                     ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(hintText: "Enter Mobile Number"),
-                      validator: (val) => (val.isEmpty || val.length != 10)
-                          ? "Enter Valid Mobile No"
-                          : null,
-                      onChanged: (val) {
-                        mobileNo = val;
-                        phoneNo = val;
-                      },
+                    Row(
+                      children: [
+                        CountryCodePicker(
+                          textStyle: TextStyle(fontSize: 18),
+                          initialSelection: "IN",
+                          favorite: ["+91","IN"],
+                          onChanged: (val){
+                            countryCode  = val.code;
+                          },
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            style: TextStyle(fontSize: 18,color: Utiles.primaryButton),
+                            keyboardType: TextInputType.number,
+                            decoration:
+                                InputDecoration(hintText: "Enter Mobile Number"),
+                            validator: (val) => (val.isEmpty || val.length != 10)
+                                ? "Enter Valid Mobile No"
+                                : null,
+                            onChanged: (val) {
+                              mobileNo = val;
+                              phoneNo = val;
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 60,

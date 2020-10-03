@@ -76,8 +76,12 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       appBar: AppBar(
         actions: [
           (widget.view)?FlatButton(onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context)=>EditPetPage(petdate: widget.snapshot,reference: widget.snapshot.reference,)));
-          }, child: Text("Edit")):SizedBox()
+            Navigator.push(context,MaterialPageRoute(builder: (context)=>EditPetPage()));
+          }, child: Row(children: [
+            Icon(Icons.edit,size: 20,color: Colors.white,),
+            SizedBox(width: 5,),
+            Text("Edit",style: TextStyle(fontSize: 20,color: Colors.white),)
+          ],)):SizedBox()
         ],
       ),
       body: ListView(

@@ -13,6 +13,7 @@ import 'package:monkoodog/CustomWidgets.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
 import 'package:monkoodog/Modals/breed.dart';
+import 'package:monkoodog/Widgets/ToogleButton.dart';
 import 'package:monkoodog/utils/age.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
@@ -140,8 +141,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   @override
   void initState() {
-    if(Provider.of<DataProvider>(context).userLocation==null)
-    Provider.of<DataProvider>(context, listen: false).getdata();
+   super.initState();
+   // if(Provider.of<DataProvider>(context).userLocation==null)
+   //   Provider.of<DataProvider>(context, listen: false).getdata();
   }
 
   List breeds;
@@ -298,76 +300,36 @@ class _AddPetScreenState extends State<AddPetScreen> {
                           ),
                           buildWithHeading(
                               "Gender",
-                              ToggleButtons(
-                                  constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width*.35,height: 45)
-                                 , borderRadius: BorderRadius.circular(8),
-                                  fillColor: Colors.green,
-                                  borderColor: Colors.white,
-                                  selectedColor: Colors.white,
-                                  onPressed: (val) {
-                                    for (int i = 0;
-                                    i < genderSelected.length;
-                                    i++)
-                                      genderSelected[i] = !genderSelected[i];
+                          ToogleButtonColored(onTap: (val) {
+                            for (int i = 0;
+                            i < genderSelected.length;
+                            i++)
+                              genderSelected[i] = !genderSelected[i];
 
-                                    setState(() {});
-                                  },
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Text("Male"),
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(10)),
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Text("Female"),
-                                    ),
-                                  ],
-                                  isSelected: genderSelected)),
+                            setState(() {});
+                            genderSelected[val] = true;
+                          },buttons: [
+                            " Male ","Female"
+                          ],)
+                          ),
                           SizedBox(
                             height: 10,
                           ),
                           buildWithHeading(
                               "Breed",
-                              ToggleButtons(
-                                constraints: BoxConstraints.expand(width: MediaQuery.of(context).size.width*.35,height: 45),
-                                  borderRadius: BorderRadius.circular(8),
-                                  fillColor: Colors.green,
-                                  borderColor: Colors.white,
-                                  selectedColor: Colors.white,
-                                  onPressed: (val) {
-                                    for (int i = 0;
-                                    i < breedSelected.length;
-                                    i++)
-                                      breedSelected[i] = !breedSelected[i];
 
-                                    setState(() {});
-                                  },
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Text("Pure"),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(10)),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Text("Mix"),
-                                      ),
-                                    ),
-                                  ],
-                                  isSelected: breedSelected)),
+                            ToogleButtonColored(onTap: (val){
+                              for (int i = 0;
+                              i < breedSelected.length;
+                              i++)
+                                breedSelected[i] = false;
+
+                              breedSelected[val] = true;
+                              setState(() {});
+                            },buttons: [
+                              "Pure","Mix"
+                            ],)
+                          ),
                           SizedBox(
                             height: 10,
                           ),
