@@ -33,6 +33,7 @@ dependencies:
   font_awesome_flutter:
   provider:
   shared_preferences:
+  flutter_staggered_animations: ^0.1.2
   connectivity:
   simple_animations: ^2.2.2
   http:

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monkoodog/Modals/User.dart';
-
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:monkoodog/Screens/HomePage/HomePage.dart';
@@ -42,88 +42,100 @@ class _confirmOtpState extends State<confirmOtp> {
       resizeToAvoidBottomPadding: false,
       body: Padding(
           padding: const EdgeInsets.only(left: 25, right: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            SizedBox(height: 50,),
-          Text("Enter the Code Sent", style: Theme
-              .of(context)
-              .textTheme
-              .headline5
-              .copyWith(color: Colors.black, fontWeight: FontWeight.w700),),
-          SizedBox(height: 10,),
-          Text("Enter the 6-digit code", style: Theme
-              .of(context)
-              .textTheme
-              .headline6
-              .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),),
-          SizedBox(height: 30,),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: PinCodeTextField(
-              keyboardType: TextInputType.number,
-              animationCurve: Curves.decelerate,
-              onChanged: (val){
-                smsOTP = val;
-              },
-              appContext: context,
-              length: 6,
-              onCompleted: (val){
-                smsOTP = val;
-                signIn();
-              },
+          child: SingleChildScrollView(
+            child: AnimationLimiter(
 
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: AnimationConfiguration.toStaggeredList(
+                    duration: Duration(milliseconds: 300),
+                    childAnimationBuilder: (widget)=>SlideAnimation(
+                  verticalOffset: -200,
+                  child: FadeInAnimation(
+                    child: widget,
+                  ),
+                ), children: [
+                  SizedBox(height: 50,),
+                  Text("Enter the Code Sent", style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline5
+                      .copyWith(color: Colors.black, fontWeight: FontWeight.w700),),
+                  SizedBox(height: 10,),
+                  Text("Enter the 6-digit code", style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),),
+                  SizedBox(height: 30,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: PinCodeTextField(
+                      keyboardType: TextInputType.number,
+                      animationCurve: Curves.decelerate,
+                      onChanged: (val){
+                        smsOTP = val;
+                      },
+                      appContext: context,
+                      length: 6,
+                      onCompleted: (val){
+                        smsOTP = val;
+                        signIn();
+                      },
+
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text("Didn't get the code ? Tap here to", style: Theme
+                        .of(context)
+                        .textTheme
+                        .subtitle1
+                        .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),),
+                  )
+                  ,
+                  SizedBox(height: 8,),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text("Resend Code", style: Theme
+                        .of(context)
+                        .textTheme
+                        .subtitle2
+                        .copyWith(color: Colors.black),),
+                  )
+
+                  ,
+                  SizedBox(height: 20,),
+                  buildButton(text: "Continue",
+                      context: context,
+                      color: Utiles.primaryBgColor,
+                      onPressed: () async {
+
+                        loading=true;
+                        setState(() {
+
+                        });
+                        signIn();
+                        // Navigator.push(context, CupertinoPageRoute(
+                        //     builder: (context)=>HomePage()
+                        // ));
+                        // setState(() {
+                        //   loading = true;
+                        // });
+                        //
+                        // await Future.delayed(Duration(seconds: 3));
+                        // setState(() {
+                        //   loading =F false;
+                        // });
+                      },
+                      loading: loading),
+                  SizedBox(height: 15,),
+                ]
+                )    ),
             ),
-          ),
-          SizedBox(height: 20,),
-
-          Align(
-            alignment: Alignment.center,
-            child: Text("Didn't get the code ? Tap here to", style: Theme
-                .of(context)
-                .textTheme
-                .subtitle1
-                .copyWith(color: Colors.black54, fontWeight: FontWeight.normal),),
           )
-          ,
-          SizedBox(height: 8,),
-          Align(
-            alignment: Alignment.center,
-            child: Text("Resend Code", style: Theme
-                .of(context)
-                .textTheme
-                .subtitle2
-                .copyWith(color: Colors.black),),
-          )
-
-          ,
-          SizedBox(height: 20,),
-          buildButton(text: "Continue",
-              context: context,
-              color: Utiles.primaryBgColor,
-              onPressed: () async {
-
-            loading=true;
-            setState(() {
-
-            });
-            signIn();
-                // Navigator.push(context, CupertinoPageRoute(
-                //     builder: (context)=>HomePage()
-                // ));
-                // setState(() {
-                //   loading = true;
-                // });
-                //
-                // await Future.delayed(Duration(seconds: 3));
-                // setState(() {
-                //   loading =F false;
-                // });
-              },
-              loading: loading),
-          SizedBox(height: 15,),
-    ]
-    )
     )
     ,
     );

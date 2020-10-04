@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:monkoodog/CustomWidgets.dart';
@@ -44,121 +45,170 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30,),
-          child: (loading)
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 35,
-                    ),
-                    Text(
-                      "Let's Get Started",
-                      style: Theme.of(context).textTheme.headline5.copyWith(
-                          color: Colors.black, fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Enter Your mobile number",
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: Colors.black54, fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Code",
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Colors.black26, fontWeight: FontWeight.normal),
-                    ),
-                    Row(
-                      children: [
-                        CountryCodePicker(
-                          textStyle: TextStyle(fontSize: 18),
-                          initialSelection: "IN",
-                          favorite: ["+91","IN"],
-                          onChanged: (val){
-                            countryCode  = val.code;
-                          },
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            style: TextStyle(fontSize: 18,color: Utiles.primaryButton),
-                            keyboardType: TextInputType.number,
-                            decoration:
-                                InputDecoration(hintText: "Enter Mobile Number"),
-                            validator: (val) => (val.isEmpty || val.length != 10)
-                                ? "Enter Valid Mobile No"
-                                : null,
-                            onChanged: (val) {
-                              mobileNo = val;
-                              phoneNo = val;
-                            },
+    return WillPopScope(
+      onWillPop: ()async{
+        if(loading)
+          {
+            loading=false;
+            setState(() {
+
+            });
+            return false;
+          }else{
+          showDialog<void>(
+            context: context,
+            barrierDismissible: true,
+            // false = user must tap button, true = tap outside dialog
+            builder: (BuildContext dialogContext) {
+              return AlertDialog(
+                title: Text('Are your sure to exit'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                      return true;// Dismiss alert dialog
+                    },
+                  ), FlatButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop();
+                      return false;// Dismiss alert dialog
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+          return true;
+        }
+      },
+      child: Form(
+        key: formKey,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          body: Padding(
+            padding: const EdgeInsets.only(left: 30, right: 30,),
+            child: (loading)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
+
+              child: AnimationLimiter(
+                child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: AnimationConfiguration.toStaggeredList(
+                            duration: const Duration(milliseconds: 575),
+                            childAnimationBuilder: (widget)=>SlideAnimation(
+                              horizontalOffset: -100,
+                          child: FadeInAnimation(child: widget),
+                        ), children: [
+                          SizedBox(
+                            height: 35,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 60,
-                    ),
-                    buildButton(
-                        context: context,
-                        text: "Verify Mobile Number",
-                        color: Utiles.primaryBgColor,
-                        onPressed: () async {
-                          if (formKey.currentState.validate()) verifyPhone();
-                          setState(() {
-                            loading = true;
-                          });
-                        },
-                        loading: loading),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                        child: Text(
-                      "Or",
-                      style: Theme.of(context).textTheme.headline6,
-                      textAlign: TextAlign.center,
-                    )),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    buildButton(
-                        context: context,
-                        text: "Sign in with Google",
-                        color: Utiles.primaryButton,
-                        onPressed: () {
-                          _handleSignIn();
-                        },
-                        loading: loading),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: "Issue?contact",
-                              style: TextStyle(color: Colors.black87)),
-                          TextSpan(
-                              text: "woof@monkoodog.com",
-                              style: TextStyle(color: Utiles.primaryBgColor))
+                          Text(
+                            "Let's Get Started",
+                            style: Theme.of(context).textTheme.headline5.copyWith(
+                                color: Colors.black, fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Enter Your mobile number",
+                            style: Theme.of(context).textTheme.headline6.copyWith(
+                                color: Colors.black54, fontWeight: FontWeight.normal),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            "Code",
+                            style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                color: Colors.black26, fontWeight: FontWeight.normal),
+                          ),
+                          Row(
+                            children: [
+                              CountryCodePicker(
+                                textStyle: TextStyle(fontSize: 18),
+                                initialSelection: "IN",
+                                favorite: ["+91","IN"],
+                                onChanged: (val){
+                                  countryCode  = val.code;
+                                },
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  style: TextStyle(fontSize: 18,color: Utiles.primaryButton),
+                                  keyboardType: TextInputType.number,
+                                  decoration:
+                                  InputDecoration(hintText: "Enter Mobile Number"),
+                                  validator: (val) => (val.isEmpty || val.length != 10)
+                                      ? "Enter Valid Mobile No"
+                                      : null,
+                                  onChanged: (val) {
+                                    mobileNo = val;
+                                    phoneNo = val;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 60,
+                          ),
+                          buildButton(
+                              context: context,
+                              text: "Verify Mobile Number",
+                              color: Utiles.primaryBgColor,
+                              onPressed: () async {
+                                if (formKey.currentState.validate()) verifyPhone();
+                                setState(() {
+                                  loading = true;
+                                });
+                              },
+                              loading: loading),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Center(
+                              child: Text(
+                                "Or",
+                                style: Theme.of(context).textTheme.headline6,
+                                textAlign: TextAlign.center,
+                              )),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          buildButton(
+                              context: context,
+                              text: "Sign in with Google",
+                              color: Utiles.primaryButton,
+                              onPressed: () {
+                                _handleSignIn();
+                              },
+                              loading: loading),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Center(
+                            child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: "Issue?contact",
+                                    style: TextStyle(color: Colors.black87)),
+                                TextSpan(
+                                    text: "woof@monkoodog.com",
+                                    style: TextStyle(color: Utiles.primaryBgColor))
+                              ]),
+                            ),
+                          )
                         ]),
                       ),
-                    )
-                  ],
+              ),
                 ),
+          ),
         ),
       ),
     );

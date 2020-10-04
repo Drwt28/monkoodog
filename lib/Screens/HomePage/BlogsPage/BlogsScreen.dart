@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Search.dart';
@@ -17,34 +18,44 @@ class _BlogsScreenState extends State<BlogsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffold,
-      body: Column(
-        children: [
-          SizedBox(height: 10,),
-          Container(
-            width: MediaQuery.of(context).size.width*.9,
+      body: SingleChildScrollView(
+        child: AnimationLimiter(
+          child: Column(
+            children: AnimationConfiguration.toStaggeredList(
+                duration: Duration(milliseconds: 500),
+                childAnimationBuilder: (widget)=>SlideAnimation(
+                horizontalOffset: 100,
+                child: ScaleAnimation(
+              child: widget,
+            )), children: [
+              SizedBox(height: 10,),
+              Container(
+                width: MediaQuery.of(context).size.width*.9,
 
-            child: ListTile(
-              onTap: (){
-                if(blogs!=null)
-                showSearch(context: context, delegate: Search(type: "blogs",suggestions: blogs));
-                else
-                  scaffold.currentState.showSnackBar(SnackBar(
-                    backgroundColor: Utiles.primaryBgColor,
-                    behavior: SnackBarBehavior.floating,
-                    content: Text("Data is loading......."),margin: EdgeInsets.symmetric(vertical: 100,horizontal: 20),));
+                child: ListTile(
+                  onTap: (){
+                    if(blogs!=null)
+                      showSearch(context: context, delegate: Search(type: "blogs",suggestions: blogs));
+                    else
+                      scaffold.currentState.showSnackBar(SnackBar(
+                        backgroundColor: Utiles.primaryBgColor,
+                        behavior: SnackBarBehavior.floating,
+                        content: Text("Data is loading......."),margin: EdgeInsets.symmetric(vertical: 100,horizontal: 20),));
 
-                },
-              leading: Icon(Icons.search),
-              title: Text("Search"),
-            ),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.black26,width: 1)
-            ),
+                  },
+                  leading: Icon(Icons.search),
+                  title: Text("Search"),
+                ),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.black26,width: 1)
+                ),
+              ),
+              Expanded(child: buildNewsPage()),
+            ]),
           ),
-          Expanded(child: buildNewsPage()),
-        ],
+        ),
       ),
     );
   }

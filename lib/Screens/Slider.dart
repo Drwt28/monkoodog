@@ -38,16 +38,15 @@ class _SliderPageState extends State<SliderPage> {
     return (isLooged)?HomePage():Scaffold(
       body: LiquidSwipe(
         pages : [
-          buildSinglePage('Welcome to Monkoodog','Best app for your dog','assets/images/scree1.png',Utiles.primaryBgColor),
-          buildSinglePage('Set your Location','Set your location so we can tell you the nearest animal shop to but pet','assets/images/screen2.png',Utiles.primaryButton),
-          buildSinglePage('Pet Vaccines Dates','Get your dog health \ninsights, next due date for\nvaccines and lot more.','assets/images/screen3.png',Utiles.primaryBgColor),
-          LoginScreen()
+          buildSinglePage('Welcome to Monkoodog','Best app for your dog','assets/images/scree1.png',Utiles.primaryBgColor,isLast: false),
+          buildSinglePage('Set your Location','Set your location so we can tell you the nearest animal shop to but pet','assets/images/screen2.png',Utiles.primaryButton,isLast: false),
+          buildSinglePage('Pet Vaccines Dates','Get your dog health \ninsights, next due date for\nvaccines and lot more.','assets/images/screen3.png',Utiles.primaryBgColor,isLast: true),
         ],
       ),
     );
   }
 
-  Widget buildSinglePage(title,subtitle,image,color) {
+  Widget buildSinglePage(title,subtitle,image,color,{isLast}) {
     return Stack(
       children: [
         Container(
@@ -80,7 +79,7 @@ class _SliderPageState extends State<SliderPage> {
               Align(
                   alignment: Alignment.centerRight,child: FlatButton(onPressed: (){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-              }, child: Text("Skip",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white),))),
+              }, child: Text(isLast?"Next":"Skip",style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white),))),
               SizedBox(
                 height: 10,
               ),
