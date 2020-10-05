@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/image_properties.dart';
+import 'package:flutter_share_me/flutter_share_me.dart';
 
 import 'package:monkoodog/Modals/news.dart';
 import 'package:monkoodog/utils/UiHelper.dart';
@@ -73,12 +74,12 @@ class _NewsCompleteDetailState extends State<NewsCompleteDetail> {
               ),
             ),
             onPressed: () {
-              // FlutterShareMe().shareToSystem(
-              //     msg: 'https://www.monkoodog.com/' +
-              //         widget.news.title
-              //             .replaceAll(' ', '-')
-              //             .toString()
-              //             .toLowerCase());
+              FlutterShareMe().shareToSystem(
+                  msg: 'https://www.monkoodog.com/' +
+                      widget.news.title
+                          .replaceAll(' ', '-')
+                          .toString()
+                          .toLowerCase());
             },
           ),
         ],

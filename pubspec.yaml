@@ -54,6 +54,7 @@ dependencies:
   lazy_load_scrollview: ^1.1.0
   share:
   country_code_picker:
+  flutter_share_me: ^0.9.1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:monkoodog/Modals/news.dart';
 import 'package:monkoodog/Screens/HomePage/Newspage/NewsDetail.dart';
 import 'package:monkoodog/utils/UiHelper.dart';
@@ -16,7 +17,7 @@ class NewsItem extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsCompleteDetail(news: news[index],)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>NewsCompleteDetail(news: news[index],type: type,)));
             },
             child: Container(
               decoration: BoxDecoration(
@@ -75,13 +76,13 @@ class NewsItem extends StatelessWidget {
                       FlatButton.icon(
                         label: Text("Share"),
                         onPressed: () {
-                          // FlutterShareMe().shareToSystem(
-                          //     msg: 'https://www.monkoodog.com/' +
-                          //         news[index]
-                          //             .title
-                          //             .replaceAll(' ', '-')
-                          //             .toString()
-                          //             .toLowerCase());
+                          FlutterShareMe().shareToSystem(
+                              msg: 'https://www.monkoodog.com/' +
+                                  news[index]
+                                      .title
+                                      .replaceAll(' ', '-')
+                                      .toString()
+                                      .toLowerCase());
                         },
                         icon: Icon(
                           Icons.share,
