@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:monkoodog/Animation/FadeAnimation.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
@@ -33,7 +34,7 @@ class _MyPetScreenState extends State<MyPetScreen> {
               ? (snapshot.data.documents.length == 0)
                   ? NoPetwidget()
                   : Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                       child: Column(
                         children: [
                           Row(
@@ -122,7 +123,8 @@ class _MyPetScreenState extends State<MyPetScreen> {
         margin: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Utiles.primaryButton, width: 1),
+            boxShadow: [BoxShadow(color: Colors.orange[200],spreadRadius: 1,blurRadius: 2)],
+
             borderRadius: BorderRadius.circular(8)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,12 +133,26 @@ class _MyPetScreenState extends State<MyPetScreen> {
               flex: 3,
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: FadeInImage(
-                      fit: BoxFit.fitWidth,
-                      image: NetworkImage(pet.media),
-                      placeholder: AssetImage(
-                        "assets/images/dog.png",
-                      ))),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Container(
+                        child: FadeInImage(
+                            fit: BoxFit.fitWidth,
+                            image: NetworkImage(pet.media),
+                            placeholder: AssetImage(
+                              "assets/images/dog.png",
+                            )),
+                      ),
+                      Positioned(
+                          right: 5,
+                          top: 5,
+                          child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.all(1),
+                              child: Icon((pet.gender.contains("Male"))?FontAwesomeIcons.mars:FontAwesomeIcons.venus,color: Colors.orange,)))
+                    ],
+                  )),
             ),
             Flexible(
                 flex: 4,
@@ -152,15 +168,22 @@ class _MyPetScreenState extends State<MyPetScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1
-                                .copyWith(color: Colors.black),
+                                .copyWith(color: Colors.black,fontWeight: FontWeight.bold),
                           ),
                           InkWell(
-                            child: Text(
-                              "Recent Vaccine",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(color: Utiles.primaryBgColor),
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Utiles.primaryButton),
+                                color: Colors.orange[200]
+                              ),
+                              child: Text(
+                                "Recent Vaccine",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1
+                                    .copyWith(color: Utiles.primaryButton,fontSize: 14),
+                              ),
                             ),
                             onTap: () {},
                           ),

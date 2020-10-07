@@ -6,6 +6,7 @@ import 'package:monkoodog/Screens/HomePage/HomePage.dart';
 import 'package:monkoodog/Screens/HomePage/Pet/AddPetScreen.dart';
 import 'package:monkoodog/Screens/Login.dart';
 import 'package:monkoodog/Screens/Slider.dart';
+import 'package:monkoodog/Screens/SplashScreen.dart';
 import 'package:monkoodog/Widgets/ToogleButton.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SliderPage(),
+        home: SplashScreen(),
       ),
     );
   }
