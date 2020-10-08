@@ -25,6 +25,7 @@ class _FinderState extends State<Finder> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   FloatingActionButton(
+                    backgroundColor: Utiles.primaryButton,
                     heroTag: 'sddfdfsdf',
                     mini: true,
                     onPressed: () {
@@ -37,7 +38,7 @@ class _FinderState extends State<Finder> {
                 ],),
             ),
 
-            Expanded(child: (currentIndex==0)?MyApp():PetServicePage())
+            Expanded(child: (currentIndex==0)?PetFinderScreen():PetServicePage())
           ],
         ),
       ),
@@ -52,7 +53,7 @@ class _FinderState extends State<Finder> {
         child: SizedBox(
           height: 40,
           child: RaisedButton(
-          color: selected?Utiles.primaryBgColor:Colors.black12,
+          color: selected?Utiles.primaryBgColor:Colors.white38,
           shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20)),
             onPressed: (){

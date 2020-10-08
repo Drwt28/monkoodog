@@ -75,7 +75,7 @@ class NewPet {
     id = json['id']??"";
     userId = json['user_id']??"";
     name = json['pet_name']??'';
-    gender = json['pet_gender']??'';
+    gender = json['gender']??'';
     dob = json['dob']??'';
     age = json['age']??'';
     breedType = json['breed_type']??"";

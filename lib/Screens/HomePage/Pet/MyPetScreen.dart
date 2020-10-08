@@ -34,7 +34,8 @@ class _MyPetScreenState extends State<MyPetScreen> {
               ? (snapshot.data.documents.length == 0)
                   ? NoPetwidget()
                   : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
                       child: Column(
                         children: [
                           Row(
@@ -68,21 +69,28 @@ class _MyPetScreenState extends State<MyPetScreen> {
                           Expanded(
                             child: AnimationLimiter(
                               child: ListView(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   children: List.generate(
                                       snapshot.data.documents.length,
-                                      (index) => AnimationConfiguration.staggeredList(
-                                        position: index,
-                                        duration: Duration(milliseconds: 400),
-                                        child: SlideAnimation(
-                                          verticalOffset: 50,
-                                          child: FadeInAnimation(
-                                            child: buildSinglePetWidget(
-                                                NewPet.fromJson(snapshot
-                                                    .data.documents[index].data),
-                                                snapshot.data.documents[index]),
-                                          ),
-                                        ),
-                                      ))),
+                                      (index) =>
+                                          AnimationConfiguration.staggeredList(
+                                            position: index,
+                                            duration:
+                                                Duration(milliseconds: 400),
+                                            child: SlideAnimation(
+                                              verticalOffset: 50,
+                                              child: FadeInAnimation(
+                                                child: buildSinglePetWidget(
+                                                    NewPet.fromJson(snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data),
+                                                    snapshot
+                                                        .data.documents[index]),
+                                              ),
+                                            ),
+                                          ))),
                             ),
                           )
                         ],
@@ -102,9 +110,8 @@ class _MyPetScreenState extends State<MyPetScreen> {
         fromDate: DateTime.parse(pet.dob),
         toDate: DateTime.now(),
         includeToDate: false);
-    var weeks =  int.parse(age
-        .toString()
-        .substring(0, age.toString().indexOf(' ')));
+    var weeks =
+        int.parse(age.toString().substring(0, age.toString().indexOf(' ')));
     List<Vaccination> vaccination =
         Provider.of<DataProvider>(context).vaccinations;
     return InkWell(
@@ -123,8 +130,10 @@ class _MyPetScreenState extends State<MyPetScreen> {
         margin: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [BoxShadow(color: Colors.orange[200],spreadRadius: 1,blurRadius: 2)],
-
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.orange[200], spreadRadius: 1, blurRadius: 2)
+            ],
             borderRadius: BorderRadius.circular(8)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +159,16 @@ class _MyPetScreenState extends State<MyPetScreen> {
                           child: Container(
                               color: Colors.white,
                               padding: EdgeInsets.all(1),
-                              child: Icon((pet.gender.contains("Male"))?FontAwesomeIcons.mars:FontAwesomeIcons.venus,color: Colors.orange,)))
+                              child:
+                                  (pet.gender.toLowerCase().contains("female"))
+                                      ? Icon(
+                                          FontAwesomeIcons.venus,
+                                          color: Colors.pink,
+                                        )
+                                      : Icon(
+                                          FontAwesomeIcons.mars,
+                                          color: Colors.orange,
+                                        )))
                     ],
                   )),
             ),
@@ -168,21 +186,25 @@ class _MyPetScreenState extends State<MyPetScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .subtitle1
-                                .copyWith(color: Colors.black,fontWeight: FontWeight.bold),
+                                .copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
                           ),
                           InkWell(
                             child: Container(
                               padding: EdgeInsets.all(4),
                               decoration: BoxDecoration(
-                                border: Border.all(color: Utiles.primaryButton),
-                                color: Colors.orange[200]
-                              ),
+                                  border:
+                                      Border.all(color: Utiles.primaryButton),
+                                  color: Colors.orange[200]),
                               child: Text(
                                 "Recent Vaccine",
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1
-                                    .copyWith(color: Utiles.primaryButton,fontSize: 14),
+                                    .copyWith(
+                                        color: Utiles.primaryButton,
+                                        fontSize: 14),
                               ),
                             ),
                             onTap: () {},

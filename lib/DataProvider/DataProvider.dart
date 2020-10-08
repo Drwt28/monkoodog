@@ -138,7 +138,7 @@ class DataProvider with ChangeNotifier {
     getPosts(1, 1);
     getUserLocation();
     getdata();
-    getMapPets(10);
+    getMapPets(100);
     getMapPetService(10);
 
   }

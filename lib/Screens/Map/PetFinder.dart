@@ -17,16 +17,13 @@ import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
 import 'package:provider/provider.dart';
 // import 'package:restcountries/restcountries.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatefulWidget {
+class PetFinderScreen extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _PetFinderScreenState createState() => _PetFinderScreenState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _PetFinderScreenState extends State<PetFinderScreen> {
 
 
   double distance = 10;
@@ -58,8 +55,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    getBreeds();
-    getUserLocation();
+
+    Provider.of<DataProvider>(context,listen: false).getMapPets(100);
   }
 
   bool isAreaSearch = false;
@@ -72,6 +69,7 @@ class _MyAppState extends State<MyApp> {
 
   final Map<String, Marker> _markers = {};
 
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
 
@@ -79,11 +77,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   getMarkers(){
+    petList = Provider.of<DataProvider>(context).mapPets;
     setState(() {
       _markers.clear();
       for (NewPet pet in petList) {
         final marker = Marker(
-
+          onTap: (){
+            Navigator.push(context, CupertinoPageRoute(
+              builder: (context)=>PetDetailScreen(pets: pet,view: false,)
+            ));
+          },
           draggable: true,
           markerId: MarkerId(pet.name),
           position: LatLng(pet.latitude, pet.longitude),
@@ -123,7 +126,7 @@ class _MyAppState extends State<MyApp> {
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
                     target:  LatLng(location.latitude, location.longitude),
-                    zoom: 2,
+                    zoom: 10,
                   ),
                   markers: _markers.values.toSet(),
                 ),
