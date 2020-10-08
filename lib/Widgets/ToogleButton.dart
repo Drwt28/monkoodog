@@ -5,9 +5,10 @@ class ToogleButtonColored extends StatefulWidget {
 
   List buttons;
   var onTap ;
+  int selected =0;
 
 
-  ToogleButtonColored({this.buttons,this.onTap});
+  ToogleButtonColored({this.buttons,this.onTap,this.selected});
 
   @override
   _ToogleButtonColoredState createState() => _ToogleButtonColoredState();
@@ -15,6 +16,19 @@ class ToogleButtonColored extends StatefulWidget {
 
 class _ToogleButtonColoredState extends State<ToogleButtonColored> {
   int selected = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+
+
+    Future.delayed(Duration(milliseconds: 20)).then((value){
+
+      selected = widget.selected??0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -20,9 +20,7 @@ import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
 import 'package:provider/provider.dart';
 
 class EditPetPage extends StatefulWidget {
-
-  DocumentSnapshot documentSnapshot ;
-
+  DocumentSnapshot documentSnapshot;
 
   EditPetPage({this.documentSnapshot});
 
@@ -31,8 +29,8 @@ class EditPetPage extends StatefulWidget {
 }
 
 class _EditPetPageState extends State<EditPetPage> {
-  var genderSelected = [true, false];
-  var breedSelected = [true, false];
+  var genderSelected = [false, false];
+  var breedSelected = [false, false];
   Uint8List profileImage;
 
   var feedBackController = TextEditingController();
@@ -43,62 +41,43 @@ class _EditPetPageState extends State<EditPetPage> {
   List _diseasesResult = [];
   List _allergiesResult = [];
 
-  var selectedDiseases = "",
-      selectedAllergies = "";
+  var selectedDiseases = "", selectedAllergies = "";
   var step = 1;
-
-
-
-
 
   buildBottomButton() {
     var user = Provider.of<FirebaseUser>(context);
-    var location = Provider
-        .of<DataProvider>(context)
-        .userLocation;
+    var location = Provider.of<DataProvider>(context).userLocation;
     return ClipRRect(
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       child: InkWell(
-        onTap: ()async {
-          if (step == 1)
-          {
-            if(formkey.currentState.validate())
-            {
-              if(selectedPrimaryBreed==null)
-              {
+        onTap: () async {
+          if (step == 1) {
+            if (formkey.currentState.validate()) {
+              if (selectedPrimaryBreed == null) {
                 showErrorDialog("OOPS, Please select primary breed");
-              }else if(!imageExists)
-              {
+              } else if (!imageExists) {
                 showErrorDialog("OOPS, Please upload image of pet");
-              }
-              else{
+              } else {
                 step = 2;
-                setState(() {
-
-                });
+                setState(() {});
               }
-
             }
-
-
-          }
-          else {
+          } else {
             showLoadingDialog();
-            String gender = genderSelected.indexOf(true) == 0
-                ? "Male"
-                : "Female";
+            String gender =
+                genderSelected.indexOf(true) == 0 ? "Male" : "Female";
             Geoflutterfire geo = Geoflutterfire();
-
 
             var pet = NewPet(
               position: geo
                   .point(
-                  latitude: location.latitude, longitude: location.longitude)
+                      latitude: location.latitude,
+                      longitude: location.longitude)
                   .data,
               diseases: _diseasesResult,
-              dob: age.toString().substring(0,10),
+              dob: age.toString().substring(0, 10),
               gender: gender,
               longitude: location.longitude,
               created: DateTime.now().toString(),
@@ -106,9 +85,10 @@ class _EditPetPageState extends State<EditPetPage> {
               latitude: location.latitude,
               name: petNameController.text,
               age: Age.weeks(
-                  fromDate: age,
-                  toDate: DateTime.now(),
-                  includeToDate: false).toString(),
+                      fromDate: age,
+                      toDate: DateTime.now(),
+                      includeToDate: false)
+                  .toString(),
               userId: user.uid,
               loves: feedBackController.text,
               primaryBreed: selectedPrimaryBreed,
@@ -117,18 +97,14 @@ class _EditPetPageState extends State<EditPetPage> {
               allergies: _allergiesResult,
               breed: selectedPrimaryBreed,
               breedType: selectedSecondaryBreed == null ? 0 : 1,
-
             );
 
-
-            await widget.documentSnapshot.reference.updateData(NewPet.getData(pet));
+            await widget.documentSnapshot.reference
+                .updateData(NewPet.getData(pet));
             Navigator.pop(context);
             showSuccesDialog();
             setState(() {});
-
           }
-
-
         },
         child: Container(
           decoration: BoxDecoration(
@@ -137,19 +113,19 @@ class _EditPetPageState extends State<EditPetPage> {
           height: 90,
           child: Center(
               child: Text(
-                step == 2 ? "Finish" : "Next",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(color: Colors.white),
-              )),
+            step == 2 ? "Finish" : "Next",
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Colors.white),
+          )),
         ),
       ),
     );
   }
 
   NewPet pet;
+
   @override
   void initState() {
     super.initState();
@@ -161,32 +137,30 @@ class _EditPetPageState extends State<EditPetPage> {
     _allergiesResult = pet.allergies;
     petNameController.text = pet.name;
     profileImageUrl = pet.media;
-    imageExists=  true;
-    int gen = pet.gender.contains("Male")?0:1;
+    imageExists = true;
+    int gen = pet.gender.toLowerCase().contains("female") ? 1 : 0;
+
+
+    print(pet.breedType);
     genderSelected[gen] = true;
     age = DateTime.parse(pet.dob);
     breedSelected[pet.breedType] = true;
     selectedPrimaryBreed = pet.primaryBreed;
     selectedSecondaryBreed = pet.secondaryBreed;
 
-    Future.delayed(Duration(milliseconds: 300)).then((value){setState(() {
-
-    });});
-
-
+    Future.delayed(Duration(milliseconds: 100)).then((value) {
+      setState(() {});
+    });
   }
 
-
-  deletePet(){
+  deletePet() {
     showDialog(
       context: (context),
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         backgroundColor: Colors.white,
         title: Text("Delete"),
-        content:
-        Text("Are you sure you to delete "),
+        content: Text("Are you sure you to delete "),
         actions: <Widget>[
           FlatButton(
             onPressed: () async {
@@ -197,8 +171,8 @@ class _EditPetPageState extends State<EditPetPage> {
             },
             child: Text("Yes"),
             color: Colors.red,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           ),
           FlatButton(
             onPressed: () {
@@ -210,31 +184,38 @@ class _EditPetPageState extends State<EditPetPage> {
       ),
     );
   }
+
   List breeds;
   DateTime age;
   FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    breeds = Provider
-        .of<DataProvider>(context)
-        .breeds;
+    breeds = Provider.of<DataProvider>(context).breeds;
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
+
+
         bool status = false;
-        showDialog(context: context,child: AlertDialog(
-          title: Text("Are you sure to exit"),
-          actions: [
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-              return true;
-            }, child: Text("No")),
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-              Navigator.pop(context);
-            }, child: Text("Yes")),
-          ],
-        ));
+        showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text("Are you sure to exit"),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      return true;
+                    },
+                    child: Text("No")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Yes")),
+              ],
+            ));
 
         return status;
       },
@@ -243,15 +224,27 @@ class _EditPetPageState extends State<EditPetPage> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-
           actions: [
-            FlatButton(onPressed: (){
-              deletePet();
-            }, child: Row(children: [
-              Icon(Icons.delete,size: 20,color: Colors.white,),
-              SizedBox(width: 5,),
-              Text("Delete",style: TextStyle(fontSize: 20,color: Colors.white),)
-            ],))
+            FlatButton(
+                onPressed: () {
+                  deletePet();
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.delete,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Delete",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    )
+                  ],
+                ))
           ],
           title: Text("Edit Pet"),
         ),
@@ -259,221 +252,225 @@ class _EditPetPageState extends State<EditPetPage> {
         body: step == 2
             ? buildAddPet2()
             : Form(
-          key: formkey,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-            physics: BouncingScrollPhysics(),
-            children: [
-              Container(
-                height: 160,
-                padding: EdgeInsets.all(8),
-                child: Row(
+                key: formkey,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  physics: BouncingScrollPhysics(),
                   children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Container(
+                      height: 160,
+                      padding: EdgeInsets.all(8),
+                      child: Row(
                         children: [
-                          Text(
-                            "Edit dog's info",
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                            "Name",
-                            TextFormField(
-                              validator: (val)=>val.isEmpty?"Enter Pet Name":null,
-                              controller: petNameController,
-                              focusNode: focusNode,
-                              decoration:
-                              InputDecoration(hintText: "Enter Name"),
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Edit dog's info",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .copyWith(color: Colors.black),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildWithHeading(
+                                  "Name",
+                                  TextFormField(
+                                    validator: (val) =>
+                                        val.isEmpty ? "Enter Pet Name" : null,
+                                    controller: petNameController,
+                                    focusNode: focusNode,
+                                    decoration:
+                                        InputDecoration(hintText: "Enter Name"),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      getImage();
+                                    },
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 0, vertical: 10),
+                                          child: (imageExists)
+                                              ? Image.network(profileImageUrl)
+                                              : Image.asset(
+                                                  "assets/images/dog.png",
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        )),
+                                  ),
+                                ),
+                                Text(
+                                  "Upload photo",
+                                  style: TextStyle(color: Colors.black54),
+                                )
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
+                    Container(
+                      height: 500,
+                      padding: EdgeInsets.all(8),
+                      child: Row(
                         children: [
                           Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                getImage();
-                              },
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 10),
-                                    child: (imageExists)
-                                        ? Image.network(profileImageUrl)
-                                        : Image.asset(
-                                      "assets/images/dog.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )),
+                            flex: 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildWithHeading(
+                                    "Date of Birth",
+                                    ListTile(
+                                      onTap: () async {
+                                        var currentdate = DateTime.now();
+                                        age = await showDatePicker(
+                                            context: context,
+                                            initialDate:
+                                                DateTime(currentdate.year - 3),
+                                            firstDate:
+                                                DateTime(currentdate.year - 3),
+                                            lastDate: currentdate);
+                                        setState(() {});
+                                      },
+                                      title: Text(age == null
+                                          ? "Select Date"
+                                          : age.toString().substring(0, 10)),
+                                      trailing: Icon(
+                                        Icons.calendar_today_rounded,
+                                        size: 30,
+                                      ),
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildWithHeading(
+
+                                    "Gender",
+                                    ToogleButtonColored(
+                                      selected: genderSelected.indexOf(true),
+
+                                      onTap: (val) {
+                                        for (int i = 0;
+                                            i < genderSelected.length;
+                                            i++)
+                                          genderSelected[i] =
+                                              !genderSelected[i];
+
+                                        setState(() {});
+                                      },
+                                      buttons: [" Male ", "Female"],
+
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildWithHeading(
+                                    "Breed",
+                                    ToogleButtonColored(
+                                      selected: breedSelected.indexOf(true),
+                                      onTap: (val) {
+                                        for (int i = 0;
+                                            i < breedSelected.length;
+                                            i++)
+                                          breedSelected[i] = !breedSelected[i];
+
+                                        breedSelected[val] = true;
+
+                                        setState(() {});
+                                      },
+                                      buttons: ["Pure", "Mix"],
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildWithHeading(
+                                    "Choose Primary Breed",
+                                    InkWell(
+                                      onTap: () {
+                                        buildSearchBottomSheet(true);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 18, horizontal: 24),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.black12),
+                                        child: Text(selectedPrimaryBreed ??
+                                            "Select Primary Breed"),
+                                      ),
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                (breedSelected[1])
+                                    ? buildWithHeading(
+                                        "Choose Primary Breed",
+                                        InkWell(
+                                          onTap: () {
+                                            buildSearchBottomSheet(false);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 18, horizontal: 24),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.black12),
+                                            child: Text(
+                                                selectedSecondaryBreed ??
+                                                    "Select Secondary Breed"),
+                                          ),
+                                        ))
+                                    : SizedBox()
+                              ],
                             ),
                           ),
-                          Text(
-                            "Upload photo",
-                            style: TextStyle(color: Colors.black54),
-                          )
                         ],
                       ),
                     )
                   ],
                 ),
               ),
-              Container(
-                height: 500,
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Date of Birth",
-                              ListTile(
-                                onTap: () async {
-                                  var currentdate = DateTime.now();
-                                  age = await showDatePicker(
-                                      context: context,
-                                      initialDate:
-                                      DateTime(currentdate.year - 3),
-                                      firstDate:
-                                      DateTime(currentdate.year - 3),
-                                      lastDate: currentdate);
-                                  setState(() {
-
-                                  });
-                                },
-                                title: Text(age==null?"Select Date":age.toString().substring(0,10)),
-                                trailing: Icon(
-                                  Icons.calendar_today_rounded,
-                                  size: 30,
-                                ),
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Gender",
-                              ToogleButtonColored(onTap: (val) {
-                                for (int i = 0;
-                                i < genderSelected.length;
-                                i++)
-                                  genderSelected[i] = !genderSelected[i];
-
-                                setState(() {});
-                              },buttons: [
-                                " Male ","Female"
-                              ],)
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Breed",
-
-                              ToogleButtonColored(onTap: (){
-                                for (int i = 0;
-                                i < breedSelected.length;
-                                i++)
-                                  breedSelected[i] = !breedSelected[i];
-
-                                setState(() {});
-                              },buttons: [
-                                "Pure","Mix"
-                              ],)
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Choose Primary Breed",
-                              InkWell(
-                                onTap: () {
-                                  buildSearchBottomSheet(true);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 18, horizontal: 24),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.black12),
-                                  child: Text(selectedPrimaryBreed ??
-                                      "Select Primary Breed"),
-                                ),
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          (breedSelected[1])
-                              ? buildWithHeading(
-                              "Choose Primary Breed",
-                              InkWell(
-                                onTap: () {
-                                  buildSearchBottomSheet(false);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 18, horizontal: 24),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                      color: Colors.black12),
-                                  child: Text(selectedSecondaryBreed ??
-                                      "Select Secondary Breed"),
-                                ),
-                              ))
-                              : SizedBox()
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }
 
   buildAddPet2() {
     List<MultipleSelectItem> _diseases =
-        Provider
-            .of<DataProvider>(context)
-            .diseases;
+        Provider.of<DataProvider>(context).diseases;
     List<MultipleSelectItem> _allergies =
-        Provider
-            .of<DataProvider>(context)
-            .allergies;
+        Provider.of<DataProvider>(context).allergies;
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
             Text(
-              "Fill dog's info 2/2",
-              style: Theme
-                  .of(context)
+              "Fill dog's info 2/2 optional",
+              style: Theme.of(context)
                   .textTheme
                   .headline6
                   .copyWith(color: Colors.black),
@@ -482,59 +479,51 @@ class _EditPetPageState extends State<EditPetPage> {
               height: 30,
             ),
             buildWithHeading(
-                "Does your dog have any allergies?",
+                "Does your dog have any allergies? if not skip",
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+
+                  width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12),
+                      color: Colors.white24),
                   child: MultipleDropDown(
                     placeholder: 'Select Allergies',
                     disabled: false,
                     values: _allergiesResult,
                     elements: _allergies,
                   ),
-                )),
+                ),optional: true),
             SizedBox(
               height: 10,
             ),
             buildWithHeading(
-                "Does your dog have any diseases?",
+                "Does your dog have any diseases? if not skip",
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12),
+                      color: Colors.white24),
                   child: MultipleDropDown(
                     placeholder: 'Select Disease',
                     disabled: false,
                     values: _diseasesResult,
                     elements: _diseases,
                   ),
-                )),
+                ),optional: true),
             SizedBox(
               height: 10,
             ),
             buildWithHeading(
-                "Tell us what your dog loves",
+                "Tell us what your dog loves (optional)",
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   height: 200,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12),
+                      color: Colors.white24),
                   child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: 5,
@@ -544,7 +533,7 @@ class _EditPetPageState extends State<EditPetPage> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(14),
                       hintText:
-                      'Tell us what your dog loves\n(You can leave this blank)',
+                          'Tell us what your dog loves\n(You can leave this blank)',
                     ),
                     onSaved: (String value) {
                       // This optional block of code can be used to run
@@ -556,7 +545,7 @@ class _EditPetPageState extends State<EditPetPage> {
                                                   : null;
                                             },*/
                   ),
-                )),
+                ),optional: true),
             SizedBox(
               height: 10,
             ),
@@ -566,12 +555,16 @@ class _EditPetPageState extends State<EditPetPage> {
     );
   }
 
-  buildWithHeading(title, Widget) {
+  buildWithHeading(title, Widget,{optional}) {
+    if(optional==null)
+      {
+        optional = false;
+      }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "$title *",
+          '$title ${optional?"":"*"}',
         ),
         SizedBox(
           height: 10,
@@ -584,9 +577,8 @@ class _EditPetPageState extends State<EditPetPage> {
     );
   }
 
-  var bottomSheetController;
-  String selectedPrimaryBreed = null,
-      selectedSecondaryBreed = null;
+  PersistentBottomSheetController bottomSheetController;
+  String selectedPrimaryBreed = null, selectedSecondaryBreed = null;
   var scaffold_key = GlobalKey<ScaffoldState>();
   Widget suggestionList = SizedBox();
 
@@ -597,8 +589,7 @@ class _EditPetPageState extends State<EditPetPage> {
     focusNode.unfocus();
 
     bottomSheetController = scaffold_key.currentState.showBottomSheet(
-            (context) =>
-            Container(
+        (context) => Container(
               child: Column(
                 children: [
                   SizedBox(
@@ -606,10 +597,7 @@ class _EditPetPageState extends State<EditPetPage> {
                   ),
                   Text(
                     "Choose Breed",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -626,7 +614,7 @@ class _EditPetPageState extends State<EditPetPage> {
                         suggestionList = buildListModels(
                             breeds
                                 .where((element) =>
-                                element.contains(val.toLowerCase()))
+                                    element.contains(val.toLowerCase()))
                                 .toList(),
                             isPrimary);
                         print(suggestionList.toString());
@@ -653,32 +641,25 @@ class _EditPetPageState extends State<EditPetPage> {
 
   Widget buildListModels(List stringList, bool isPrimary) {
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * .35,
+      height: MediaQuery.of(context).size.height * .35,
       child: ListView.builder(
         itemExtent: 40,
         physics: BouncingScrollPhysics(),
         itemCount: stringList.length,
-        itemBuilder: (context, index) =>
-            ListTile(
-              onTap: () {
-                if (isPrimary)
-                  selectedPrimaryBreed = stringList[index];
-                else
-                  selectedSecondaryBreed = stringList[index];
+        itemBuilder: (context, index) => ListTile(
+          onTap: () {
+            if (isPrimary)
+              selectedPrimaryBreed = stringList[index];
+            else
+              selectedSecondaryBreed = stringList[index];
 
-                Navigator.pop(context);
-              },
-              title: Text(
-                stringList[index],
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .subtitle2,
-              ),
-            ),
+            Navigator.pop(context);
+          },
+          title: Text(
+            stringList[index],
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
+        ),
       ),
     );
   }
@@ -697,15 +678,13 @@ class _EditPetPageState extends State<EditPetPage> {
   }
 
   Future getImage() async {
-    if(profileImageUrl!=null)
-      (await FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl)).delete();
-    var image = await ImagePicker().getImage(
-        maxWidth: 200,
-        maxHeight: 200,
-        source: ImageSource.gallery);
+    if (profileImageUrl != null)
+      (await FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl))
+          .delete();
+    var image = await ImagePicker()
+        .getImage(maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
 
     if (!mounted) return;
-
 
     profileImage = await image.readAsBytes();
     setState(() {
@@ -728,15 +707,11 @@ class _EditPetPageState extends State<EditPetPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LinearProgressIndicator(
-
-                ),
+                child: LinearProgressIndicator(),
               ),
-
               Text(
                 "Image is Uploading Please wait....",
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .headline6
                     .copyWith(color: Colors.black),
@@ -744,14 +719,11 @@ class _EditPetPageState extends State<EditPetPage> {
             ],
           ),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ));
     var storage = FirebaseStorage.instance.ref();
     var uploadTask = storage
-        .child(DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString())
+        .child(DateTime.now().millisecondsSinceEpoch.toString())
         .putData(profileImage);
 
     uploadTask.events.listen((event) {});
@@ -768,80 +740,91 @@ class _EditPetPageState extends State<EditPetPage> {
     });
     profileImageUrl = imageUrl.toString();
     imageExists = true;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
   void dispose() {
-
     // FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl);
   }
 
-
-  showErrorDialog(message)
-  {
-    showDialog(context: context,child: AlertDialog(
-      title: Icon(Icons.info,color: Colors.red,size: 30,),
-      content: Text(message),
-      actions: [
-        FlatButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: Text("Retry"))
-      ],
-    ));
-  }
-
-  showSuccesDialog()
-  {
-    showDialog(context: context,child: AlertDialog(
-      title: Image.asset('assets/images/paw.png',width: 70,height: 70,),
-      content: Text("Congratulations",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),)
-      ,actions: [
-      FlatButton(onPressed: (){
-        Navigator.pop(context);
-        Navigator.pop(context);
-      }, child: Text("Ok"))
-    ],
-    ));
-  }
-
-  bool validate() {
-    if(formkey.currentState.validate()){
-
-    }
-  }
-
-  showLoadingDialog() {
-    showDialog(context: context,child:AlertDialog(
-      title: Image.asset(
-        'assets/images/pet_vector.png',
-        height: 90,
-        width: 90,
-      ),
-      content: Wrap(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: LinearProgressIndicator(
-
-            ),
+  showErrorDialog(message) {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Icon(
+            Icons.info,
+            color: Colors.red,
+            size: 30,
           ),
+          content: Text(message),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Retry"))
+          ],
+        ));
+  }
 
-          Text(
-            "Updating pet info....",
-            style: Theme
-                .of(context)
+  showSuccesDialog() {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Image.asset(
+            'assets/images/paw.png',
+            width: 70,
+            height: 70,
+          ),
+          content: Text(
+            "Congratulations",
+            style: Theme.of(context)
                 .textTheme
                 .headline6
                 .copyWith(color: Colors.black),
-          )
-        ],
-      ),
-      shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    ) );
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text("Ok"))
+          ],
+        ));
   }
 
+  bool validate() {
+    if (formkey.currentState.validate()) {}
+  }
+
+  showLoadingDialog() {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Image.asset(
+            'assets/images/pet_vector.png',
+            height: 90,
+            width: 90,
+          ),
+          content: Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LinearProgressIndicator(),
+              ),
+              Text(
+                "Updating pet info....",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(color: Colors.black),
+              )
+            ],
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ));
+  }
 }

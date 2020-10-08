@@ -17,15 +17,12 @@ import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
 import 'package:provider/provider.dart';
 // import 'package:restcountries/restcountries.dart';
 
-
 class PetFinderScreen extends StatefulWidget {
   @override
   _PetFinderScreenState createState() => _PetFinderScreenState();
 }
 
 class _PetFinderScreenState extends State<PetFinderScreen> {
-
-
   double distance = 10;
   List<NewPet> petList = [];
   List _secondarybreedresult = [];
@@ -38,25 +35,16 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
   getBreeds() async {
     var data =
         await Firestore.instance.collection("data").document('dataList').get();
-    for(var a  in data.data['breeds'])
-    {
+    for (var a in data.data['breeds']) {
       breeds.add(MultipleSelectItem.build(
-          value: '${a}',
-          display: '${a}',
-          content: '${a}'));
-
+          value: '${a}', display: '${a}', content: '${a}'));
     }
-   setState(() {
-
-   });
+    setState(() {});
   }
-
-
 
   @override
   void initState() {
-
-    Provider.of<DataProvider>(context,listen: false).getMapPets(100);
+    Provider.of<DataProvider>(context, listen: false).getMapPets(100);
   }
 
   bool isAreaSearch = false;
@@ -69,23 +57,26 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
 
   final Map<String, Marker> _markers = {};
 
-
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
 
-  getMarkers();
+    getMarkers();
   }
 
-  getMarkers(){
+  getMarkers() {
     petList = Provider.of<DataProvider>(context).mapPets;
     setState(() {
       _markers.clear();
       for (NewPet pet in petList) {
         final marker = Marker(
-          onTap: (){
-            Navigator.push(context, CupertinoPageRoute(
-              builder: (context)=>PetDetailScreen(pets: pet,view: false,)
-            ));
+          onTap: () {
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (context) => PetDetailScreen(
+                          pets: pet,
+                          view: false,
+                        )));
           },
           draggable: true,
           markerId: MarkerId(pet.name),
@@ -100,23 +91,21 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
     });
   }
 
-
-
-
-
   var scaffold = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     petList = Provider.of<DataProvider>(context).mapPets;
     var location = Provider.of<DataProvider>(context).userLocation;
+    getMarkers();
     return SafeArea(
       child: Scaffold(
         key: scaffold,
         body: Stack(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:Radius.circular(20) ),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               child: Container(
                 child: GoogleMap(
                   myLocationEnabled: true,
@@ -125,7 +114,7 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                   zoomGesturesEnabled: true,
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
-                    target:  LatLng(location.latitude, location.longitude),
+                    target: LatLng(location.latitude, location.longitude),
                     zoom: 10,
                   ),
                   markers: _markers.values.toSet(),
@@ -141,7 +130,7 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                 child: Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
-                      "",
+                      petList!=null?petList.length.toString()+" Pets":"",
                       style: Theme.of(context)
                           .textTheme
                           .headline6
@@ -157,123 +146,134 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: (petList==null)?Center(child: CircularProgressIndicator()):(petList.length == 0)
-                      ? buildRangeWidget()
-                      : CarouselSlider(
-                          items: List.generate(
-                              petList.length,
-                              (index) => Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: InkWell(
-                                        onTap: () {
-                                          //onTap: (){
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PetDetailScreen(
-                                                        pets: petList[index],
-                                                        view: false,
-                                                      )));
-
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: Hero(
-                                                tag: petList[index].dob,
-                                                child: FadeInImage(
-                                                  fit: BoxFit.cover,
-                                                  image: NetworkImage(
-                                                      petList[index].media),
-                                                  placeholder: AssetImage(
-                                                      'assets/images/dog_marker.png'),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Container(
-                                                color: Utiles.primaryBgColor,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      petList[index].breed,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline6
-                                                          .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 16),
+                  child: (petList == null)
+                      ? Center(child: CircularProgressIndicator())
+                      : (petList.length == 0)
+                          ? buildRangeWidget()
+                          : CarouselSlider(
+                              items: List.generate(
+                                  petList.length,
+                                  (index) => Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          child: InkWell(
+                                            onTap: () {
+                                              //onTap: (){
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PetDetailScreen(
+                                                            pets:
+                                                                petList[index],
+                                                            view: false,
+                                                          )));
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Hero(
+                                                    tag: petList[index].dob,
+                                                    child: FadeInImage(
+                                                      fit: BoxFit.cover,
+                                                      image: NetworkImage(
+                                                          petList[index].media),
+                                                      placeholder: AssetImage(
+                                                          'assets/images/dog_marker.png'),
                                                     ),
-                                                    Text(
-                                                      Utiles.calculateAge(
-                                                          DateTime.parse(
-                                                              petList[index]
-                                                                  .dob)),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle1
-                                                          .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 15),
-                                                    ),
-                                                    Text(
-                                                        "${petList[index].distance} Km",
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .subtitle1
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 16))
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Container(
+                                                    color:
+                                                        Utiles.primaryBgColor,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          petList[index].breed,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .headline6
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 16),
+                                                        ),
+                                                        Text(
+                                                          Utiles.calculateAge(
+                                                              DateTime.parse(
+                                                                  petList[index]
+                                                                      .dob)),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .subtitle1
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 15),
+                                                        ),
+                                                        Text(
+                                                            "${petList[index].distance} Km",
+                                                            textAlign: TextAlign
+                                                                .end,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .subtitle1
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        16))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  )),
-                          options: CarouselOptions(
-                              autoPlay: false,
-                              enableInfiniteScroll: false,
-                              initialPage: 0,
-                              aspectRatio: 1,
-                              enlargeCenterPage: true,
-                              scrollDirection: Axis.horizontal,
-                              onPageChanged: (index, controller) {
-                                _mapController.animateCamera(
-                                    CameraUpdate.newCameraPosition(
-                                        new CameraPosition(
-                                            target: LatLng(
-                                                petList[index.floor()].latitude,
-                                                petList[index.floor()]
-                                                    .longitude),
-                                            zoom: 10)));
-                              },
-                              onScrolled: (index) {},
-                              height: 120),
-                        ),
+                                      )),
+                              options: CarouselOptions(
+                                  autoPlay: false,
+                                  enableInfiniteScroll: false,
+                                  initialPage: 0,
+                                  aspectRatio: 1,
+                                  enlargeCenterPage: true,
+                                  scrollDirection: Axis.horizontal,
+                                  onPageChanged: (index, controller) {
+                                    _mapController.animateCamera(
+                                        CameraUpdate.newCameraPosition(
+                                            new CameraPosition(
+                                                target: LatLng(
+                                                    petList[index.floor()]
+                                                        .latitude,
+                                                    petList[index.floor()]
+                                                        .longitude),
+                                                zoom: 14)));
+                                  },
+                                  onScrolled: (index) {},
+                                  height: 120),
+                            ),
                 ),
               ),
             ),
@@ -284,19 +284,19 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                 height: 55,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
-
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: FloatingActionButton(
-
                         heroTag: 'ser',
                         mini: true,
                         backgroundColor: Colors.white,
                         onPressed: () {
                           showSearch(
-                              context: context, delegate: PetSearch(totalPets,lat1??0.0,lon1??0.0));
+                              context: context,
+                              delegate: PetSearch(
+                                  totalPets, lat1 ?? 0.0, lon1 ?? 0.0));
                         },
                         child: Icon(
                           Icons.search,
@@ -381,7 +381,6 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                   onChanged: (val) {
                     setState(() {
                       distance = val;
-                      filterByRange(val);
                     });
                   },
                   value: distance,
@@ -412,15 +411,14 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                   .copyWith(color: Utiles.primaryBgColor, fontSize: 16),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CupertinoButton(
               onPressed: () {
-                Navigator.push(context, CupertinoPageRoute(
-                  builder: (context)=>AreaSearch("Pets",true)
-                ));
-
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => AreaSearch("Pets", true)));
               },
               color: Utiles.primaryBgColor,
               child: Text(
@@ -433,14 +431,25 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
             child: CupertinoButton(
               onPressed: () {
                 //
-                Provider.of<DataProvider>(context,listen: false).getMapPets(distance);
-                if(_primarybreedresult.isNotEmpty||_secondarybreedresult.isNotEmpty)
-               petList = totalPets.where((element) => ((_primarybreedresult.toString()??'g').
-               toLowerCase().contains((element.primaryBreed??'hgajgjg').toLowerCase())||
-                   (_secondarybreedresult.toString()??'hj').toLowerCase().contains((element.secondaryBreed??'lidaliaud').toLowerCase()))).toList();
+                Navigator.pop(context);
+                Provider.of<DataProvider>(context, listen: false)
+                    .getMapPets(distance);
+                if (_primarybreedresult.isNotEmpty ||
+                    _secondarybreedresult.isNotEmpty)
+                  petList = totalPets
+                      .where((element) => ((_primarybreedresult.toString() ??
+                                  'g')
+                              .toLowerCase()
+                              .contains((element.primaryBreed ?? 'hgajgjg')
+                                  .toLowerCase()) ||
+                          (_secondarybreedresult.toString() ?? 'hj')
+                              .toLowerCase()
+                              .contains((element.secondaryBreed ?? 'lidaliaud')
+                                  .toLowerCase())))
+                      .toList();
                 getMarkers();
                 Navigator.pop(context);
-                },
+              },
               color: Utiles.primaryBgColor,
               child: Text(
                 "Apply Filter",
@@ -451,8 +460,6 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
       ),
     );
   }
-
-
 
   Widget buildRangeWidget() {
     return Card(
@@ -518,12 +525,12 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
   }
 
   filterByRange(double range) {
-    petList = totalPets
-        .where((element) =>
-            double.parse(element.distance)  <= distance)
-        .toList();
-    getMarkers();
-    setState(() {});
+
+    // petList = totalPets
+    //     .where((element) => double.parse(element.distance) <= distance)
+    //     .toList();
+    // getMarkers();
+    // setState(() {});
   }
 
   double calculateDistance(lat2, lon2) {
@@ -532,18 +539,16 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
     var a = 0.5 -
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a))??0.0;
+    return 12742 * asin(sqrt(a)) ?? 0.0;
   }
-
 }
+
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
 
 // This menu button widget updates a _selection field (of type WhyFarther,
 // not shown here).
 
 class PetSearch extends SearchDelegate<String> {
-
-
   double calculateDistance(lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -554,9 +559,9 @@ class PetSearch extends SearchDelegate<String> {
   }
 
   List<NewPet> petList;
-  var lat,long;
+  var lat, long;
 
-  PetSearch(this.petList,this.lat,this.long);
+  PetSearch(this.petList, this.lat, this.long);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -593,18 +598,16 @@ class PetSearch extends SearchDelegate<String> {
                   child: Container(
                     height: 70,
                     child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          PetDetailScreen(
+                                      builder: (context) => PetDetailScreen(
                                             pets: suggestions[index],
                                             view: false,
                                           )));
@@ -615,10 +618,10 @@ class PetSearch extends SearchDelegate<String> {
                                   flex: 1,
                                   child: FadeInImage(
                                     fit: BoxFit.cover,
-                                    placeholder:
-                                    AssetImage('assets/images/dog_marker.png'),
-                                    image: NetworkImage(suggestions[index].media),
-
+                                    placeholder: AssetImage(
+                                        'assets/images/dog_marker.png'),
+                                    image:
+                                        NetworkImage(suggestions[index].media),
                                   ),
                                 ),
                                 Expanded(
@@ -629,7 +632,8 @@ class PetSearch extends SearchDelegate<String> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline6
-                                        .copyWith(fontSize: 16, color: Colors.black),
+                                        .copyWith(
+                                            fontSize: 16, color: Colors.black),
                                   ),
                                 ),
                                 Expanded(
@@ -642,7 +646,9 @@ class PetSearch extends SearchDelegate<String> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline6
-                                            .copyWith(fontSize: 16, color: Colors.green),
+                                            .copyWith(
+                                                fontSize: 16,
+                                                color: Colors.green),
                                       ),
                                     ),
                                   ),

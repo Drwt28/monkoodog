@@ -37,12 +37,15 @@ class NewsItem extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10)),
-                    child: Image.network(
-                      news[index].url != null
-                          ? news[index].url
-                          : UIHelper.url_no_img,
+                    child: news[index].url==null?
+
+                    Image.asset("assets/images/loading.gif",
+                    height: 200,):
+
+                    FadeInImage(
+                      placeholder: AssetImage("assets/images/loading.gif"),
+                   image: NetworkImage(news[index].url,),
                       height: 200,
-                      width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     ),
                   ),

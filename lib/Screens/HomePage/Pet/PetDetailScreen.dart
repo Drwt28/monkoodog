@@ -88,8 +88,8 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
         children: [
           buildTopLayout(),
           SizedBox(height: 10,),
-          buildToggleButton()
-         , SizedBox(height: 10,),
+          !widget.view?Container():buildToggleButton()
+         , !widget.view?Container():SizedBox(height: 10,),
           !widget.view?Container():ListAllVaccination(
             vaccination: vaccination,
             month: month,

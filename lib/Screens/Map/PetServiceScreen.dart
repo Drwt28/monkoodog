@@ -48,6 +48,16 @@ class _PetServicePageState extends State<PetServicePage> {
       _markers.clear();
       for (PetService pet in petList) {
         final marker = Marker(
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ServiceDetailPage(
+                          petService:
+                          pet,
+                        )));
+          },
           draggable: false,
           markerId: MarkerId(pet.addressLine1),
           position: LatLng(pet.latitude, pet.longitude),
@@ -214,7 +224,7 @@ class _PetServicePageState extends State<PetServicePage> {
                                           petList[index.floor()].latitude,
                                           petList[index.floor()]
                                               .longitude),
-                                      zoom: 10)));
+                                      zoom: 12)));
                         },
                         onScrolled: (index) {},
                         height: 120),

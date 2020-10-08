@@ -164,7 +164,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
             FlatButton(onPressed: (){
               Navigator.pop(context);
               return true;
-            }, child: Text("Add Pet")),
+            }, child: Text("Continue")),
             FlatButton(onPressed: (){
               Navigator.pop(context);
               Navigator.pop(context);
@@ -386,22 +386,17 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   buildAddPet2() {
     List<MultipleSelectItem> _diseases =
-        Provider
-            .of<DataProvider>(context)
-            .diseases;
+        Provider.of<DataProvider>(context).diseases;
     List<MultipleSelectItem> _allergies =
-        Provider
-            .of<DataProvider>(context)
-            .allergies;
+        Provider.of<DataProvider>(context).allergies;
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
             Text(
-              "Fill dog's info 2/2",
-              style: Theme
-                  .of(context)
+              "Fill dog's info 2/2 optional",
+              style: Theme.of(context)
                   .textTheme
                   .headline6
                   .copyWith(color: Colors.black),
@@ -410,59 +405,51 @@ class _AddPetScreenState extends State<AddPetScreen> {
               height: 30,
             ),
             buildWithHeading(
-                "Does your dog have any allergies?",
+                "Does your dog have any allergies? if not skip",
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+
+                  width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12),
+                      color: Colors.white24),
                   child: MultipleDropDown(
                     placeholder: 'Select Allergies',
                     disabled: false,
                     values: _allergiesResult,
                     elements: _allergies,
                   ),
-                )),
+                ),optional: true),
             SizedBox(
               height: 10,
             ),
             buildWithHeading(
-                "Does your dog have any diseases?",
+                "Does your dog have any diseases? if not skip",
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12),
+                      color: Colors.white24),
                   child: MultipleDropDown(
                     placeholder: 'Select Disease',
                     disabled: false,
                     values: _diseasesResult,
                     elements: _diseases,
                   ),
-                )),
+                ),optional: true),
             SizedBox(
               height: 10,
             ),
             buildWithHeading(
-                "Tell us what your dog loves",
+                "Tell us what your dog loves (optional)",
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   height: 200,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12),
+                      color: Colors.white24),
                   child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: 5,
@@ -484,7 +471,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                                   : null;
                                             },*/
                   ),
-                )),
+                ),optional: true),
             SizedBox(
               height: 10,
             ),
@@ -494,12 +481,16 @@ class _AddPetScreenState extends State<AddPetScreen> {
     );
   }
 
-  buildWithHeading(title, Widget) {
+  buildWithHeading(title, Widget,{optional}) {
+    if(optional==null)
+    {
+      optional = false;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "$title *",
+          '$title ${optional?"":"*"}',
         ),
         SizedBox(
           height: 10,

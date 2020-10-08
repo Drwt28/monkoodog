@@ -55,7 +55,7 @@ dependencies:
   share:
   country_code_picker:
   flutter_share_me: ^0.9.1
-
+  progressive_image:
 dev_dependencies:
   flutter_test:
     sdk: flutter
