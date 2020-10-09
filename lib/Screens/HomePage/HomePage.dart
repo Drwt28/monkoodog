@@ -160,6 +160,7 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
+                    selectedIndex-=0;
                     Navigator.pop(context);
                   },
                 ),

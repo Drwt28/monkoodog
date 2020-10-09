@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-  Future.delayed(Duration(milliseconds: 500)).then((value){
+  Future.delayed(Duration(milliseconds: 1600)).then((value){
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SliderPage()));
   });
   }
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: AnimationConfiguration.toStaggeredList(
-              duration: Duration(milliseconds: 400),
+              duration: Duration(milliseconds: 1500),
               childAnimationBuilder:
           (widget)=>SlideAnimation(
             verticalOffset: -100,
