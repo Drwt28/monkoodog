@@ -16,6 +16,11 @@
 	<string>pet capturing</string>
 	<key>NSCameraUsageDescription</key>
 	<string>pet capturing</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>pet adding</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+	<string>pet  finder location</string>
+
 		<key>NSMicrophoneUsageDescription</key>
 	<string>pet description</string>
 	<key>CFBundlePackageType</key>
