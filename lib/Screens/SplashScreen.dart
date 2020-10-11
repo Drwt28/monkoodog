@@ -8,14 +8,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
 
-  Future.delayed(Duration(milliseconds: 1600)).then((value){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SliderPage()));
-  });
+    Future.delayed(Duration(milliseconds: 1600)).then((value) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SliderPage()));
+    });
   }
 
   @override
@@ -28,47 +28,40 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: AnimationConfiguration.toStaggeredList(
               duration: Duration(milliseconds: 1500),
-              childAnimationBuilder:
-          (widget)=>SlideAnimation(
-            verticalOffset: -100,
-              child: FadeInAnimation(
-                child: widget,
-              )), children: [
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                child: SizedBox(
-                  height: 200,
-                  width: 200,
+              childAnimationBuilder: (widget) => SlideAnimation(
+                  verticalOffset: -100,
+                  child: FadeInAnimation(
+                    child: widget,
+                  )),
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    child: SizedBox(
+                      height: 200,
+                      width: 200,
+                    ),
+                    decoration: getGradientDecoration(),
+                  ),
                 ),
-                decoration: getGradientDecoration(),
-              ),
-            ),
-            Text("",style: TextStyle(color: Colors.white),),
-            Text("",style: TextStyle(color: Colors.white),),
-          ]),
+                Text(
+                  "",
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  "",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ]),
         ),
       ),
-
     );
   }
 
   BoxDecoration getGradientDecoration() {
     BoxDecoration decoration = BoxDecoration(
-//        gradient: LinearGradient(
-//            begin: Alignment.topRight,
-//            end: Alignment.bottomLeft,
-//            stops: [
-//              0.4,
-//              0.6
-//            ],
-//            colors: [
-//              Color(0xff24C6DC),
-//              Color(0xff514A9D)
-//            ]
-//        ),
       image: DecorationImage(
-        alignment: Alignment.center,
+          alignment: Alignment.center,
           fit: BoxFit.contain,
 //        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
           image: Image.asset("assets/images/logo.png", height: 200, width: 200)
@@ -77,5 +70,4 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return decoration;
   }
-
 }

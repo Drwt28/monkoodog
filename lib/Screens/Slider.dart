@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_swipe/Helpers/Helpers.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:monkoodog/Screens/HomePage/HomePage.dart';
 import 'package:monkoodog/Screens/Login.dart';
@@ -36,6 +37,8 @@ class _SliderPageState extends State<SliderPage> {
         ? HomePage()
         : Scaffold(
             body: LiquidSwipe(
+              enableSlideIcon: true,
+              waveType: WaveType.liquidReveal,
               enableLoop: false,
               initialPage: 0,
               pages: [
@@ -109,6 +112,18 @@ class _SliderPageState extends State<SliderPage> {
             ],
           ),
         ),
+        (isLast)?Container():Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+
+            child: FlatButton(
+          child: Text("Skip",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),),
+          onPressed: (){
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
+          },
+        )),
         (!isLast)?Container():Positioned(
           left: 0,
           bottom: 0,

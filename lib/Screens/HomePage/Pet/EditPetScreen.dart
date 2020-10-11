@@ -71,18 +71,11 @@ class _EditPetPageState extends State<EditPetPage> {
             Geoflutterfire geo = Geoflutterfire();
 
             var pet = NewPet(
-              position: geo
-                  .point(
-                      latitude: location.latitude,
-                      longitude: location.longitude)
-                  .data,
               diseases: _diseasesResult,
               dob: age.toString().substring(0, 10),
               gender: gender,
-              longitude: location.longitude,
               created: DateTime.now().toString(),
               id: user.uid,
-              latitude: location.latitude,
               name: petNameController.text,
               age: Age.weeks(
                       fromDate: age,
@@ -140,7 +133,6 @@ class _EditPetPageState extends State<EditPetPage> {
     imageExists = true;
     int gen = pet.gender.toLowerCase().contains("female") ? 1 : 0;
 
-
     print(pet.breedType);
     genderSelected[gen] = true;
     age = DateTime.parse(pet.dob);
@@ -155,6 +147,8 @@ class _EditPetPageState extends State<EditPetPage> {
 
   deletePet() {
     showDialog(
+      barrierDismissible: false,
+      useRootNavigator: false,
       context: (context),
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -194,13 +188,11 @@ class _EditPetPageState extends State<EditPetPage> {
     breeds = Provider.of<DataProvider>(context).breeds;
     return WillPopScope(
       onWillPop: () async {
-
-
         bool status = false;
         showDialog(
             context: context,
             child: AlertDialog(
-              title: Text("Are you sure to exit"),
+              title: Text("Are you want to go back"),
               actions: [
                 FlatButton(
                     onPressed: () {
@@ -327,127 +319,143 @@ class _EditPetPageState extends State<EditPetPage> {
                         ],
                       ),
                     ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: buildWithHeading(
+                              "Date of Birth",
+                              Container(
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          spreadRadius: 1,
+                                          color: Colors.black12,
+                                          blurRadius: 3)
+                                    ],
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white),
+                                child: ListTile(
+                                  onTap: () async {
+                                    var currentdate = DateTime.now();
+                                    age = await showDatePicker(
+                                        context: context,
+                                        initialDate:
+                                            DateTime(currentdate.year - 3),
+                                        firstDate:
+                                            DateTime(currentdate.year - 3),
+                                        lastDate: currentdate);
+                                    setState(() {});
+                                  },
+                                  title: Text(age == null
+                                      ? "Select Date"
+                                      : age.toString().substring(0, 10)),
+                                  trailing: Icon(
+                                    Icons.calendar_today_rounded,
+                                    size: 30,
+                                  ),
+                                ),
+                              )),
+                        ),
+                        Expanded(
+                          child: SizedBox(),
+                          flex: 3,
+                        )
+                      ],
+                    ),
                     Container(
                       height: 500,
                       padding: EdgeInsets.all(8),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                buildWithHeading(
-                                    "Date of Birth",
-                                    ListTile(
-                                      onTap: () async {
-                                        var currentdate = DateTime.now();
-                                        age = await showDatePicker(
-                                            context: context,
-                                            initialDate:
-                                                DateTime(currentdate.year - 3),
-                                            firstDate:
-                                                DateTime(currentdate.year - 3),
-                                            lastDate: currentdate);
-                                        setState(() {});
-                                      },
-                                      title: Text(age == null
-                                          ? "Select Date"
-                                          : age.toString().substring(0, 10)),
-                                      trailing: Icon(
-                                        Icons.calendar_today_rounded,
-                                        size: 30,
-                                      ),
-                                    )),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                buildWithHeading(
-
-                                    "Gender",
-                                    ToogleButtonColored(
-                                      selected: genderSelected.indexOf(true),
-
-                                      onTap: (val) {
-                                        for (int i = 0;
-                                            i < genderSelected.length;
-                                            i++)
-                                          genderSelected[i] =
-                                              !genderSelected[i];
-
-                                        setState(() {});
-                                      },
-                                      buttons: [" Male ", "Female"],
-
-                                    )),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                buildWithHeading(
-                                    "Breed",
-                                    ToogleButtonColored(
-                                      selected: breedSelected.indexOf(true),
-                                      onTap: (val) {
-                                        for (int i = 0;
-                                            i < breedSelected.length;
-                                            i++)
-                                          breedSelected[i] = !breedSelected[i];
-
-                                        breedSelected[val] = true;
-
-                                        setState(() {});
-                                      },
-                                      buttons: ["Pure", "Mix"],
-                                    )),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                buildWithHeading(
-                                    "Choose Primary Breed",
-                                    InkWell(
-                                      onTap: () {
-                                        buildSearchBottomSheet(true);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 18, horizontal: 24),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.black12),
-                                        child: Text(selectedPrimaryBreed ??
-                                            "Select Primary Breed"),
-                                      ),
-                                    )),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                (breedSelected[1])
-                                    ? buildWithHeading(
-                                        "Choose Primary Breed",
-                                        InkWell(
-                                          onTap: () {
-                                            buildSearchBottomSheet(false);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 18, horizontal: 24),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.black12),
-                                            child: Text(
-                                                selectedSecondaryBreed ??
-                                                    "Select Secondary Breed"),
-                                          ),
-                                        ))
-                                    : SizedBox()
-                              ],
-                            ),
+                          SizedBox(
+                            height: 10,
                           ),
+                          buildWithHeading(
+                              "Gender",
+                              ToogleButtonColored(
+                                selected: genderSelected.indexOf(true),
+                                onTap: (val) {
+                                  for (int i = 0;
+                                      i < genderSelected.length;
+                                      i++)
+                                    genderSelected[i] = !genderSelected[i];
+
+                                  setState(() {});
+                                },
+                                buttons: [" Male ", "Female"],
+                              )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          buildWithHeading(
+                              "Breed",
+                              ToogleButtonColored(
+                                selected: breedSelected.indexOf(true),
+                                onTap: (val) {
+                                  for (int i = 0; i < breedSelected.length; i++)
+                                    breedSelected[i] = !breedSelected[i];
+
+                                  breedSelected[val] = true;
+
+                                  setState(() {});
+                                },
+                                buttons: ["Pure", "Mix"],
+                              )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          buildWithHeading(
+                              "Choose Primary Breed",
+                              InkWell(
+                                onTap: () {
+                                  buildSearchBottomSheet(true);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 18, horizontal: 24),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            spreadRadius: 1,
+                                            color: Colors.black12,
+                                            blurRadius: 3)
+                                      ],
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white),
+                                  child: Text(selectedPrimaryBreed ??
+                                      "Select Secondary Breed"),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          (breedSelected[1])
+                              ? buildWithHeading(
+                                  "Choose Secondary Breed",
+                                  InkWell(
+                                    onTap: () {
+                                      buildSearchBottomSheet(false);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 18, horizontal: 24),
+                                      decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                                spreadRadius: 1,
+                                                color: Colors.black12,
+                                                blurRadius: 3)
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white),
+                                      child: Text(selectedSecondaryBreed ??
+                                          "Select Secondary Breed"),
+                                    ),
+                                  ))
+                              : SizedBox()
                         ],
                       ),
                     )
@@ -481,19 +489,25 @@ class _EditPetPageState extends State<EditPetPage> {
             buildWithHeading(
                 "Does your dog have any allergies? if not skip",
                 Container(
-
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            color: Colors.black12,
+                            blurRadius: 3)
+                      ],
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24),
+                      color: Colors.white),
                   child: MultipleDropDown(
                     placeholder: 'Select Allergies',
                     disabled: false,
                     values: _allergiesResult,
                     elements: _allergies,
                   ),
-                ),optional: true),
+                ),
+                optional: true),
             SizedBox(
               height: 10,
             ),
@@ -503,15 +517,22 @@ class _EditPetPageState extends State<EditPetPage> {
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            color: Colors.black12,
+                            blurRadius: 3)
+                      ],
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24),
+                      color: Colors.white),
                   child: MultipleDropDown(
                     placeholder: 'Select Disease',
                     disabled: false,
                     values: _diseasesResult,
                     elements: _diseases,
                   ),
-                ),optional: true),
+                ),
+                optional: true),
             SizedBox(
               height: 10,
             ),
@@ -522,8 +543,14 @@ class _EditPetPageState extends State<EditPetPage> {
                   height: 200,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            color: Colors.black12,
+                            blurRadius: 3)
+                      ],
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24),
+                      color: Colors.white),
                   child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: 5,
@@ -545,7 +572,8 @@ class _EditPetPageState extends State<EditPetPage> {
                                                   : null;
                                             },*/
                   ),
-                ),optional: true),
+                ),
+                optional: true),
             SizedBox(
               height: 10,
             ),
@@ -555,16 +583,15 @@ class _EditPetPageState extends State<EditPetPage> {
     );
   }
 
-  buildWithHeading(title, Widget,{optional}) {
-    if(optional==null)
-      {
-        optional = false;
-      }
+  buildWithHeading(title, Widget, {optional}) {
+    if (optional == null) {
+      optional = false;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$title ${optional?"":"*"}',
+          '$title ${optional ? "" : "*"}',
         ),
         SizedBox(
           height: 10,

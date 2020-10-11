@@ -48,7 +48,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                 child: ListTile(
                   title: Text(User
                       .fromJson(snap.data.data)
-                      .userPhone, style: TextStyle(fontSize: 15,
+                      .userPhone??"", style: TextStyle(fontSize: 15,
                       color: Colors.black,
                       fontWeight: FontWeight.w700),),
                   leading: Icon(Icons.call),

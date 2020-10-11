@@ -55,7 +55,9 @@ dependencies:
   share:
   country_code_picker:
   flutter_share_me: ^0.9.1
-  progressive_image:
+  fancy_shimmer_image: ^1.2.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

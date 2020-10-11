@@ -12,6 +12,12 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>monkoodog</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+	<string>pet capturing</string>
+	<key>NSCameraUsageDescription</key>
+	<string>pet capturing</string>
+		<key>NSMicrophoneUsageDescription</key>
+	<string>pet description</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

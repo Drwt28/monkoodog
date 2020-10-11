@@ -23,7 +23,7 @@ class PetFinderScreen extends StatefulWidget {
 }
 
 class _PetFinderScreenState extends State<PetFinderScreen> {
-  double distance = 10;
+  double distance = 50;
   List<NewPet> petList = [];
   List _secondarybreedresult = [];
   List _primarybreedresult = [];
@@ -69,19 +69,20 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
       _markers.clear();
       for (NewPet pet in petList) {
         final marker = Marker(
-          onTap: () {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (context) => PetDetailScreen(
-                          pets: pet,
-                          view: false,
-                        )));
-          },
           draggable: true,
           markerId: MarkerId(pet.name),
           position: LatLng(pet.latitude, pet.longitude),
           infoWindow: InfoWindow(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => PetDetailScreen(
+
+                        pets: pet,
+                        view: false,
+                      )));
+            },
             title: pet.primaryBreed,
             snippet: pet.name,
           ),
@@ -374,6 +375,16 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
           ),
           Row(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(left:15),
+                child: Text(
+                  "10 km",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: Utiles.primaryButton, fontSize: 16),
+                ),
+              ),
               Expanded(
                 child: Slider(
                   autofocus: false,
@@ -384,9 +395,9 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                     });
                   },
                   value: distance,
-                  activeColor: Colors.blue,
+                  activeColor: Utiles.primaryBgColor,
                   min: 10,
-                  max: 2000,
+                  max: 200,
                 ),
               ),
               Padding(
@@ -396,7 +407,7 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6
-                      .copyWith(color: Colors.blue, fontSize: 16),
+                      .copyWith(color: Utiles.primaryBgColor, fontSize: 16),
                 ),
               )
             ],

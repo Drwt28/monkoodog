@@ -29,26 +29,65 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: DataProvider()),
         StreamProvider<FirebaseUser>.value(value: FirebaseAuth.instance.onAuthStateChanged)
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Monkoodog',
-        theme: ThemeData(
+      child: WillPopScope(
 
-          dialogTheme: DialogTheme(
+        onWillPop: ()async{
 
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
-            )
+        var val = false;
+         await  showDialog(
+            context: (context),
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              backgroundColor: Colors.white,
+              title: Text("Logout"),
+              content:
+              Text("Are you sure to exit"),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                    val = true;
+
+                  },
+                  child: Text("YES"),
+                  color: Colors.red,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("NO"),
+                )
+              ],
+            ),
+          );
+
+         return val;
+        },
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Monkoodog',
+          theme: ThemeData(
+
+            dialogTheme: DialogTheme(
+
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+              )
+            ),
+
+            appBarTheme: AppBarTheme(
+              color: Utiles.primaryBgColor
+            ),
+
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-
-          appBarTheme: AppBarTheme(
-            color: Utiles.primaryBgColor
-          ),
-
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+          home: SplashScreen(),
         ),
-        home: SplashScreen(),
       ),
     );
   }

@@ -37,58 +37,43 @@ class _AddPetScreenState extends State<AddPetScreen> {
   List _diseasesResult = [];
   List _allergiesResult = [];
 
-  var selectedDiseases = "",
-      selectedAllergies = "";
+  var selectedDiseases = "", selectedAllergies = "";
   var step = 1;
 
   buildBottomButton() {
     var user = Provider.of<FirebaseUser>(context);
-    var location = Provider
-        .of<DataProvider>(context)
-        .userLocation;
+    var location = Provider.of<DataProvider>(context).userLocation;
     return ClipRRect(
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       child: InkWell(
-        onTap: ()async {
-          if (step == 1)
-            {
-              if(formkey.currentState.validate())
-                {
-                  if(selectedPrimaryBreed==null)
-                    {
-                      showErrorDialog("OOPS, Please select primary breed");
-                    }else if(!imageExists)
-                      {
-                        showErrorDialog("OOPS, Please upload image of pet");
-                      }
-                  else{
-                    step = 2;
-                    setState(() {
-
-                    });
-                  }
-
-                }
-
-
+        onTap: () async {
+          if (step == 1) {
+            if (formkey.currentState.validate()) {
+              if (selectedPrimaryBreed == null) {
+                showErrorDialog("OOPS, Please select primary breed");
+              } else if (!imageExists) {
+                showErrorDialog("OOPS, Please upload image of pet");
+              } else {
+                step = 2;
+                setState(() {});
+              }
             }
-          else {
+          } else {
             showLoadingDialog();
-            String gender = genderSelected.indexOf(true) == 0
-                ? "Male"
-                : "Female";
+            String gender =
+                genderSelected.indexOf(true) == 0 ? "Male" : "Female";
             Geoflutterfire geo = Geoflutterfire();
-
 
             var pet = NewPet(
               position: geo
                   .point(
-                  latitude: location.latitude, longitude: location.longitude)
+                      latitude: location.latitude,
+                      longitude: location.longitude)
                   .data,
               diseases: _diseasesResult,
-              dob: age.toString().substring(0,10),
+              dob: age.toString().substring(0, 10),
               gender: gender,
               longitude: location.longitude,
               created: DateTime.now().toString(),
@@ -96,9 +81,10 @@ class _AddPetScreenState extends State<AddPetScreen> {
               latitude: location.latitude,
               name: petNameController.text,
               age: Age.weeks(
-                  fromDate: age,
-                  toDate: DateTime.now(),
-                  includeToDate: false).toString(),
+                      fromDate: age,
+                      toDate: DateTime.now(),
+                      includeToDate: false)
+                  .toString(),
               userId: user.uid,
               loves: feedBackController.text,
               primaryBreed: selectedPrimaryBreed,
@@ -107,19 +93,16 @@ class _AddPetScreenState extends State<AddPetScreen> {
               allergies: _allergiesResult,
               breed: selectedPrimaryBreed,
               breedType: selectedSecondaryBreed == null ? 0 : 1,
-
             );
 
-
-            await Firestore.instance.collection("pets").add(NewPet.getData(pet));
+            await Firestore.instance
+                .collection("pets")
+                .add(NewPet.getData(pet));
             Navigator.pop(context);
             showSuccesDialog();
             setState(() {});
-
           }
-
-
-          },
+        },
         child: Container(
           decoration: BoxDecoration(
             color: Utiles.primaryBgColor,
@@ -127,13 +110,12 @@ class _AddPetScreenState extends State<AddPetScreen> {
           height: 90,
           child: Center(
               child: Text(
-                step == 2 ? "Finish" : "Next",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline6
-                    .copyWith(color: Colors.white),
-              )),
+            step == 2 ? "Finish" : "Next",
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Colors.white),
+          )),
         ),
       ),
     );
@@ -141,9 +123,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   @override
   void initState() {
-   super.initState();
-   // if(Provider.of<DataProvider>(context).userLocation==null)
-   //   Provider.of<DataProvider>(context, listen: false).getdata();
+    super.initState();
+    // if(Provider.of<DataProvider>(context).userLocation==null)
+    //   Provider.of<DataProvider>(context, listen: false).getdata();
   }
 
   List breeds;
@@ -152,25 +134,29 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    breeds = Provider
-        .of<DataProvider>(context)
-        .breeds;
+    breeds = Provider.of<DataProvider>(context).breeds;
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         bool status = false;
-        showDialog(context: context,child: AlertDialog(
-          title: Text("Are you sure to exit"),
-          actions: [
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-              return true;
-            }, child: Text("Continue")),
-            FlatButton(onPressed: (){
-              Navigator.pop(context);
-              Navigator.pop(context);
-            }, child: Text("Quit")),
-          ],
-        ));
+        showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text("Are you sure to exit"),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      return true;
+                    },
+                    child: Text("Continue")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Quit")),
+              ],
+            ));
 
         return status;
       },
@@ -185,201 +171,223 @@ class _AddPetScreenState extends State<AddPetScreen> {
         body: step == 2
             ? buildAddPet2()
             : Form(
-          key: formkey,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                physics: BouncingScrollPhysics(),
-          children: [
-              Container(
-                height: 160,
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Fill dog's info",
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                            "Name",
-                            TextFormField(
-                              validator: (val)=>val.isEmpty?"Enter Pet Name":null,
-                              controller: petNameController,
-                              focusNode: focusNode,
-                              decoration:
-                              InputDecoration(hintText: "Enter Name"),
+                key: formkey,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 160,
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 5,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Fill dog's info",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  buildWithHeading(
+                                    "Name",
+                                    TextFormField(
+                                      validator: (val) =>
+                                          val.isEmpty ? "Enter Pet Name" : null,
+                                      controller: petNameController,
+                                      focusNode: focusNode,
+                                      decoration: InputDecoration(
+                                          hintText: "Enter Name"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        getImage();
+                                      },
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 0, vertical: 10),
+                                            child: (profileImage != null)
+                                                ? Image.memory(profileImage)
+                                                : Image.asset(
+                                                    "assets/images/dog.png",
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                          )),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Upload photo",
+                                    style: TextStyle(color: Colors.black54),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
+                      Row(
                         children: [
                           Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                getImage();
-                              },
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 10),
-                                    child: (profileImage != null)
-                                        ? Image.memory(profileImage)
-                                        : Image.asset(
-                                      "assets/images/dog.png",
-                                      fit: BoxFit.cover,
+                              flex: 5,
+                              child:buildWithHeading(
+                                  "Date of Birth",
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [BoxShadow(
+                                        spreadRadius: 1,
+                                        color: Colors.black12,
+                                        blurRadius: 3
+                                      )],
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white),
+                                    child: ListTile(
+                                      onTap: () async {
+                                        var currentdate = DateTime.now();
+                                        age = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime(
+                                                currentdate.year - 3),
+                                            firstDate: DateTime(
+                                                currentdate.year - 3),
+                                            lastDate: currentdate);
+                                        setState(() {});
+                                      },
+                                      title: Text(age == null
+                                          ? "Select Date"
+                                          : age.toString().substring(0, 10)),
+                                      trailing: Icon(
+                                        Icons.calendar_today_rounded,
+                                        size: 30,
+                                      ),
                                     ),
-                                  )),
-                            ),
-                          ),
-                          Text(
-                            "Upload photo",
-                            style: TextStyle(color: Colors.black54),
+                                  ))),
+                          Expanded(
+                            flex: 3,
+                          child: SizedBox(),
                           )
                         ],
                       ),
-                    )
-                  ],
+
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            buildWithHeading(
+                                "Gender",
+                                ToogleButtonColored(
+                                  onTap: (val) {
+                                    for (int i = 0;
+                                    i < genderSelected.length;
+                                    i++)
+                                      genderSelected[i] =
+                                      !genderSelected[i];
+
+                                    setState(() {});
+                                    genderSelected[val] = true;
+                                  },
+                                  buttons: [" Male ", "Female"],
+                                )),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            buildWithHeading(
+                                "Breed",
+                                ToogleButtonColored(
+                                  onTap: (val) {
+                                    for (int i = 0;
+                                    i < breedSelected.length;
+                                    i++) breedSelected[i] = false;
+
+                                    breedSelected[val] = true;
+                                    setState(() {});
+                                  },
+                                  buttons: ["Pure", "Mix"],
+                                )),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            buildWithHeading(
+                                "Choose Primary Breed",
+                                InkWell(
+                                  onTap: () {
+                                    buildSearchBottomSheet(true);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 18, horizontal: 24),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [BoxShadow(
+                                            spreadRadius: 1,
+                                            color: Colors.black12,
+                                            blurRadius: 3
+                                        )],
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white),
+                                    child: Text(selectedPrimaryBreed ??
+                                        "Select Primary Breed"),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            (breedSelected[1])
+                                ? buildWithHeading(
+                                "Choose Secondary Breed",
+                                InkWell(
+                                  onTap: () {
+                                    buildSearchBottomSheet(false);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 18, horizontal: 24),
+                                    decoration: BoxDecoration(
+                                        boxShadow: [BoxShadow(
+                                            spreadRadius: 1,
+                                            color: Colors.black12,
+                                            blurRadius: 3
+                                        )],
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white),
+                                    child: Text(
+                                        selectedSecondaryBreed ??
+                                            "Select Secondary Breed"),
+                                  ),
+                                ))
+                                : SizedBox()
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                height: 500,
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Date of Birth",
-                              ListTile(
-                                onTap: () async {
-                                  var currentdate = DateTime.now();
-                                  age = await showDatePicker(
-                                      context: context,
-                                      initialDate:
-                                      DateTime(currentdate.year - 3),
-                                      firstDate:
-                                      DateTime(currentdate.year - 3),
-                                      lastDate: currentdate);
-                                  setState(() {
-
-                                  });
-                                },
-                                title: Text(age==null?"Select Date":age.toString().substring(0,10)),
-                                trailing: Icon(
-                                  Icons.calendar_today_rounded,
-                                  size: 30,
-                                ),
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Gender",
-                          ToogleButtonColored(onTap: (val) {
-                            for (int i = 0;
-                            i < genderSelected.length;
-                            i++)
-                              genderSelected[i] = !genderSelected[i];
-
-                            setState(() {});
-                            genderSelected[val] = true;
-                          },buttons: [
-                            " Male ","Female"
-                          ],)
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Breed",
-
-                            ToogleButtonColored(onTap: (val){
-                              for (int i = 0;
-                              i < breedSelected.length;
-                              i++)
-                                breedSelected[i] = false;
-
-                              breedSelected[val] = true;
-                              setState(() {});
-                            },buttons: [
-                              "Pure","Mix"
-                            ],)
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          buildWithHeading(
-                              "Choose Primary Breed",
-                              InkWell(
-                                onTap: () {
-                                  buildSearchBottomSheet(true);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 18, horizontal: 24),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.black12),
-                                  child: Text(selectedPrimaryBreed ??
-                                      "Select Primary Breed"),
-                                ),
-                              )),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          (breedSelected[1])
-                              ? buildWithHeading(
-                              "Choose Primary Breed",
-                              InkWell(
-                                onTap: () {
-                                  buildSearchBottomSheet(false);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 18, horizontal: 24),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                      color: Colors.black12),
-                                  child: Text(selectedSecondaryBreed ??
-                                      "Select Secondary Breed"),
-                                ),
-                              ))
-                              : SizedBox()
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-          ],
-        ),
-            ),
       ),
     );
   }
@@ -407,19 +415,24 @@ class _AddPetScreenState extends State<AddPetScreen> {
             buildWithHeading(
                 "Does your dog have any allergies? if not skip",
                 Container(
-
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(
+                          spreadRadius: 1,
+                          color: Colors.black12,
+                          blurRadius: 3
+                      )],
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24),
+                      color: Colors.white),
                   child: MultipleDropDown(
                     placeholder: 'Select Allergies',
                     disabled: false,
                     values: _allergiesResult,
                     elements: _allergies,
                   ),
-                ),optional: true),
+                ),
+                optional: true),
             SizedBox(
               height: 10,
             ),
@@ -429,15 +442,21 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(
+                          spreadRadius: 1,
+                          color: Colors.black12,
+                          blurRadius: 3
+                      )],
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24),
+                      color: Colors.white),
                   child: MultipleDropDown(
                     placeholder: 'Select Disease',
                     disabled: false,
                     values: _diseasesResult,
                     elements: _diseases,
                   ),
-                ),optional: true),
+                ),
+                optional: true),
             SizedBox(
               height: 10,
             ),
@@ -448,8 +467,13 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   height: 200,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(
+                          spreadRadius: 1,
+                          color: Colors.black12,
+                          blurRadius: 3
+                      )],
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white24),
+                      color: Colors.white),
                   child: TextFormField(
                     keyboardType: TextInputType.multiline,
                     maxLines: 5,
@@ -459,7 +483,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(14),
                       hintText:
-                      'Tell us what your dog loves\n(You can leave this blank)',
+                          'Tell us what your dog loves\n(You can leave this blank)',
                     ),
                     onSaved: (String value) {
                       // This optional block of code can be used to run
@@ -471,7 +495,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                                   : null;
                                             },*/
                   ),
-                ),optional: true),
+                ),
+                optional: true),
             SizedBox(
               height: 10,
             ),
@@ -481,16 +506,15 @@ class _AddPetScreenState extends State<AddPetScreen> {
     );
   }
 
-  buildWithHeading(title, Widget,{optional}) {
-    if(optional==null)
-    {
+  buildWithHeading(title, Widget, {optional}) {
+    if (optional == null) {
       optional = false;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$title ${optional?"":"*"}',
+          '$title ${optional ? "" : "*"}',
         ),
         SizedBox(
           height: 10,
@@ -504,8 +528,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
   }
 
   var bottomSheetController;
-  String selectedPrimaryBreed = null,
-      selectedSecondaryBreed = null;
+  String selectedPrimaryBreed = null, selectedSecondaryBreed = null;
   var scaffold_key = GlobalKey<ScaffoldState>();
   Widget suggestionList = SizedBox();
 
@@ -516,8 +539,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
     focusNode.unfocus();
 
     bottomSheetController = scaffold_key.currentState.showBottomSheet(
-            (context) =>
-            Container(
+        (context) => Container(
               child: Column(
                 children: [
                   SizedBox(
@@ -525,10 +547,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   ),
                   Text(
                     "Choose Breed",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headline6,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -545,7 +564,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                         suggestionList = buildListModels(
                             breeds
                                 .where((element) =>
-                                element.contains(val.toLowerCase()))
+                                    element.contains(val.toLowerCase()))
                                 .toList(),
                             isPrimary);
                         print(suggestionList.toString());
@@ -572,32 +591,25 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   Widget buildListModels(List stringList, bool isPrimary) {
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * .35,
+      height: MediaQuery.of(context).size.height * .35,
       child: ListView.builder(
         itemExtent: 40,
         physics: BouncingScrollPhysics(),
         itemCount: stringList.length,
-        itemBuilder: (context, index) =>
-            ListTile(
-              onTap: () {
-                if (isPrimary)
-                  selectedPrimaryBreed = stringList[index];
-                else
-                  selectedSecondaryBreed = stringList[index];
+        itemBuilder: (context, index) => ListTile(
+          onTap: () {
+            if (isPrimary)
+              selectedPrimaryBreed = stringList[index];
+            else
+              selectedSecondaryBreed = stringList[index];
 
-                Navigator.pop(context);
-              },
-              title: Text(
-                stringList[index],
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .subtitle2,
-              ),
-            ),
+            Navigator.pop(context);
+          },
+          title: Text(
+            stringList[index],
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
+        ),
       ),
     );
   }
@@ -616,15 +628,13 @@ class _AddPetScreenState extends State<AddPetScreen> {
   }
 
   Future getImage() async {
-    if(profileImageUrl!=null)
-      (await FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl)).delete();
-    var image = await ImagePicker().getImage(
-        maxWidth: 200,
-        maxHeight: 200,
-        source: ImageSource.gallery);
+    if (profileImageUrl != null)
+      (await FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl))
+          .delete();
+    var image = await ImagePicker()
+        .getImage(maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
 
     if (!mounted) return;
-
 
     profileImage = await image.readAsBytes();
     setState(() {
@@ -647,15 +657,11 @@ class _AddPetScreenState extends State<AddPetScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LinearProgressIndicator(
-
-                ),
+                child: LinearProgressIndicator(),
               ),
-
               Text(
                 "Image is Uploading Please wait....",
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .headline6
                     .copyWith(color: Colors.black),
@@ -663,14 +669,11 @@ class _AddPetScreenState extends State<AddPetScreen> {
             ],
           ),
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ));
     var storage = FirebaseStorage.instance.ref();
     var uploadTask = storage
-        .child(DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString())
+        .child(DateTime.now().millisecondsSinceEpoch.toString())
         .putData(profileImage);
 
     uploadTask.events.listen((event) {});
@@ -687,80 +690,91 @@ class _AddPetScreenState extends State<AddPetScreen> {
     });
     profileImageUrl = imageUrl.toString();
     imageExists = true;
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
   void dispose() {
-
     // FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl);
   }
 
-
-  showErrorDialog(message)
-  {
-    showDialog(context: context,child: AlertDialog(
-      title: Icon(Icons.info,color: Colors.red,size: 30,),
-      content: Text(message),
-      actions: [
-        FlatButton(onPressed: (){
-          Navigator.pop(context);
-        }, child: Text("Retry"))
-      ],
-    ));
-  }
-
-  showSuccesDialog()
-  {
-    showDialog(context: context,child: AlertDialog(
-      title: Image.asset('assets/images/paw.png',width: 70,height: 70,),
-      content: Text("Congratulations",style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),)
-       ,actions: [
-         FlatButton(onPressed: (){
-           Navigator.pop(context);
-           Navigator.pop(context);
-    }, child: Text("Ok"))
-      ],
-    ));
-  }
-
-  bool validate() {
-   if(formkey.currentState.validate()){
-
-   }
-  }
-
-   showLoadingDialog() {
-    showDialog(context: context,child:AlertDialog(
-      title: Image.asset(
-        'assets/images/pet_vector.png',
-        height: 90,
-        width: 90,
-      ),
-      content: Wrap(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: LinearProgressIndicator(
-
-            ),
+  showErrorDialog(message) {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Icon(
+            Icons.info,
+            color: Colors.red,
+            size: 30,
           ),
+          content: Text(message),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Retry"))
+          ],
+        ));
+  }
 
-          Text(
-            "Pet is adding please wait....",
-            style: Theme
-                .of(context)
+  showSuccesDialog() {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Image.asset(
+            'assets/images/paw.png',
+            width: 70,
+            height: 70,
+          ),
+          content: Text(
+            "Congratulations",
+            style: Theme.of(context)
                 .textTheme
                 .headline6
                 .copyWith(color: Colors.black),
-          )
-        ],
-      ),
-      shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    ) );
-   }
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text("Ok"))
+          ],
+        ));
+  }
 
+  bool validate() {
+    if (formkey.currentState.validate()) {}
+  }
+
+  showLoadingDialog() {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Image.asset(
+            'assets/images/pet_vector.png',
+            height: 90,
+            width: 90,
+          ),
+          content: Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LinearProgressIndicator(),
+              ),
+              Text(
+                "Pet is adding please wait....",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(color: Colors.black),
+              )
+            ],
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ));
+  }
 }

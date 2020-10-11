@@ -1,13 +1,17 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:monkoodog/Modals/news.dart';
 import 'package:monkoodog/Screens/HomePage/Newspage/NewsDetail.dart';
 import 'package:monkoodog/utils/UiHelper.dart';
 import 'package:html/parser.dart';
+import 'package:monkoodog/utils/utiles.dart';
 
 class NewsItem extends StatelessWidget {
   final int index;
   final List news;
+
+
   final type;
   const NewsItem(this.index, this.news,this.type, {Key key}) : super(key: key);
   @override
@@ -37,16 +41,17 @@ class NewsItem extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10)),
-                    child: news[index].url==null?
-
-                    Image.asset("assets/images/loading.gif",
-                    height: 200,):
-
-                    FadeInImage(
-                      placeholder: AssetImage("assets/images/loading.gif"),
-                   image: NetworkImage(news[index].url,),
+                    child: ( news[index].url==null)?Container(
                       height: 200,
-                      fit: BoxFit.cover,
+                      child: LinearProgressIndicator(
+                        backgroundColor: Colors.white,
+                        valueColor: AlwaysStoppedAnimation(Colors.black12),
+                      ),
+                    ):Container(
+                      child: Image.network(news[index].url
+                      ,height: 200,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   SizedBox(

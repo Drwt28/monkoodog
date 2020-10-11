@@ -22,7 +22,7 @@ class PetServicePage extends StatefulWidget {
 }
 
 class _PetServicePageState extends State<PetServicePage> {
-  double distance = 10;
+  double distance = 50;
   List<PetService> petList = [];
   List _secondarybreedresult = [];
   List _primarybreedresult = [];
@@ -48,20 +48,20 @@ class _PetServicePageState extends State<PetServicePage> {
       _markers.clear();
       for (PetService pet in petList) {
         final marker = Marker(
-          onTap: (){
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ServiceDetailPage(
-                          petService:
-                          pet,
-                        )));
-          },
           draggable: false,
           markerId: MarkerId(pet.addressLine1),
           position: LatLng(pet.latitude, pet.longitude),
           infoWindow: InfoWindow(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ServiceDetailPage(
+                            petService:
+                            pet,
+                          )));
+            },
             title: pet.addressLine1,
             snippet: pet.zip,
           ),
@@ -338,6 +338,16 @@ class _PetServicePageState extends State<PetServicePage> {
           ),
           Row(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(left:15),
+                child: Text(
+                  "10 km",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: Utiles.primaryButton, fontSize: 16),
+                ),
+              ),
               Expanded(
                 child: Slider(
                   autofocus: false,
@@ -345,13 +355,12 @@ class _PetServicePageState extends State<PetServicePage> {
                   onChanged: (val) {
                     setState(() {
                       distance = val;
-
                     });
                   },
                   value: distance,
-                  activeColor: Colors.blue,
+                  activeColor: Utiles.primaryBgColor,
                   min: 10,
-                  max: 300,
+                  max: 200,
                 ),
               ),
               Padding(
@@ -361,7 +370,7 @@ class _PetServicePageState extends State<PetServicePage> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6
-                      .copyWith(color: Colors.blue, fontSize: 16),
+                      .copyWith(color: Utiles.primaryBgColor, fontSize: 16),
                 ),
               )
             ],

@@ -12,6 +12,7 @@ import 'package:monkoodog/Screens/HomePage/Pet/MyPetScreen.dart';
 import 'package:monkoodog/Screens/Login.dart';
 import 'package:monkoodog/Screens/Map/Finder.dart';
 import 'package:monkoodog/Screens/Map/PetFinder.dart';
+import 'package:monkoodog/Screens/Slider.dart';
 import 'package:monkoodog/Screens/User/ProfileUpdateScreen.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
@@ -257,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
+                                      builder: (context) => SliderPage()));
 
 //
                             },

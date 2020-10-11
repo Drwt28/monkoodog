@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:monkoodog/CustomWidgets.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
@@ -24,6 +25,9 @@ class PetDetailScreen extends StatefulWidget {
 }
 
 class _PetDetailScreenState extends State<PetDetailScreen> {
+
+  NewPet pet;
+
 
   List<Vaccination> vaccination = List();
   Utiles util = Utiles();
@@ -61,9 +65,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
   void initState() {
     super.initState();
     getDob();
+    pet = widget.pets;
 
     age = Age.weeks(
-        fromDate: DateTime.parse(widget.pets.dob),
+        fromDate: DateTime.parse(pet.dob),
         toDate: DateTime.now(),
         includeToDate: false);
   }
@@ -74,6 +79,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     vaccination = Provider.of<DataProvider>(context).vaccinations;
     return Scaffold(
       appBar: AppBar(
+        title: Text(pet.name),
         actions: [
           (widget.view)?FlatButton(onPressed: (){
             Navigator.push(context,MaterialPageRoute(builder: (context)=>EditPetPage(documentSnapshot: widget.snapshot,)));
@@ -84,28 +90,79 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
           ],)):SizedBox()
         ],
       ),
-      body: ListView(
-        children: [
-          buildTopLayout(),
-          SizedBox(height: 10,),
-          !widget.view?Container():buildToggleButton()
-         , !widget.view?Container():SizedBox(height: 10,),
-          !widget.view?Container():ListAllVaccination(
-            vaccination: vaccination,
-            month: month,
-            //Utiles.month(widget.pets.dob),
-            date: date,
-            year: year,
-            age: age
-                .toString()
-                .substring(0, age.toString().indexOf(' ')),
-            weeks: int.parse(age
-                .toString()
-                .substring(0, age.toString().indexOf(' '))),
-            vac: selectedTab==0?false:true,
-          )
+      body: (widget.snapshot==null)?AnimationLimiter(
+        child: ListView(
+          children: AnimationConfiguration.toStaggeredList(
+              duration: Duration(milliseconds: 700),
+              childAnimationBuilder: (widget)=>
+                  SlideAnimation(
+                    verticalOffset: -100,
+                    child: ScaleAnimation(
+                      child: widget,
+                    ),
+                  ), children: [
+            buildTopLayout(),
+            SizedBox(height: 10,),
+            !widget.view?Container():buildToggleButton()
+            , !widget.view?Container():SizedBox(height: 10,),
+            !widget.view?Container():ListAllVaccination(
+              vaccination: vaccination,
+              month: month,
+              //Utiles.month(pet.dob),
+              date: date,
+              year: year,
+              age: age
+                  .toString()
+                  .substring(0, age.toString().indexOf(' ')),
+              weeks: int.parse(age
+                  .toString()
+                  .substring(0, age.toString().indexOf(' '))),
+              vac: selectedTab==0?false:true,
+            )
 
-                  ],
+          ]),
+        ),
+      ):StreamBuilder<DocumentSnapshot>(
+        stream: widget.snapshot.reference.snapshots(),
+        builder: (context, snapshot) {
+         if(snapshot.hasData)
+           {
+             pet = NewPet.fromJson(snapshot.data.data);
+           }
+          return AnimationLimiter(
+            child: ListView(
+              children: AnimationConfiguration.toStaggeredList(
+                  duration: Duration(milliseconds: 700),
+                  childAnimationBuilder: (widget)=>
+                  SlideAnimation(
+                    verticalOffset: -100,
+                    child: ScaleAnimation(
+                      child: widget,
+                    ),
+                  ), children: [
+                buildTopLayout(),
+                SizedBox(height: 10,),
+                !widget.view?Container():buildToggleButton()
+                , !widget.view?Container():SizedBox(height: 10,),
+                !widget.view?Container():ListAllVaccination(
+                  vaccination: vaccination,
+                  month: month,
+                  //Utiles.month(pet.dob),
+                  date: date,
+                  year: year,
+                  age: age
+                      .toString()
+                      .substring(0, age.toString().indexOf(' ')),
+                  weeks: int.parse(age
+                      .toString()
+                      .substring(0, age.toString().indexOf(' '))),
+                  vac: selectedTab==0?false:true,
+                )
+
+              ]),
+            ),
+          );
+        }
       ),
 
     );
@@ -128,11 +185,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 110,),
-                  buildHeadText("Allergies",widget.pets.allergies.length>0?widget.pets.allergies.toString().replaceAll("]", "").replaceAll("[", ""):"No Allergies"),
+                  buildHeadText("Allergies",pet.allergies.length>0?pet.allergies.toString().replaceAll("]", "").replaceAll("[", ""):"No Allergies"),
                   SizedBox(height: 4,),
-                  buildHeadText("Diseases",widget.pets.diseases.length>0?widget.pets.diseases.toString().replaceAll("]", "").replaceAll("[", ""):"No Diseases"),
+                  buildHeadText("Diseases",pet.diseases.length>0?pet.diseases.toString().replaceAll("]", "").replaceAll("[", ""):"No Diseases"),
                   SizedBox(height: 4,),
-                  buildHeadText("Loves",widget.pets.loves),
+                  buildHeadText("Loves",pet.loves),
                 ],
               ),
               height: 200,
@@ -155,7 +212,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(widget.pets.media)
+                      image: NetworkImage(pet.media)
                     ),
                     color: Colors.white,
                     shape: BoxShape.circle,
@@ -169,11 +226,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(widget.pets.name,style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
+                    Text(pet.name,style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black),),
                     SizedBox(height: 8,)
-                    ,Text(Utiles.calculateAge(DateTime.parse(widget.pets.dob)),style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+                    ,Text(Utiles.calculateAge(DateTime.parse(pet.dob)),style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                     SizedBox(height: 2,),
-                    Text(widget.pets.breed,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
+                    Text(pet.breed,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.black54,fontSize: 15),),
                   ],
                 )
               ],

@@ -34,9 +34,8 @@ class _ToogleButtonColoredState extends State<ToogleButtonColored> {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           InkWell(
             onTap: (){
 
@@ -49,9 +48,9 @@ class _ToogleButtonColoredState extends State<ToogleButtonColored> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Container(
+                constraints: BoxConstraints.expand(height: 45,width: 120),
 
-                padding: EdgeInsets.symmetric(horizontal: 25,vertical: 14),
-                child: Text(widget.buttons[0],style: TextStyle(color: selected==0?Colors.white:Colors.black),),
+                child: Center(child: Text(widget.buttons[0],style: TextStyle(color: selected==0?Colors.white:Colors.black),)),
                 color: selected==0?Colors.green:Colors.black12,
               ),
             ),
@@ -71,8 +70,8 @@ class _ToogleButtonColoredState extends State<ToogleButtonColored> {
               borderRadius: BorderRadius.circular(10),
               child: Container(
 
-                  padding: EdgeInsets.symmetric(horizontal: 25,vertical: 14),
-                child: Text(widget.buttons[1],style: TextStyle(color: selected==1?Colors.white:Colors.black),),
+                constraints: BoxConstraints.expand(height: 45,width: 120),
+                child: Center(child: Text(widget.buttons[1],style: TextStyle(color: selected==1?Colors.white:Colors.black),)),
                 color: selected==1?Colors.green:Colors.black12,
               ),
             ),
