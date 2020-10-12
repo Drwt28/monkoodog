@@ -33,9 +33,8 @@ dependencies:
   font_awesome_flutter:
   provider:
   shared_preferences:
-  flutter_staggered_animations: ^0.1.2
+  flutter_staggered_animations:
   connectivity:
-  simple_animations: ^2.2.2
   http:
   flutter_html: ^0.11.1
   firebase_auth:
