@@ -6,7 +6,7 @@ import 'package:monkoodog/Search.dart';
 import 'package:monkoodog/Widgets/NewsItem.dart';
 import 'package:monkoodog/utils/utiles.dart';
 import 'package:provider/provider.dart';
-import 'package:monkoodog/Animation/FadeAnimation.dart';
+
 
 class NewsScreen extends StatefulWidget {
   @override

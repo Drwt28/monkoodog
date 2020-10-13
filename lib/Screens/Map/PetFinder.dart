@@ -188,7 +188,7 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                                                       image: NetworkImage(
                                                           petList[index].media),
                                                       placeholder: AssetImage(
-                                                          'assets/images/dog_marker.png'),
+                                                          'assets/images/pet_finder.png'),
                                                     ),
                                                   ),
                                                 ),

@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:monkoodog/Animation/FadeAnimation.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
 import 'package:monkoodog/Modals/NewPet.dart';
 import 'package:monkoodog/Modals/vaccination.dart';

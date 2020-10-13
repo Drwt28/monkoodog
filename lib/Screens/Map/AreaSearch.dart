@@ -391,7 +391,7 @@ class _AreaSearchState extends State<AreaSearch> {
   void initState() {
     super.initState();
 
-    BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),
+    BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 1.5),
         'assets/images/pin.png')
         .then((onValue) {
       serviceIcon = onValue;

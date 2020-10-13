@@ -43,31 +43,69 @@ class _PetServicePageState extends State<PetServicePage> {
     getMarkers();
   }
 
-  getMarkers(){
+  var vetinaryIcon,hospitalIcon,shopIcon,trainerIcon;
+
+  getIconType(String category)
+  {
+    var icon;
+     if(category.contains("Veterinary"))
+    return vetinaryIcon;
+     if(category.contains("Pet Services"))
+     return hospitalIcon;
+       if(category.contains("Shop"))
+    return shopIcon;
+    return icon;
+  }
+
+
+  getIcon()async{
+    var icon;
+    // if(category.contains("Veterinary"))
+    vetinaryIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 3),
+        'assets/images/doctor.png');
+    // if(category.contains("Pet Services"))
+    hospitalIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio:3),
+        'assets/images/hospital.png');
+    // if(category.contains("Shop"))
+    shopIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 3),
+        'assets/images/shop.png');
+
+
+    return icon;
+  }
+  
+  getMarkers()async{
+
+    _markers.clear();
+
+
+    for (PetService pet in petList) {
+      var icon = getIconType(pet.category);
+      final marker = Marker(
+        draggable: false,
+        icon: icon,
+        markerId: MarkerId(pet.addressLine1),
+        position: LatLng(pet.latitude, pet.longitude),
+        infoWindow: InfoWindow(
+          onTap: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ServiceDetailPage(
+                          petService:
+                          pet,
+                        )));
+          },
+          title: pet.addressLine1,
+          snippet: pet.zip,
+        ),
+      );
+      _markers[pet.addressLine1] = marker;
+    }
+    
     setState(() {
-      _markers.clear();
-      for (PetService pet in petList) {
-        final marker = Marker(
-          draggable: false,
-          markerId: MarkerId(pet.addressLine1),
-          position: LatLng(pet.latitude, pet.longitude),
-          infoWindow: InfoWindow(
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ServiceDetailPage(
-                            petService:
-                            pet,
-                          )));
-            },
-            title: pet.addressLine1,
-            snippet: pet.zip,
-          ),
-        );
-        _markers[pet.addressLine1] = marker;
-      }
+
     });
   }
 
@@ -190,7 +228,7 @@ class _PetServicePageState extends State<PetServicePage> {
                                                 fontSize: 15),
                                           ),
                                           Text(
-                                              "${petList[index].distance} Km",
+                                              "${petList[index].category}",
                                               textAlign:
                                               TextAlign.end,
                                               style: Theme.of(context)
@@ -304,6 +342,11 @@ class _PetServicePageState extends State<PetServicePage> {
         endDrawer: buildFilterDrawer(),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    getIcon();
   }
 
   Widget buildFilterDrawer() {
