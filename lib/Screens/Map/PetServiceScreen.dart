@@ -56,10 +56,21 @@ class _PetServicePageState extends State<PetServicePage> {
     return shopIcon;
     return icon;
   }
+  getImageType(String category)
+  {
+
+     if(category.contains("Veterinary"))
+    return 'assets/images/doctor.png';
+     if(category.contains("Pet Services"))
+     return 'assets/images/hospital.png';
+       if(category.contains("Shop"))
+    return 'assets/images/shop.png';
+
+  }
 
 
   getIcon()async{
-    var icon;
+
     // if(category.contains("Veterinary"))
     vetinaryIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 3),
         'assets/images/doctor.png');
@@ -71,7 +82,7 @@ class _PetServicePageState extends State<PetServicePage> {
         'assets/images/shop.png');
 
 
-    return icon;
+
   }
   
   getMarkers()async{
@@ -192,7 +203,8 @@ class _PetServicePageState extends State<PetServicePage> {
                                     flex: 1,
                                     child: Hero(
                                       tag: petList[index].addressLine1??'',
-                                      child: Image.asset('assets/images/dog_marker.png'
+                                      child: Image.asset(petList[index].services==null?'assets/images/shop.png':
+                                          getImageType(petList[index].services)
                                       ),
                                     ),
                                   ),
@@ -278,30 +290,7 @@ class _PetServicePageState extends State<PetServicePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // FloatingActionButton(
-                    //   heroTag: 'sddfdfsdf',
-                    //   mini: true,
-                    //   onPressed: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    //   child: Icon(Icons.arrow_back),
-                    // ),
-                    // SizedBox(
-                    //   height: 55,
-                    //   child: Card(
-                    //     shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(20)),
-                    //     child: Center(
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.symmetric(
-                    //               horizontal: 30, vertical: 5),
-                    //           child: Text(
-                    //             "Pet Services",
-                    //             style: Theme.of(context).textTheme.headline6,
-                    //           ),
-                    //         )),
-                    //   ),
-                    // ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: FloatingActionButton(
@@ -508,7 +497,7 @@ class _PetServicePageState extends State<PetServicePage> {
 //              )
 //            ],
 //          ),
-          leading: Image.asset('assets/images/dog_marker.png',
+          leading: Image.asset('assets/images/shop.png',
               width: 30, height: 30),
         ),
       ),
