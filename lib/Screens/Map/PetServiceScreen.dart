@@ -15,7 +15,6 @@ import 'AreaSearch.dart';
 import 'ServiceDetailPage.dart';
 
 
-
 class PetServicePage extends StatefulWidget {
   @override
   _PetServicePageState createState() => _PetServicePageState();
@@ -43,51 +42,49 @@ class _PetServicePageState extends State<PetServicePage> {
     getMarkers();
   }
 
-  var vetinaryIcon,hospitalIcon,shopIcon,trainerIcon;
+  var vetinaryIcon, hospitalIcon, shopIcon, trainerIcon;
 
-  getIconType(String category)
-  {
+  getIconType(String category) {
     var icon;
-     if(category.contains("Veterinary"))
-    return vetinaryIcon;
-     if(category.contains("Pet Services"))
-     return hospitalIcon;
-       if(category.contains("Shop"))
-    return shopIcon;
+    if (category.contains("Veterinary"))
+      return vetinaryIcon;
+    if (category.contains("Pet Services"))
+      return hospitalIcon;
+    if (category.contains("Shop"))
+      return shopIcon;
     return icon;
   }
-  getImageType(String category)
-  {
 
-     if(category.contains("Veterinary"))
-    return 'assets/images/doctor.png';
-     if(category.contains("Pet Services"))
-     return 'assets/images/hospital.png';
-      else
-    return 'assets/images/shop.png';
-
+  String getImageType(String category) {
+    if (category.contains("Veterinary"))
+      return 'assets/images/doctor.png';
+    else if (category.contains("Pet Services"))
+      return 'assets/images/hospital.png';
+    else if (category.contains("Shop"))
+      return 'assets/images/shop.png';
+    else
+      return 'assets/images/hospital.png';
 
   }
 
 
-  getIcon()async{
-
+  int lastIndex=0;
+  getIcon() async {
     // if(category.contains("Veterinary"))
-    vetinaryIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 3),
+    vetinaryIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 3),
         'assets/images/doctor.png');
     // if(category.contains("Pet Services"))
-    hospitalIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio:3),
+    hospitalIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 3),
         'assets/images/hospital.png');
     // if(category.contains("Shop"))
-    shopIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 3),
+    shopIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 3),
         'assets/images/shop.png');
-
-
-
   }
-  
-  getMarkers()async{
 
+  getMarkers() async {
     _markers.clear();
 
 
@@ -96,10 +93,10 @@ class _PetServicePageState extends State<PetServicePage> {
       final marker = Marker(
         draggable: false,
         icon: icon,
-        markerId: MarkerId(pet.addressLine1),
+        markerId: MarkerId(pet.company),
         position: LatLng(pet.latitude, pet.longitude),
         infoWindow: InfoWindow(
-          onTap: (){
+          onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -115,7 +112,7 @@ class _PetServicePageState extends State<PetServicePage> {
       );
       _markers[pet.addressLine1] = marker;
     }
-    
+
     setState(() {
 
     });
@@ -125,8 +122,12 @@ class _PetServicePageState extends State<PetServicePage> {
 
   @override
   Widget build(BuildContext context) {
-    petList = Provider.of<DataProvider>(context).mapPetService;
-    var location = Provider.of<DataProvider>(context).userLocation;
+    petList = Provider
+        .of<DataProvider>(context)
+        .mapPetService;
+    var location = Provider
+        .of<DataProvider>(context)
+        .userLocation;
     getMarkers();
     return SafeArea(
       child: Scaffold(
@@ -141,7 +142,7 @@ class _PetServicePageState extends State<PetServicePage> {
                 zoomGesturesEnabled: true,
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
-                  target:  LatLng(location.latitude, location.longitude),
+                  target: LatLng(location.latitude, location.longitude),
                   zoom: 10,
                 ),
                 markers: _markers.values.toSet(),
@@ -157,7 +158,8 @@ class _PetServicePageState extends State<PetServicePage> {
                     padding: EdgeInsets.all(5),
                     child: Text(
                       "${petList.length} Services",
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .headline6
                           .copyWith(color: Colors.black, fontSize: 15),
@@ -169,7 +171,10 @@ class _PetServicePageState extends State<PetServicePage> {
               left: 0,
               child: SizedBox(
                 height: 130,
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: (petList.length == 0)
@@ -177,89 +182,98 @@ class _PetServicePageState extends State<PetServicePage> {
                       : CarouselSlider(
                     items: List.generate(
                         petList.length,
-                            (index) => Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(16)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ServiceDetailPage(
-                                              petService:
-                                              petList[index],
-                                            )));
-                                //onTap: (){
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Hero(
-                                      tag: petList[index].addressLine1??'',
-                                      child: Image.asset(petList[index].services==null?'assets/images/shop.png':
-                                          getImageType(petList[index].services)
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      color: Utiles.primaryBgColor,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            petList[index].company??'',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                .copyWith(
-                                                color:
-                                                Colors.white,
-                                                fontSize: 16),
+                            (index) =>
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(16)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ServiceDetailPage(
+                                                  petService:
+                                                  petList[index],
+                                                )));
+                                    //onTap: (){
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Hero(
+                                          tag: petList[index].addressLine1 ??
+                                              '',
+                                          child: Image.asset(
+                                              petList[index].services == null
+                                                  ? 'assets/images/shop.png'
+                                                  :
+                                              getImageType(
+                                                  petList[index].category??"Shop")
                                           ),
-                                          Text(petList[index].city??'',
-                                            textAlign:
-                                            TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1
-                                                .copyWith(
-                                                color:
-                                                Colors.white,
-                                                fontSize: 15),
-                                          ),
-                                          Text(
-                                              "${petList[index].category}",
-                                              textAlign:
-                                              TextAlign.end,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1
-                                                  .copyWith(
-                                                  color: Colors
-                                                      .white,
-                                                  fontSize: 16))
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          color: Utiles.primaryBgColor,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                petList[index].company ?? '',
+                                                style: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    .copyWith(
+                                                    color:
+                                                    Colors.white,
+                                                    fontSize: 16),
+                                              ),
+                                              Text(petList[index].city ?? '',
+                                                textAlign:
+                                                TextAlign.center,
+                                                style: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .subtitle1
+                                                    .copyWith(
+                                                    color:
+                                                    Colors.white,
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                  "${petList[index].category}",
+                                                  textAlign:
+                                                  TextAlign.end,
+                                                  style: Theme
+                                                      .of(context)
+                                                      .textTheme
+                                                      .subtitle1
+                                                      .copyWith(
+                                                      color: Colors
+                                                          .white,
+                                                      fontSize: 16))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        )),
+                            )),
                     options: CarouselOptions(
                         autoPlay: false,
                         enableInfiniteScroll: false,
@@ -268,6 +282,17 @@ class _PetServicePageState extends State<PetServicePage> {
                         enlargeCenterPage: true,
                         scrollDirection: Axis.horizontal,
                         onPageChanged: (index, controller) {
+                          try {
+                            _mapController.hideMarkerInfoWindow(
+                                MarkerId(petList[lastIndex].company));
+                            _mapController.showMarkerInfoWindow(
+                                MarkerId(petList[index].company));
+                            lastIndex = index;
+                          } catch (e) {
+                            _mapController.showMarkerInfoWindow(
+                                MarkerId(petList[index].company));
+                            lastIndex = index;
+                          }
                           _mapController.animateCamera(
                               CameraUpdate.newCameraPosition(
                                   new CameraPosition(
@@ -287,7 +312,10 @@ class _PetServicePageState extends State<PetServicePage> {
               left: 0,
               child: SizedBox(
                 height: 55,
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -300,7 +328,9 @@ class _PetServicePageState extends State<PetServicePage> {
                         backgroundColor: Colors.white,
                         onPressed: () {
                           showSearch(
-                              context: context, delegate: PetSearch(totalPets,lat1??0.0,lon1??0.0));
+                              context: context,
+                              delegate: PetSearch(
+                                  totalPets, lat1 ?? 0.0, lon1 ?? 0.0));
                         },
                         child: Icon(
                           Icons.search,
@@ -343,7 +373,10 @@ class _PetServicePageState extends State<PetServicePage> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      width: MediaQuery.of(context).size.width * .85,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * .85,
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
@@ -352,7 +385,8 @@ class _PetServicePageState extends State<PetServicePage> {
             child: Text(
               'Filters',
               textAlign: TextAlign.center,
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .headline6
                   .copyWith(color: Colors.black87),
@@ -363,7 +397,8 @@ class _PetServicePageState extends State<PetServicePage> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Find Services in range',
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .headline6
                   .copyWith(color: Utiles.primaryBgColor, fontSize: 16),
@@ -372,10 +407,11 @@ class _PetServicePageState extends State<PetServicePage> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left:15),
+                padding: const EdgeInsets.only(left: 15),
                 child: Text(
                   "10 km",
-                  style: Theme.of(context)
+                  style: Theme
+                      .of(context)
                       .textTheme
                       .headline6
                       .copyWith(color: Utiles.primaryButton, fontSize: 16),
@@ -400,7 +436,8 @@ class _PetServicePageState extends State<PetServicePage> {
                 padding: const EdgeInsets.only(right: 15),
                 child: Text(
                   "${distance.toInt()} km",
-                  style: Theme.of(context)
+                  style: Theme
+                      .of(context)
                       .textTheme
                       .headline6
                       .copyWith(color: Utiles.primaryBgColor, fontSize: 16),
@@ -412,7 +449,8 @@ class _PetServicePageState extends State<PetServicePage> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Area wise',
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .headline6
                   .copyWith(color: Utiles.primaryBgColor, fontSize: 16),
@@ -423,9 +461,8 @@ class _PetServicePageState extends State<PetServicePage> {
             child: CupertinoButton(
               onPressed: () {
                 Navigator.push(context, CupertinoPageRoute(
-                    builder: (context)=>AreaSearch("Pet Service",false)
+                    builder: (context) => AreaSearch("Pet Service", false)
                 ));
-
               },
               color: Utiles.primaryBgColor,
               child: Text(
@@ -433,20 +470,18 @@ class _PetServicePageState extends State<PetServicePage> {
               ),
             ),
           )
-          ,Padding(
+          , Padding(
             padding: const EdgeInsets.all(8.0),
             child: CupertinoButton(
-              onPressed: () async{
-
-                petList=null;
+              onPressed: () async {
+                petList = null;
                 setState(() {
 
                 });
-                await Provider.of<DataProvider>(context,listen: false).getMapPetService(distance);
+                await Provider.of<DataProvider>(context, listen: false)
+                    .getMapPetService(distance);
                 getMarkers();
                 Navigator.pop(context);
-
-
               },
               color: Utiles.primaryBgColor,
               child: Text(
@@ -459,8 +494,7 @@ class _PetServicePageState extends State<PetServicePage> {
     );
   }
 
-  bool containsAny(List breed,result)
-  {
+  bool containsAny(List breed, result) {
 
   }
 
@@ -510,7 +544,8 @@ class _PetServicePageState extends State<PetServicePage> {
       initiallyExpanded: false,
       title: Text(
         title,
-        style: Theme.of(context)
+        style: Theme
+            .of(context)
             .textTheme
             .headline6
             .copyWith(color: Colors.black, fontSize: 16),
@@ -520,8 +555,6 @@ class _PetServicePageState extends State<PetServicePage> {
   }
 
   var lat1, lon1;
-
-
 
 
 }
@@ -543,9 +576,9 @@ class PetSearch extends SearchDelegate<String> {
   }
 
   List<PetService> petList;
-  var lat,long;
+  var lat, long;
 
-  PetSearch(this.petList,this.lat,this.long);
+  PetSearch(this.petList, this.lat, this.long);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -576,73 +609,82 @@ class PetSearch extends SearchDelegate<String> {
     return (suggestions.length > 0)
         ? ListView.builder(
         itemCount: suggestions.length,
-        itemBuilder: (context, index) => Padding(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-          child: Container(
-            height: 70,
-            child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: InkWell(
-                    onTap: (){
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) =>
-                      //             ViewPetScreen(
-                      //               pets: suggestions[index],
-                      //               view: false,
-                      //             )));
-                    },
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: FadeInImage(
-                            fit: BoxFit.cover,
-                            placeholder:
-                            AssetImage('assets/images/dog_marker.png'),
-                            image: AssetImage('assets/images/dog_marker.png'),
+        itemBuilder: (context, index) =>
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+              child: Container(
+                height: 70,
+                child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: InkWell(
+                        onTap: () {
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             ViewPetScreen(
+                          //               pets: suggestions[index],
+                          //               view: false,
+                          //             )));
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: FadeInImage(
+                                fit: BoxFit.cover,
+                                placeholder:
+                                AssetImage('assets/images/dog_marker.png'),
+                                image: AssetImage(
+                                    'assets/images/dog_marker.png'),
 
 
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            suggestions[index].addressLine1,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(fontSize: 16, color: Colors.black),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            child: Center(
-                              child: Text(
-                                "${calculateDistance(suggestions[index].latitude, suggestions[index].longitude).ceil()} km",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    .copyWith(fontSize: 16, color: Colors.green),
                               ),
                             ),
-                          ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                suggestions[index].addressLine1,
+                                textAlign: TextAlign.center,
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(
+                                    fontSize: 16, color: Colors.black),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                child: Center(
+                                  child: Text(
+                                    "${calculateDistance(
+                                        suggestions[index].latitude,
+                                        suggestions[index].longitude)
+                                        .ceil()} km",
+                                    textAlign: TextAlign.center,
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(
+                                        fontSize: 16, color: Colors.green),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                )),
-          ),
-        ))
+                      ),
+                    )),
+              ),
+            ))
         : Container(
       child: Center(
         child: Text('No Pet found'),

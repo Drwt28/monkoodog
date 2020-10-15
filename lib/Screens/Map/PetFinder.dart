@@ -61,6 +61,13 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
     _mapController = controller;
 
     getMarkers();
+
+    try{
+      _mapController.showMarkerInfoWindow(MarkerId(petList[0].name));
+    }catch(e)
+    {
+
+    }
   }
 
   getMarkers() {
@@ -78,10 +85,9 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                   context,
                   CupertinoPageRoute(
                       builder: (context) => PetDetailScreen(
-
-                        pets: pet,
-                        view: false,
-                      )));
+                            pets: pet,
+                            view: false,
+                          )));
             },
             title: pet.primaryBreed,
             snippet: pet.name,
@@ -93,6 +99,8 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
   }
 
   var scaffold = GlobalKey<ScaffoldState>();
+
+  var lastIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +139,9 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                 child: Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
-                      petList!=null?petList.length.toString()+" Pets":"",
+                      petList != null
+                          ? petList.length.toString() + " Pets"
+                          : "",
                       style: Theme.of(context)
                           .textTheme
                           .headline6
@@ -261,7 +271,18 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                                   aspectRatio: 1,
                                   enlargeCenterPage: true,
                                   scrollDirection: Axis.horizontal,
-                                  onPageChanged: (index, controller) {
+                                  onPageChanged: (index, controller) async {
+                                    try {
+                                      _mapController.hideMarkerInfoWindow(
+                                          MarkerId(petList[lastIndex].name));
+                                      _mapController.showMarkerInfoWindow(
+                                          MarkerId(petList[index].name));
+                                      lastIndex = index;
+                                    } catch (e) {
+                                      _mapController.showMarkerInfoWindow(
+                                          MarkerId(petList[index].name));
+                                      lastIndex = index;
+                                    }
                                     _mapController.animateCamera(
                                         CameraUpdate.newCameraPosition(
                                             new CameraPosition(
@@ -376,7 +397,7 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left:15),
+                padding: const EdgeInsets.only(left: 15),
                 child: Text(
                   "10 km",
                   style: Theme.of(context)
@@ -536,7 +557,6 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
   }
 
   filterByRange(double range) {
-
     // petList = totalPets
     //     .where((element) => double.parse(element.distance) <= distance)
     //     .toList();
