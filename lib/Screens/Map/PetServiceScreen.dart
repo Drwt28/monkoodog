@@ -63,8 +63,9 @@ class _PetServicePageState extends State<PetServicePage> {
     return 'assets/images/doctor.png';
      if(category.contains("Pet Services"))
      return 'assets/images/hospital.png';
-       if(category.contains("Shop"))
+      else
     return 'assets/images/shop.png';
+
 
   }
 
