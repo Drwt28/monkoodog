@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:monkoodog/Modals/event.dart';
 import 'package:monkoodog/Modals/news.dart';
@@ -126,27 +127,35 @@ class Api {
 
   Future<List<News>> getNewsList(int pageSize, int pageNo) async {
     var newsList = List<News>();
-    var response;
 
-    try {
-      response = await client.get(
-          'https://www.monkoodog.com/wp-json/wp/v2/news?PageNo=$pageNo&PageSize=$pageSize');
-    } catch (e) {
-      print("error" + e.toString());
+    var query = await Firestore.instance.collection("news").orderBy("updatedTime").limit(10).getDocuments();
+    // loop and convert each item to Post
+    for (var news in query.documents) {
+      newsList.add(News.fromJson(news.data));
     }
-
-    if (response.statusCode == 200) {
-      // parse into List
-      var parsed = json.decode(response.body) as List<dynamic>;
-
-      // loop and convert each item to Post
-      for (var news in parsed) {
-        newsList.add(News.fromJson(news));
-      }
-      print(newsList.toString());
-      return newsList;
-    }
-    return null;
+    print(newsList.toString());
+    return newsList;
+    // var response;
+    //
+    // try {
+    //   response = await client.get(
+    //       'https://www.monkoodog.com/wp-json/wp/v2/news?PageNo=$pageNo&PageSize=$pageSize');
+    // } catch (e) {
+    //   print("error" + e.toString());
+    // }
+    //
+    // if (response.statusCode == 200) {
+    //   // parse into List
+    //   var parsed = json.decode(response.body) as List<dynamic>;
+    //
+    //   // loop and convert each item to Post
+    //   for (var news in parsed) {
+    //     newsList.add(News.fromJson(news));
+    //   }
+    //   print(newsList.toString());
+    //   return newsList;
+    // }
+    // return null;
   }
 
   Future<String> getMedia(String link) async {

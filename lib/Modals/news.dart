@@ -10,18 +10,17 @@ class News {
 
   News.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    mediaLink = "https://www.monkoodog.com/wp-json/wp/v2/media/${json["featured_media"]}";
-    title = json['title']['rendered'];
-
-    content = json['content']['rendered'];
+    url = json['url'];
+    title = json['title'];
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['title']['rendered'] = this.title;
-    data['guid']['rendered'] = this.url;
-    data['content']['rendered'] = this.content;
+    data['title'] = this.title;
+    data['url'] = this.url;
+    data['content'] = this.content;
     return data;
   }
 }
