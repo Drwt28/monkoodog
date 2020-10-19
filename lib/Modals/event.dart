@@ -11,9 +11,10 @@ class Event {
 
   Event.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    mediaLink = "https://www.monkoodog.com/wp-json/wp/v2/media/${json["featured_media"]}";
-    title = json['title']['rendered'];
-    content = json['content']['rendered'];
+    mediaLink = "https://www.monkoodog.com/wp-json/wp/v2/media/";
+    title = json['title'];
+    url = json['url'];
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {

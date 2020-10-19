@@ -74,37 +74,26 @@ class DataProvider with ChangeNotifier {
     print("getting news");
    news =  await api.getNewsList(page_size, page_no);
    notifyListeners();
-   news = await getMedia(news);
-   notifyListeners();
-
   }
 
   loadMoreNews()async{
     news.addAll(await api.getNewsList(news.length+2, 1)) ;
-    notifyListeners();
-    news = await getMedia(news);
     notifyListeners();
   }
   loadMorePosts()async{
     print(posts.length);
     posts.addAll(await api.getPostList(posts.length+2, 1)) ;
     notifyListeners();
-    posts = await getMedia(posts);
-    notifyListeners();
   }
 
   loadMoreEvents()async{
     events.addAll(await api.getEventList(events.length+2, 1)) ;
-    notifyListeners();
-    events = await getMedia(events);
     notifyListeners();
   }
 
   getEvents(int page_size,int page_no)
   async{
    events =  await api.getEventList(page_size, page_no);
-   notifyListeners();
-   events = await getMedia(events);
    notifyListeners();
   }
   Future<List> getMedia(List list)
@@ -120,8 +109,6 @@ class DataProvider with ChangeNotifier {
   getPosts(int page_size,int page_no)
   async{
    posts =  await api.getPostList(page_size, page_no);
-   notifyListeners();
-   posts = await getMedia(posts);
    notifyListeners();
   }
 

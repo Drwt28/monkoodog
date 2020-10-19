@@ -62,24 +62,30 @@ class Api {
     int pageNo,
   ) async {
     var posts = List<Post>();
-    var response;
-    try {
-      response = await client.get(
-        //'$ENDPOINT/PostsList?PageSize=$pageSize&PageNo=$pageNo&nCategorieID=$cateId&Search=$search',
-        '$POST?page=$pageNo&page_size=$pageSize',
-      );
-    } catch (e) {
-      print("error " + e.toString());
-    }
-    if (response.statusCode == 200) {
-      var parsed = json.decode(response.body) as List<dynamic>;
 
-      for (var post in parsed) {
-        posts.add(Post.fromJson(post));
-      }
-      return posts;
+    var query = await Firestore.instance.collection("posts").orderBy("updatedTime",descending: true).limit(10).getDocuments();
+    // loop and convert each item to Post
+    for (var news in query.documents) {
+      posts.add(Post.fromJson(news.data));
     }
-    return null;
+    // var response;
+    // try {
+    //   response = await client.get(
+    //     //'$ENDPOINT/PostsList?PageSize=$pageSize&PageNo=$pageNo&nCategorieID=$cateId&Search=$search',
+    //     '$POST?page=$pageNo&page_size=$pageSize',
+    //   );
+    // } catch (e) {
+    //   print("error " + e.toString());
+    // }
+    // if (response.statusCode == 200) {
+    //   var parsed = json.decode(response.body) as List<dynamic>;
+    //
+    //   for (var post in parsed) {
+    //     posts.add(Post.fromJson(post));
+    //   }
+    //   return posts;
+    // }
+    return posts;
   }
 
 /*
@@ -128,7 +134,7 @@ class Api {
   Future<List<News>> getNewsList(int pageSize, int pageNo) async {
     var newsList = List<News>();
 
-    var query = await Firestore.instance.collection("news").orderBy("updatedTime").limit(10).getDocuments();
+    var query = await Firestore.instance.collection("news").orderBy("updatedTime",descending: true).limit(10).getDocuments();
     // loop and convert each item to Post
     for (var news in query.documents) {
       newsList.add(News.fromJson(news.data));
@@ -172,25 +178,31 @@ class Api {
     var eventList = List<Event>();
     var response;
 
-    try {
-      response = await client.get('$EVENT?page=$pageNo&page_size=$pageSize',
-          headers: headers);
-    } catch (e) {
-      print("error" + e.toString());
-    }
+    // try {
+    //   response = await client.get('$EVENT?page=$pageNo&page_size=$pageSize',
+    //       headers: headers);
+    // } catch (e) {
+    //   print("error" + e.toString());
+    // }
     print("Event=>> Data received");
-    if (response.statusCode == 200) {
-      // parse into List
-      var parsed = json.decode(response.body) as List<dynamic>;
+    // if (response.statusCode == 200) {
+    //   // parse into List
+    //   var parsed = json.decode(response.body) as List<dynamic>;
+    //
+    //   // loop and convert each item to Post
+    //   for (var event in parsed) {
+    //     eventList.add(Event.fromJson(event));
+    //   }
+    //
+    //   return eventList;
+    // }
 
-      // loop and convert each item to Post
-      for (var event in parsed) {
-        eventList.add(Event.fromJson(event));
-      }
-
-      return eventList;
+    var query = await Firestore.instance.collection("events").orderBy("updatedTime",descending: true).limit(10).getDocuments();
+    // loop and convert each item to Post
+    for (var news in query.documents) {
+      eventList.add(Event.fromJson(news.data));
     }
-    return null;
+    return eventList;
   }
 /*
  *   API to get Pet List
