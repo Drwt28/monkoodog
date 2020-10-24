@@ -50,8 +50,7 @@ class MyApp extends StatelessWidget {
                     val = true;
 
                   },
-                  child: Text("YES"),
-                  color: Colors.red,
+                  child: Text("Yes"),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5)),
                 ),
@@ -59,7 +58,7 @@ class MyApp extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("NO"),
+                  child: Text("No"),
                 )
               ],
             ),
@@ -86,7 +85,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: SplashScreen(),
+          home: HomePage(),
         ),
       ),
     );

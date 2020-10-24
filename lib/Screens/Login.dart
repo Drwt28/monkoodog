@@ -272,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
       loading = true;
       setState(() {});
       User user = new User(
-          userEmail: fUser.email, userPhone: fUser.phoneNumber, uid: fUser.uid);
+          userEmail: fUser.email, userPhone: fUser.phoneNumber, uid: fUser.uid,displayName: fUser.displayName,userUrl: fUser.photoUrl);
 
       var doc = await Firestore.instance
           .collection("users")

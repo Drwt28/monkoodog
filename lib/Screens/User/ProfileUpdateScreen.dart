@@ -12,10 +12,11 @@ class ProfileUpdateScreen extends StatefulWidget {
 }
 
 class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
-  @override
+
+  User user;
+ @override
   Widget build( context) {
-    var user = Provider.of<FirebaseUser>(context);
-    return Scaffold(
+   return Scaffold(
       appBar: AppBar(
         title: Text("Update Profile"),
 
@@ -86,5 +87,14 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
         ),
       ),
     );
+  }
+
+
+  saveProfile()async{
+    FirebaseUser user =await FirebaseAuth.instance.currentUser();
+
+
+
+
   }
 }

@@ -50,7 +50,7 @@ class _SliderPageState extends State<SliderPage> {
                     isLast: false),
                 buildSinglePage(
                     'Set your Location',
-                    'Set your location so we can tell you the nearest animal shop to but pet',
+                    'Set your location to search nearby pets and pet services',
                     'assets/images/screen2.png',
                     Utiles.primaryButton,
                     isLast: false),
@@ -135,7 +135,7 @@ class _SliderPageState extends State<SliderPage> {
             },
             child: Container(
               height: 60,
-              color: Utiles.primaryBgColor,
+              color: Utiles.primaryButton,
               child: Center(
                 child: Text(
                   "Get Started",

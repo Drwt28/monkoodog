@@ -71,6 +71,10 @@ class _confirmOtpState extends State<confirmOtp> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: PinCodeTextField(
+                      pinTheme: PinTheme(
+                        selectedColor: Utiles.primaryButton,
+                        inactiveColor: Colors.black,
+                      ),
                       keyboardType: TextInputType.number,
                       animationCurve: Curves.decelerate,
                       onChanged: (val){
