@@ -63,8 +63,10 @@ class NewsItem extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           _parse(news[index].title),
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.black,
+
                               fontSize: UIHelper.fontSizeHeading,
                               fontWeight: FontWeight.w800),
                         ),
@@ -73,7 +75,10 @@ class NewsItem extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       _parse(news[index].content),
-                      style: TextStyle(fontSize: UIHelper.fontSizeContent),
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: UIHelper.fontSizeContent),
                       maxLines: 5,
                     ),
                   ),

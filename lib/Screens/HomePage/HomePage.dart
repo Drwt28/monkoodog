@@ -93,9 +93,9 @@ class _HomePageState extends State<HomePage> {
         height: MediaQuery.of(context).size.height * .1,
         child: Row(
           children: [
-            SingleItem(0, icon: CupertinoIcons.home),
-            SingleItem(1, icon: CupertinoIcons.paw_solid),
-            SingleItem(2, icon: CupertinoIcons.news_solid),
+            SingleItem(0, icon: "assets/news1.png",icon2:"assets/news1.png" ),
+            SingleItem(1, icon: "assets/pet1.png",icon2: "assets/pet2.png"),
+            SingleItem(2, icon: "assets/blog1.png",icon2: "assets/blog2.png"),
           ],
         ),
       ),
@@ -137,7 +137,9 @@ class _HomePageState extends State<HomePage> {
                                 radius: 40.0,
                                 child: CircleAvatar(
                                   radius: 39.5,
-                                  backgroundImage: user.userUrl!=null?NetworkImage(user.userUrl):AssetImage(
+                                  backgroundImage: (user!=null)?user.userUrl!=null?NetworkImage(user.userUrl):AssetImage(
+                                    'assets/images/logo_trans.png',
+                                  ):AssetImage(
                                     'assets/images/logo_trans.png',
                                   ),
                                   backgroundColor: Colors.white,
@@ -149,8 +151,8 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    user.displayName??"",
+                                  Text((user!=null)?
+                                    user.displayName??"":"",
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Utiles.primaryBgColor,
@@ -178,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       leading: Icon(
-                        CupertinoIcons.home,
+                        Icons.home,
                       ),
                       title: Text(
                         'Home',
@@ -211,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       leading: Icon(
-                        CupertinoIcons.paw,
+                        CupertinoIcons.paw_solid,
                       ),
                       title: Text(
                         'PetFinder',
@@ -229,8 +231,7 @@ class _HomePageState extends State<HomePage> {
 
                     ListTile(
                       leading: Icon(
-                        CupertinoIcons.rectangle_paperclip,
-                        color: Utiles.primaryBgColor,
+                        Icons.report,
                       ),
                       title: Text("Report Issue",
                           style: TextStyle(
@@ -250,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ListTile(
                       leading: Icon(
-                        CupertinoIcons.square_arrow_right,
+                        Icons.logout,
                       ),
                       title: Text(
                         'Logout',
@@ -319,7 +320,7 @@ class _HomePageState extends State<HomePage> {
 
   int selectedIndex = 1;
 
-  Widget SingleItem(index, {icon}) {
+  Widget SingleItem(index, {icon,icon2}) {
     return !(selectedIndex == index)
         ? Flexible(
             flex: 1,
@@ -331,11 +332,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 color: Utiles.primaryBgColor,
                 child: Center(
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 30,
-                  ),
+                  child: Image.asset(icon2,color: Colors.black,height: 40,width: 40,),
                 ),
               ),
             ))
@@ -348,11 +345,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   color: Utiles.primaryBgColor,
                   child: Center(
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 35,
-                    ),
+                    child: Image.asset(icon,color: Colors.black,height: 42,width: 42,),
                   ),
                 ),
               ),
@@ -371,7 +364,7 @@ class selectedClipper extends CustomClipper<Path> {
       ..moveTo(size.width * .45, -size.height * .87)
       ..arcToPoint(Offset(size.width * .55, -size.height * .87),
           largeArc: true,
-          radius: Radius.elliptical(size.height * .35, size.height * .58),
+          radius: Radius.elliptical(size.height * .30, size.height * .55),
           clockwise: false)
       ..lineTo(size.width, 0)
       ..lineTo(size.width, size.height)
@@ -418,8 +411,9 @@ class iconShape extends CustomClipper<Path> {
     Path path = new Path();
 
     path.lineTo(size.width, 0);
+    path.lineTo(size.width/3, size.height);
     path.lineTo(0, size.height);
-    path.lineTo(0, 0);
+
     return path;
   }
 }

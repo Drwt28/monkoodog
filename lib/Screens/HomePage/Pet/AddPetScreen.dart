@@ -107,7 +107,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
           decoration: BoxDecoration(
             color: Utiles.primaryBgColor,
           ),
-          height: 90,
+          height: 75,
           child: Center(
               child: Text(
             step == 2 ? "Finish" : "Next",
@@ -252,15 +252,16 @@ class _AddPetScreenState extends State<AddPetScreen> {
                         children: [
                           Expanded(
                               flex: 5,
-                              child:buildWithHeading(
+                              child: buildWithHeading(
                                   "Date of Birth",
                                   Container(
                                     decoration: BoxDecoration(
-                                      boxShadow: [BoxShadow(
-                                        spreadRadius: 1,
-                                        color: Colors.black12,
-                                        blurRadius: 3
-                                      )],
+                                        boxShadow: [
+                                          BoxShadow(
+                                              spreadRadius: 1,
+                                              color: Colors.black12,
+                                              blurRadius: 3)
+                                        ],
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white),
                                     child: ListTile(
@@ -268,10 +269,10 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                         var currentdate = DateTime.now();
                                         age = await showDatePicker(
                                             context: context,
-                                            initialDate: DateTime(
-                                                currentdate.year - 3),
-                                            firstDate: DateTime(
-                                                currentdate.year - 3),
+                                            initialDate:
+                                                DateTime(currentdate.year - 3),
+                                            firstDate:
+                                                DateTime(currentdate.year - 3),
                                             lastDate: currentdate);
                                         setState(() {});
                                       },
@@ -286,11 +287,10 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                   ))),
                           Expanded(
                             flex: 3,
-                          child: SizedBox(),
+                            child: SizedBox(),
                           )
                         ],
                       ),
-
                       Container(
                         padding: EdgeInsets.all(8),
                         child: Column(
@@ -304,10 +304,9 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                 ToogleButtonColored(
                                   onTap: (val) {
                                     for (int i = 0;
-                                    i < genderSelected.length;
-                                    i++)
-                                      genderSelected[i] =
-                                      !genderSelected[i];
+                                        i < genderSelected.length;
+                                        i++)
+                                      genderSelected[i] = !genderSelected[i];
 
                                     setState(() {});
                                     genderSelected[val] = true;
@@ -322,8 +321,8 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                 ToogleButtonColored(
                                   onTap: (val) {
                                     for (int i = 0;
-                                    i < breedSelected.length;
-                                    i++) breedSelected[i] = false;
+                                        i < breedSelected.length;
+                                        i++) breedSelected[i] = false;
 
                                     breedSelected[val] = true;
                                     setState(() {});
@@ -343,11 +342,12 @@ class _AddPetScreenState extends State<AddPetScreen> {
                                     padding: EdgeInsets.symmetric(
                                         vertical: 18, horizontal: 24),
                                     decoration: BoxDecoration(
-                                        boxShadow: [BoxShadow(
-                                            spreadRadius: 1,
-                                            color: Colors.black12,
-                                            blurRadius: 3
-                                        )],
+                                        boxShadow: [
+                                          BoxShadow(
+                                              spreadRadius: 1,
+                                              color: Colors.black12,
+                                              blurRadius: 3)
+                                        ],
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white),
                                     child: Text(selectedPrimaryBreed ??
@@ -359,27 +359,28 @@ class _AddPetScreenState extends State<AddPetScreen> {
                             ),
                             (breedSelected[1])
                                 ? buildWithHeading(
-                                "Choose Secondary Breed",
-                                InkWell(
-                                  onTap: () {
-                                    buildSearchBottomSheet(false);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 18, horizontal: 24),
-                                    decoration: BoxDecoration(
-                                        boxShadow: [BoxShadow(
-                                            spreadRadius: 1,
-                                            color: Colors.black12,
-                                            blurRadius: 3
-                                        )],
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white),
-                                    child: Text(
-                                        selectedSecondaryBreed ??
+                                    "Choose Secondary Breed",
+                                    InkWell(
+                                      onTap: () {
+                                        buildSearchBottomSheet(false);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 18, horizontal: 24),
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  spreadRadius: 1,
+                                                  color: Colors.black12,
+                                                  blurRadius: 3)
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.white),
+                                        child: Text(selectedSecondaryBreed ??
                                             "Select Secondary Breed"),
-                                  ),
-                                ))
+                                      ),
+                                    ))
                                 : SizedBox()
                           ],
                         ),
@@ -403,7 +404,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
         child: ListView(
           children: [
             Text(
-              "Fill dog's info 2/2 optional",
+              "",
               style: Theme.of(context)
                   .textTheme
                   .headline6
@@ -413,16 +414,17 @@ class _AddPetScreenState extends State<AddPetScreen> {
               height: 30,
             ),
             buildWithHeading(
-                "Does your dog have any allergies? if not skip",
+                "Does your dog have any allergies?",
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
-                      boxShadow: [BoxShadow(
-                          spreadRadius: 1,
-                          color: Colors.black12,
-                          blurRadius: 3
-                      )],
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            color: Colors.black12,
+                            blurRadius: 3)
+                      ],
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: MultipleDropDown(
@@ -437,16 +439,17 @@ class _AddPetScreenState extends State<AddPetScreen> {
               height: 10,
             ),
             buildWithHeading(
-                "Does your dog have any diseases? if not skip",
+                "Does your dog have any diseases?",
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
-                      boxShadow: [BoxShadow(
-                          spreadRadius: 1,
-                          color: Colors.black12,
-                          blurRadius: 3
-                      )],
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            color: Colors.black12,
+                            blurRadius: 3)
+                      ],
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: MultipleDropDown(
@@ -461,17 +464,18 @@ class _AddPetScreenState extends State<AddPetScreen> {
               height: 10,
             ),
             buildWithHeading(
-                "Tell us what your dog loves (optional)",
+                "Tell us what your dog loves",
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 200,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                   decoration: BoxDecoration(
-                      boxShadow: [BoxShadow(
-                          spreadRadius: 1,
-                          color: Colors.black12,
-                          blurRadius: 3
-                      )],
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            color: Colors.black12,
+                            blurRadius: 3)
+                      ],
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white),
                   child: TextFormField(
@@ -482,8 +486,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(14),
-                      hintText:
-                          'Tell us what your dog loves\n(You can leave this blank)',
+                      hintText: 'Tell us what your dog loves',
                     ),
                     onSaved: (String value) {
                       // This optional block of code can be used to run
@@ -542,12 +545,24 @@ class _AddPetScreenState extends State<AddPetScreen> {
         (context) => Container(
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Choose Breed",
-                    style: Theme.of(context).textTheme.headline6,
+                  ListTile(
+                    title: Text(
+                      "Choose Breed",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.close,color: Colors.red,),
+                      onPressed: (){
+                        if(isPrimary)
+                          {
+                            selectedPrimaryBreed =null;
+                          }else{
+                          selectedSecondaryBreed = null;
+                        }
+                        Navigator.pop(context);
+                      }
+                      ,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -591,23 +606,25 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
   Widget buildListModels(List stringList, bool isPrimary) {
     return Container(
-      height: MediaQuery.of(context).size.height * .35,
+      height: MediaQuery.of(context).size.height * .8,
       child: ListView.builder(
-        itemExtent: 40,
         physics: BouncingScrollPhysics(),
         itemCount: stringList.length,
-        itemBuilder: (context, index) => ListTile(
-          onTap: () {
-            if (isPrimary)
-              selectedPrimaryBreed = stringList[index];
-            else
-              selectedSecondaryBreed = stringList[index];
+        itemBuilder: (context, index) => Card(
+          child: ListTile(
+            onTap: () {
+              if (isPrimary)
+                selectedPrimaryBreed = stringList[index];
+              else
+                selectedSecondaryBreed = stringList[index];
 
-            Navigator.pop(context);
-          },
-          title: Text(
-            stringList[index],
-            style: Theme.of(context).textTheme.subtitle2,
+              Navigator.pop(context);
+            },
+            title: Text(
+              stringList[index],
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
           ),
         ),
       ),
@@ -631,8 +648,36 @@ class _AddPetScreenState extends State<AddPetScreen> {
     if (profileImageUrl != null)
       (await FirebaseStorage.instance.getReferenceFromUrl(profileImageUrl))
           .delete();
+    ImageSource source;
+
+    await showDialog(
+        context: context,
+        child: Dialog(
+          child: Wrap(
+            children: [
+              ListTile(
+                onTap: () {
+                  source = ImageSource.camera;
+
+                  Navigator.pop(context);
+                },
+                title: Text("Camera"),
+                trailing: Icon(Icons.camera_alt_rounded),
+              ),
+              ListTile(
+                onTap: () {
+                  source = ImageSource.gallery;
+                  Navigator.pop(context);
+                },
+                title: Text("Gallery"),
+                trailing: Icon(Icons.collections),
+              ),
+            ],
+          ),
+        ));
+
     var image = await ImagePicker()
-        .getImage(maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
+        .getImage(maxWidth: 200, maxHeight: 200, source: source);
 
     if (!mounted) return;
 

@@ -45,7 +45,7 @@ class _SliderPageState extends State<SliderPage> {
                 buildSinglePage(
                     'Welcome to\nMonkoodog',
                     'Best app for your dog',
-                    'assets/images/scree1.png',
+                    "assets/side1.png",
                     Utiles.primaryBgColor,
                     isLast: false),
                 buildSinglePage(
@@ -57,7 +57,7 @@ class _SliderPageState extends State<SliderPage> {
                 buildSinglePage(
                     'Pet Vaccines Dates',
                     'Get your dog health \ninsights, next due date for\nvaccines and lot more.',
-                    'assets/images/screen3.png',
+                    'assets/vet2.png',
                     Utiles.primaryBgColor,
                     isLast: true),
               ],
