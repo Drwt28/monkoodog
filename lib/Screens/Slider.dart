@@ -45,7 +45,7 @@ class _SliderPageState extends State<SliderPage> {
                 buildSinglePage(
                     'Welcome to\nMonkoodog',
                     'Best app for your dog',
-                    "assets/side1.png",
+                    "assets/slide1.png",
                     Utiles.primaryBgColor,
                     isLast: false),
                 buildSinglePage(

@@ -33,6 +33,19 @@ class Utiles {
     return age.toString() + " Years, " + months.toString() + " Months";
   }
 
+  static String getImageType(String category) {
+    if (category.contains("Veterinary"))
+      return 'assets/images/doctor.png';
+    else if (category.contains("Pet Services"))
+      return 'assets/images/hospital.png';
+    else if (category.contains("Shop"))
+      return 'assets/images/shop.png';
+    else
+      return 'assets/images/hospital.png';
+
+  }
+
+
   static String calculateWeeks(DateTime birthDate) {
     DateTime currentDate = DateTime.now();
     int age = currentDate.year - birthDate.year;

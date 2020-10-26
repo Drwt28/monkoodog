@@ -114,6 +114,9 @@ class _MyPetScreenState extends State<MyPetScreen> {
     List<Vaccination> vaccination =
         Provider.of<DataProvider>(context).vaccinations;
     return InkWell(
+      onLongPress: (){
+        deletePet(snapshot);
+      },
       onTap: () {
         Navigator.push(
             context,
@@ -303,4 +306,36 @@ class _MyPetScreenState extends State<MyPetScreen> {
       ),
     );
   }
+
+  deletePet(doc) {
+    showDialog(
+      barrierDismissible: false,
+      useRootNavigator: false,
+      context: (context),
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        backgroundColor: Colors.white,
+        title: Text("Delete"),
+        content: Text("Are you sure you to delete "),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () async {
+              doc.reference.delete();
+              Navigator.pop(context);
+            },
+            child: Text("Yes"),
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("No"),
+          )
+        ],
+      ),
+    );
+  }
+
 }

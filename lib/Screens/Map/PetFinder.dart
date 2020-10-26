@@ -318,7 +318,7 @@ class _PetFinderScreenState extends State<PetFinderScreen> {
                           showSearch(
                               context: context,
                               delegate: PetSearch(
-                                  totalPets, lat1 ?? 0.0, lon1 ?? 0.0));
+                                  Provider.of<DataProvider>(context,listen: false).mapPets, lat1 ?? 0.0, lon1 ?? 0.0));
                         },
                         child: Icon(
                           Icons.search,

@@ -145,39 +145,6 @@ class _EditPetPageState extends State<EditPetPage> {
     });
   }
 
-  deletePet() {
-    showDialog(
-      barrierDismissible: false,
-      useRootNavigator: false,
-      context: (context),
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        backgroundColor: Colors.white,
-        title: Text("Delete"),
-        content: Text("Are you sure you to delete "),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () async {
-              widget.documentSnapshot.reference.delete();
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: Text("Yes"),
-            color: Colors.red,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("No"),
-          )
-        ],
-      ),
-    );
-  }
 
   List breeds;
   DateTime age;
@@ -216,28 +183,6 @@ class _EditPetPageState extends State<EditPetPage> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
-          actions: [
-            FlatButton(
-                onPressed: () {
-                  deletePet();
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.delete,
-                      size: 20,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Delete",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    )
-                  ],
-                ))
-          ],
           title: Text("Edit Pet"),
         ),
         bottomNavigationBar: buildBottomButton(),
@@ -477,7 +422,7 @@ class _EditPetPageState extends State<EditPetPage> {
         child: ListView(
           children: [
             Text(
-              "Fill dog's info 2/2 optional",
+              "",
               style: Theme.of(context)
                   .textTheme
                   .headline6
@@ -487,7 +432,7 @@ class _EditPetPageState extends State<EditPetPage> {
               height: 30,
             ),
             buildWithHeading(
-                "Does your dog have any allergies? if not skip",
+                "Does your dog have any allergies?",
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
@@ -512,7 +457,7 @@ class _EditPetPageState extends State<EditPetPage> {
               height: 10,
             ),
             buildWithHeading(
-                "Does your dog have any diseases? if not skip",
+                "Does your dog have any diseases?",
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
@@ -537,7 +482,7 @@ class _EditPetPageState extends State<EditPetPage> {
               height: 10,
             ),
             buildWithHeading(
-                "Tell us what your dog loves (optional)",
+                "Tell us what your dog loves",
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 200,
@@ -560,7 +505,7 @@ class _EditPetPageState extends State<EditPetPage> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(14),
                       hintText:
-                          'Tell us what your dog loves\n(You can leave this blank)',
+                          'Tell us what your dog loves',
                     ),
                     onSaved: (String value) {
                       // This optional block of code can be used to run
@@ -616,52 +561,64 @@ class _EditPetPageState extends State<EditPetPage> {
     focusNode.unfocus();
 
     bottomSheetController = scaffold_key.currentState.showBottomSheet(
-        (context) => Container(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Choose Breed",
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: TextFormField(
-                      autofocus: true,
-                      onFieldSubmitted: (val) {
-                        if (isPrimary)
-                          selectedPrimaryBreed = val;
-                        else
-                          selectedSecondaryBreed = val;
-                      },
-                      onChanged: (val) {
-                        print(breeds.toString());
-                        suggestionList = buildListModels(
-                            breeds
-                                .where((element) =>
-                                    element.contains(val.toLowerCase()))
-                                .toList(),
-                            isPrimary);
-                        print(suggestionList.toString());
-                        bottomSheetController.setState(() {});
-
-                        if (isPrimary)
-                          selectedPrimaryBreed = val;
-                        else
-                          selectedSecondaryBreed = val;
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Type Brred here",
-                      ),
-                    ),
-                  ),
-                  suggestionList
-                ],
+            (context) => Container(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  "Choose Breed",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.close,color: Colors.red,),
+                  onPressed: (){
+                    if(isPrimary)
+                    {
+                      selectedPrimaryBreed =null;
+                    }else{
+                      selectedSecondaryBreed = null;
+                    }
+                    Navigator.pop(context);
+                  }
+                  ,
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextFormField(
+                  autofocus: true,
+                  onFieldSubmitted: (val) {
+                    if (isPrimary)
+                      selectedPrimaryBreed = val;
+                    else
+                      selectedSecondaryBreed = val;
+                  },
+                  onChanged: (val) {
+                    print(breeds.toString());
+                    suggestionList = buildListModels(
+                        breeds
+                            .where((element) =>
+                            element.contains(val.toLowerCase()))
+                            .toList(),
+                        isPrimary);
+                    print(suggestionList.toString());
+                    bottomSheetController.setState(() {});
+
+                    if (isPrimary)
+                      selectedPrimaryBreed = val;
+                    else
+                      selectedSecondaryBreed = val;
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Type Brred here",
+                  ),
+                ),
+              ),
+              suggestionList
+            ],
+          ),
+        ),
         backgroundColor: Colors.white,
         clipBehavior: Clip.hardEdge);
   }

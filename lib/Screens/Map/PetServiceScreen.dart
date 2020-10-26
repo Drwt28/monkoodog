@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:monkoodog/DataProvider/DataProvider.dart';
@@ -10,6 +11,7 @@ import 'dart:math' show cos, sqrt, asin;
 import 'package:monkoodog/Modals/PetServiceModel.dart';
 import 'package:multiselectable_dropdown/multiselectable_dropdown.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'AreaSearch.dart';
 import 'ServiceDetailPage.dart';
@@ -22,6 +24,7 @@ class PetServicePage extends StatefulWidget {
 
 class _PetServicePageState extends State<PetServicePage> {
   double distance = 50;
+
   List<PetService> petList = [];
   List _secondarybreedresult = [];
   List _primarybreedresult = [];
@@ -55,17 +58,6 @@ class _PetServicePageState extends State<PetServicePage> {
     return icon;
   }
 
-  String getImageType(String category) {
-    if (category.contains("Veterinary"))
-      return 'assets/images/doctor.png';
-    else if (category.contains("Pet Services"))
-      return 'assets/images/hospital.png';
-    else if (category.contains("Shop"))
-      return 'assets/images/shop.png';
-    else
-      return 'assets/images/hospital.png';
-
-  }
 
 
   int lastIndex=0;
@@ -215,7 +207,7 @@ class _PetServicePageState extends State<PetServicePage> {
                                               petList[index].services == null
                                                   ? 'assets/images/shop.png'
                                                   :
-                                              getImageType(
+                                              Utiles.getImageType(
                                                   petList[index].category??"Shop")
                                           ),
                                         ),
@@ -329,8 +321,8 @@ class _PetServicePageState extends State<PetServicePage> {
                         onPressed: () {
                           showSearch(
                               context: context,
-                              delegate: PetSearch(
-                                  totalPets, lat1 ?? 0.0, lon1 ?? 0.0));
+                              delegate: ServiceSearch(
+                                  Provider.of<DataProvider>(context,listen: false).mapPetService, lat1 ?? 0.0, lon1 ?? 0.0));
                         },
                         child: Icon(
                           Icons.search,
@@ -557,13 +549,12 @@ class _PetServicePageState extends State<PetServicePage> {
   var lat1, lon1;
 
 
+
 }
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
 
-// This menu button widget updates a _selection field (of type WhyFarther,
-// not shown here).
 
-class PetSearch extends SearchDelegate<String> {
+class ServiceSearch extends SearchDelegate<String> {
 
 
   double calculateDistance(lat2, lon2) {
@@ -578,7 +569,7 @@ class PetSearch extends SearchDelegate<String> {
   List<PetService> petList;
   var lat, long;
 
-  PetSearch(this.petList, this.lat, this.long);
+  ServiceSearch(this.petList, this.lat, this.long);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -636,15 +627,7 @@ class PetSearch extends SearchDelegate<String> {
                           children: [
                             Expanded(
                               flex: 1,
-                              child: FadeInImage(
-                                fit: BoxFit.cover,
-                                placeholder:
-                                AssetImage('assets/images/dog_marker.png'),
-                                image: AssetImage(
-                                    'assets/images/dog_marker.png'),
-
-
-                              ),
+                              child: Image.asset(Utiles.getImageType(suggestions[index].category)),
                             ),
                             Expanded(
                               flex: 2,
@@ -663,19 +646,17 @@ class PetSearch extends SearchDelegate<String> {
                               flex: 1,
                               child: Container(
                                 child: Center(
-                                  child: Text(
-                                    "${calculateDistance(
-                                        suggestions[index].latitude,
-                                        suggestions[index].longitude)
-                                        .ceil()} km",
-                                    textAlign: TextAlign.center,
-                                    style: Theme
-                                        .of(context)
-                                        .textTheme
-                                        .headline6
-                                        .copyWith(
-                                        fontSize: 16, color: Colors.green),
-                                  ),
+                                  child: IconButton(
+
+                                    onPressed: ()async{
+                                      String googleUrl = 'https://www.google.com/maps/search/?api=1&query=${petList[index].latitude},${petList[index].longitude}';
+                                      if (await canLaunch(googleUrl)) {
+                                        await launch(googleUrl);
+                                      } else {
+                                        throw 'Could not open the map.';
+                                      }
+                                    },
+                                    icon: Icon(FontAwesomeIcons.locationArrow,color: Utiles.primaryButton,),),
                                 ),
                               ),
                             ),
@@ -687,11 +668,15 @@ class PetSearch extends SearchDelegate<String> {
             ))
         : Container(
       child: Center(
-        child: Text('No Pet found'),
+        child: Text('No Shop found',style: Theme.of(context).textTheme.headline6.copyWith(color: Utiles.primaryBgColor),),
       ),
     );
   }
 
   @override
-  String get searchFieldLabel => "enter pet name";
+  String get searchFieldLabel => "search shop near you";
 }
+
+// This menu button widget updates a _selection field (of type WhyFarther,
+// not shown here).
+
