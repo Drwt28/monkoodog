@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:monkoodog/Apple/auth.dart';
 
 import 'package:monkoodog/CustomWidgets.dart';
 import 'package:monkoodog/Modals/User.dart';
@@ -151,6 +154,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                   _handleSignIn();
                                 },
                                 loading: loading),
+                            (Platform.isIOS)?buildButton(
+                                context: context,
+                                text: "Sign in with Apple",
+                                color: Utiles.primaryButton,
+                                onPressed: () async{
+                                 AuthService service = AuthService();
+                                 var user = await service.appleSignIn();
+                                 if(user!=null)
+                                 getGoogleUser(user);
+                                 else
+                                   showDialog(context: context,child: AlertDialog(
+                                     title: Text("Unable to sign in "),
+                                     actions: [FlatButton(onPressed: (){
+                                       Navigator.pop(context);
+                                     }, child: Text("ok"))],
+                                   ));
+                                },
+                                loading: loading):Container(),
                             SizedBox(
                               height: 20,
                             ),
